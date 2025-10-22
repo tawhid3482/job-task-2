@@ -8,6 +8,8 @@ import {
   useTransform,
   useVelocity,
   useSpring,
+  Variants,
+  easeOut,
 } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
@@ -16,11 +18,11 @@ const OurAscendance: React.FC = () => {
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
 
-  // 🪶 Smooth damping effect (higher damping = slower glide)
+  // 🪶 Smooth damping effect
   const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 80, // আগে 30 ছিল, এখন বেশি করেছি smooth feel-এর জন্য
-    stiffness: 80, // কম stiffness মানে ধীরে ধীরে move করবে
-    mass: 0.3, // inertia বাড়ায়, scroll থামলেও হালকা glide effect থাকবে
+    damping: 80,
+    stiffness: 80,
+    mass: 0.3,
   });
 
   // 🎞️ Transform mapping: scroll speed অনুযায়ী translate হবে
@@ -29,12 +31,13 @@ const OurAscendance: React.FC = () => {
   const imgMove2 = useTransform(smoothVelocity, [-1000, 1000], [-60, 60]);
   const imgMove3 = useTransform(smoothVelocity, [-1000, 1000], [80, -80]);
 
-  const fadeUp = {
+  // ✨ Variants
+  const fadeUp: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.9, ease: "easeOut" }, // using predefined easing
+      transition: { duration: 0.9, ease: easeOut },
     },
   };
 
@@ -60,7 +63,7 @@ const OurAscendance: React.FC = () => {
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 1, ease: easeOut }}
           style={{ transformOrigin: "center" }}
         />
       </div>
@@ -89,7 +92,7 @@ const OurAscendance: React.FC = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2, duration: 0.9, ease: easeOut }}
             >
               We will strive to deliver precise, exquisite solutions to our
               client&apos;s wishes and requirements so that their aspirations
@@ -105,7 +108,7 @@ const OurAscendance: React.FC = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.4, duration: 0.9, ease: easeOut }}
             >
               READ MORE
               <ArrowRight
