@@ -11,7 +11,7 @@ const menuItems = [
   "Commercial",
   "Home",
   "About",
-  "Management Team",
+  "Management-Team",
   "Properties",
   "Concerns",
   "Landowner",
@@ -93,8 +93,7 @@ export default function Navbar() {
   }, []);
 
   return (
-   <header className="w-full fixed top-0 left-0 z-50 bg-black/10 backdrop-blur-sm text-white transition-colors duration-300">
-
+    <header className="w-full fixed top-0 left-0 z-50 bg-black/10 backdrop-blur-sm text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo */}
@@ -179,7 +178,7 @@ export default function Navbar() {
                         {/* Left Column */}
                         <div className="flex flex-col gap-2 w-1/3 border-r border-gray-700 pr-4">
                           <Link
-                            href={`/`}
+                            href={`/residential`}
                             onClick={handleCloseMenu}
                             className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
                           >
@@ -187,12 +186,12 @@ export default function Navbar() {
                           </Link>
 
                           <Link
-                            href={`/`}
+                            href={`/
+commercial`}
                             onClick={handleCloseMenu}
                             className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                           >
                             Commercial
-                           
                           </Link>
                         </div>
 
@@ -206,12 +205,15 @@ export default function Navbar() {
                             .map((item) => (
                               <Link
                                 key={item}
-                                href={`/${slugify(item)}`}
+                                href={
+                                  item.toLowerCase() === "home"
+                                    ? "/"
+                                    : `/${item.toLowerCase()}`
+                                }
                                 onClick={handleCloseMenu}
                                 className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                               >
                                 {item}
-                              
                               </Link>
                             ))}
                         </div>
@@ -245,90 +247,86 @@ export default function Navbar() {
             <p className="uppercase text-sm font-medium hover:text-sky-300 transition">
               MENU
             </p>
- <div className="relative group">
-                {!open ? (
-                  <button
-                    aria-expanded={open}
-                    aria-controls="jcxbd-menu"
-                    onClick={handleMenuToggle}
-                    className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
-                  >
-                    <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
-                    <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
-                    <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleCloseMenu}
-                    className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
-                  >
-                    <CloseIcon className="text-white hover:text-sky-300 transition w-6 h-6" />
-                  </button>
-                )}
+            <div className="relative group">
+              {!open ? (
+                <button
+                  aria-expanded={open}
+                  aria-controls="jcxbd-menu"
+                  onClick={handleMenuToggle}
+                  className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
+                >
+                  <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
+                  <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
+                  <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
+                >
+                  <CloseIcon className="text-white hover:text-sky-300 transition w-6 h-6" />
+                </button>
+              )}
 
-                {/* Dropdown Menu */}
-                {open && (
-                  <div
-                    id="jcxbd-menu"
-                    className="origin-top-right absolute right-0 -mt-15 w-60 p-5 rounded-md shadow-xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
-                  >
-                    {/* Close Button inside menu */}
-                    <div className="flex justify-end mb-4">
-                      <button
-                        onClick={handleCloseMenu}
-                        className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
-                      >
-                        <CloseIcon className="text-white transition w-6 h-6" />
-                      </button>
+              {/* Dropdown Menu */}
+              {open && (
+                <div
+                  id="jcxbd-menu"
+                  className="origin-top-right absolute right-0 -mt-15 w-60 p-5 rounded-md shadow-xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
+                >
+                  {/* Close Button inside menu */}
+                  <div className="flex justify-end mb-4">
+                    <button
+                      onClick={handleCloseMenu}
+                      className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
+                    >
+                      <CloseIcon className="text-white transition w-6 h-6" />
+                    </button>
+                  </div>
+
+                  {/* Dropdown Links */}
+                  <div className="py-4 px-6">
+                    <div className="flex justify-between gap-10">
+                      {/* Right Column */}
+                      <div className="grid grid-cols-1 gap-3 w-2/3">
+                        {menuItems
+                          .filter(
+                            (item) =>
+                              item !== "Residential" && item !== "Commercial"
+                          )
+                          .map((item) => (
+                            <Link
+                              key={item}
+                               href={item.toLowerCase() === "home" ? "/" : `/${item.toLowerCase()}`}
+                              onClick={handleCloseMenu}
+                              className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                            >
+                              {item}
+                            </Link>
+                          ))}
+                      </div>
                     </div>
 
-                    {/* Dropdown Links */}
-                    <div className="py-4 px-6">
-                      <div className="flex justify-between gap-10">
-                    
+                    {/* Separator */}
+                    <div className="border-t border-gray-600 my-4"></div>
 
-                        {/* Right Column */}
-                        <div className="grid grid-cols-1 gap-3 w-2/3">
-                          {menuItems
-                            .filter(
-                              (item) =>
-                                item !== "Residential" && item !== "Commercial"
-                            )
-                            .map((item) => (
-                              <Link
-                                key={item}
-                                href={`/${slugify(item)}`}
-                                onClick={handleCloseMenu}
-                                className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
-                              >
-                                {item}
-                              
-                              </Link>
-                            ))}
-                        </div>
+                    {/* Footer */}
+                    <div className="text-sm text-gray-300">
+                      <div className="mb-4">
+                        <h3 className="font-semibold text-white mb-2">
+                          JCX Business Tower
+                        </h3>
+                        <p>Plot 1136/A, Japan Street, Block # I,</p>
+                        <p>Bashundhara R/A, Dhaka -1229, Bangladesh.</p>
                       </div>
-
-                      {/* Separator */}
-                      <div className="border-t border-gray-600 my-4"></div>
-
-                      {/* Footer */}
-                      <div className="text-sm text-gray-300">
-                        <div className="mb-4">
-                          <h3 className="font-semibold text-white mb-2">
-                            JCX Business Tower
-                          </h3>
-                          <p>Plot 1136/A, Japan Street, Block # I,</p>
-                          <p>Bashundhara R/A, Dhaka -1229, Bangladesh.</p>
-                        </div>
-                        <div className="text-xs text-gray-400">
-                          <p>© 2025 JCXBD | All Rights Reserved.</p>
-                        </div>
+                      <div className="text-xs text-gray-400">
+                        <p>© 2025 JCXBD | All Rights Reserved.</p>
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
-            
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
