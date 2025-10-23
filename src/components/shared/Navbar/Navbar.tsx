@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -17,7 +18,7 @@ const menuItems = [
   "Landowner",
   "Buyer",
   "Blogs",
-  "News & Events",
+  "News&Events",
   "Gallery",
   "Contact",
   "CSR",
@@ -141,11 +142,11 @@ export default function Navbar() {
                     aria-expanded={open}
                     aria-controls="jcxbd-menu"
                     onClick={handleMenuToggle}
-                    className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
+                    className="flex flex-col justify-between w-8 h-4 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
                   >
-                    <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
-                    <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
-                    <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
+                    <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
+                    <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
+                    <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
                   </button>
                 ) : (
                   <button
@@ -180,7 +181,7 @@ export default function Navbar() {
                           <Link
                             href={`/residential`}
                             onClick={handleCloseMenu}
-                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
+                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
                           >
                             Residential
                           </Link>
@@ -189,7 +190,7 @@ export default function Navbar() {
                             href={`/
 commercial`}
                             onClick={handleCloseMenu}
-                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                           >
                             Commercial
                           </Link>
@@ -211,7 +212,7 @@ commercial`}
                                     : `/${item.toLowerCase()}`
                                 }
                                 onClick={handleCloseMenu}
-                                className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                                className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                               >
                                 {item}
                               </Link>
@@ -255,9 +256,9 @@ commercial`}
                   onClick={handleMenuToggle}
                   className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
                 >
-                  <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
-                  <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
-                  <span className="block h-[3px] bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
+                  <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
+                  <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
+                  <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
                 </button>
               ) : (
                 <button
@@ -297,9 +298,13 @@ commercial`}
                           .map((item) => (
                             <Link
                               key={item}
-                               href={item.toLowerCase() === "home" ? "/" : `/${item.toLowerCase()}`}
+                              href={
+                                item.toLowerCase() === "home"
+                                  ? "/"
+                                  : `/${item.toLowerCase()}`
+                              }
                               onClick={handleCloseMenu}
-                              className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                              className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                             >
                               {item}
                             </Link>
