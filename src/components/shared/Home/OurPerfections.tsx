@@ -1,80 +1,94 @@
 /* eslint-disable @next/next/no-img-element */
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
-import { motion } from 'framer-motion';
-
+import React, { useState, useEffect } from "react";
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import { motion } from "framer-motion";
+const buttonVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 10,
+      delay: 1.5, // Appears after the main text
+    },
+  },
+};
 const projects = [
   {
     id: 1,
-    title: 'ICON 100',
-    location: 'Bashundhara R/A',
-    area: '6900 - 10300 Sq. Ft',
-    image: 'https://jcxbd.com/wp-content/uploads/2025/03/LAKE-CONDOS-01-1-1.jpg',
-    orientation: 'South-West-East facing',
-    address: 'Road: 71, Block: N, Bashundhara R/A, Dhaka',
-    landSize: '32 Katha',
-    floors: '2B + G + M + 18',
-    parking: '140+',
-    apartmentSize: '3051-3204 sft (approx.)',
-    description: 'A striking modern commercial tower.',
+    title: "ICON 100",
+    location: "Bashundhara R/A",
+    area: "6900 - 10300 Sq. Ft",
+    image:
+      "https://jcxbd.com/wp-content/uploads/2025/03/LAKE-CONDOS-01-1-1.jpg",
+    orientation: "South-West-East facing",
+    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
+    landSize: "32 Katha",
+    floors: "2B + G + M + 18",
+    parking: "140+",
+    apartmentSize: "3051-3204 sft (approx.)",
+    description: "A striking modern commercial tower.",
   },
   {
     id: 2,
-    title: 'JCX OLYMPUS',
-    location: 'Bashundhara R/A, Dhaka',
-    area: '1790 - 2270 Sq. Ft',
-    image: 'https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg',
-    orientation: 'South-West-East facing',
-    address: 'Road: 71, Block: N, Bashundhara R/A, Dhaka',
-    landSize: '32 Katha',
-    floors: '2B + G + M + 18',
-    parking: '140+',
-    apartmentSize: '3051-3204 sft (approx.)',
-    description: 'Green and sophisticated residential complex.',
+    title: "JCX OLYMPUS",
+    location: "Bashundhara R/A, Dhaka",
+    area: "1790 - 2270 Sq. Ft",
+    image: "https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg",
+    orientation: "South-West-East facing",
+    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
+    landSize: "32 Katha",
+    floors: "2B + G + M + 18",
+    parking: "140+",
+    apartmentSize: "3051-3204 sft (approx.)",
+    description: "Green and sophisticated residential complex.",
   },
   {
     id: 3,
-    title: 'JCX N71 LAKE CONDOS',
-    location: 'Bashundhara R/A',
-    area: '3000 - 3200 Sq. Ft (Approx)',
-    image: 'https://jcxbd.com/wp-content/uploads/2025/03/LAKE-CONDOS-01-1-1.jpg',
-    orientation: 'South-West-East facing',
-    address: 'Road: 71, Block: N, Bashundhara R/A, Dhaka',
-    landSize: '32 Katha',
-    floors: '2B + G + M + 18',
-    parking: '140+',
-    apartmentSize: '3051-3204 sft (approx.)',
-    description: 'Luxurious waterfront condominium living.',
+    title: "JCX N71 LAKE CONDOS",
+    location: "Bashundhara R/A",
+    area: "3000 - 3200 Sq. Ft (Approx)",
+    image:
+      "https://jcxbd.com/wp-content/uploads/2025/03/LAKE-CONDOS-01-1-1.jpg",
+    orientation: "South-West-East facing",
+    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
+    landSize: "32 Katha",
+    floors: "2B + G + M + 18",
+    parking: "140+",
+    apartmentSize: "3051-3204 sft (approx.)",
+    description: "Luxurious waterfront condominium living.",
   },
   {
     id: 4,
-    title: 'JCX GRAND RESIDENCES',
-    location: 'Bashundhara R/A',
-    area: '3242 - 6370 Sq. Ft',
-    image: 'https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg',
-    orientation: 'South-West-East facing',
-    address: 'Road: 71, Block: N, Bashundhara R/A, Dhaka',
-    landSize: '32 Katha',
-    floors: '2B + G + M + 18',
-    parking: '140+',
-    apartmentSize: '3051-3204 sft (approx.)',
-    description: 'Elegant and spacious grand residences.',
+    title: "JCX GRAND RESIDENCES",
+    location: "Bashundhara R/A",
+    area: "3242 - 6370 Sq. Ft",
+    image: "https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg",
+    orientation: "South-West-East facing",
+    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
+    landSize: "32 Katha",
+    floors: "2B + G + M + 18",
+    parking: "140+",
+    apartmentSize: "3051-3204 sft (approx.)",
+    description: "Elegant and spacious grand residences.",
   },
   {
     id: 5,
-    title: 'JCX PREMIUM',
-    location: 'Bashundhara R/A',
-    area: '3500 - 4000 Sq. Ft',
-    image: 'https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg',
-    orientation: 'South-West-East facing',
-    address: 'Road: 71, Block: N, Bashundhara R/A, Dhaka',
-    landSize: '35 Katha',
-    floors: 'G + M + 10',
-    parking: '100+',
-    apartmentSize: '3500-4000 sft (approx.)',
-    description: 'Modern premium residence.',
+    title: "JCX PREMIUM",
+    location: "Bashundhara R/A",
+    area: "3500 - 4000 Sq. Ft",
+    image: "https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg",
+    orientation: "South-West-East facing",
+    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
+    landSize: "35 Katha",
+    floors: "G + M + 10",
+    parking: "100+",
+    apartmentSize: "3500-4000 sft (approx.)",
+    description: "Modern premium residence.",
   },
 ];
 
@@ -92,14 +106,15 @@ const OurPerfections: React.FC = () => {
     };
 
     updateVisibleCount();
-    window.addEventListener('resize', updateVisibleCount);
-    return () => window.removeEventListener('resize', updateVisibleCount);
+    window.addEventListener("resize", updateVisibleCount);
+    return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
 
   const maxIndex = projects.length - visibleCount;
   const totalSegments = projects.length - visibleCount + 1;
 
-  const nextSlide = () => setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  const nextSlide = () =>
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
 
   return (
@@ -111,7 +126,7 @@ const OurPerfections: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           OUR PERFECTIONS
         </motion.p>
@@ -120,8 +135,8 @@ const OurPerfections: React.FC = () => {
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          style={{ transformOrigin: 'left' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{ transformOrigin: "left" }}
         />
       </div>
 
@@ -131,26 +146,28 @@ const OurPerfections: React.FC = () => {
           <motion.div
             className="flex gap-6"
             animate={{ x: `-${(100 / visibleCount) * currentIndex}%` }}
-            transition={{ type: 'tween', duration: 0.5 }}
+            transition={{ type: "tween", duration: 0.5 }}
           >
             {projects.map((project) => (
               <div
                 key={project.id}
                 className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 rounded-lg overflow-hidden group`}
               >
-                <div className="relative h-[300px]">
+                <div className="relative h-[350px]">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-96 h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-72 h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <motion.div
-                    className="absolute inset-0 bg-black/50 flex flex-col justify-center p-6 opacity-0 group-hover:opacity-100 z-10"
+                    className="absolute inset-0 bg-black/70 flex flex-col justify-center p-6 opacity-0 group-hover:opacity-100 z-10"
                     initial={{ y: 50, opacity: 0 }}
                     whileHover={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      {project.title}
+                    </h3>
                     <p className="text-sm text-gray-300 mb-1">
                       <strong>Orientation:</strong> {project.orientation}
                     </p>
@@ -169,6 +186,41 @@ const OurPerfections: React.FC = () => {
                     <p className="text-sm text-gray-300 mb-1">
                       <strong>Apartment Size:</strong> {project.apartmentSize}
                     </p>
+                    <motion.div
+                      variants={buttonVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="relative flex flex-col items-start mt-16 my-2"
+                    >
+                      {/* Top Line */}
+                      <motion.div
+                        className="w-20 h-px bg-white"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.8, delay: 1.6 }}
+                        style={{ originX: 0.5 }}
+                      />
+
+                      {/* Button Text */}
+                      <motion.a
+                        href="#contact"
+                        className="uppercase tracking-widest text-sm font-light hover:text-gray-300 transition-colors duration-300 my-2"
+                        // Simple hover animation for the text
+                        whileHover={{ scale: 0.5 }}
+                        whileTap={{ scale: 0.5 }}
+                      >
+                       EXPLORE
+                      </motion.a>
+
+                      {/* Bottom Line */}
+                      <motion.div
+                        className="w-20 h-px bg-white "
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.8, delay: 1.6 }}
+                        style={{ originX: 0.5 }}
+                      />
+                    </motion.div>
                   </motion.div>
                 </div>
                 <div className="bg-black/80 p-4 text-left">
@@ -187,7 +239,9 @@ const OurPerfections: React.FC = () => {
             onClick={prevSlide}
             disabled={currentIndex === 0}
             className={`p-2 mr-4 ${
-              currentIndex === 0 ? 'text-gray-500' : 'text-white hover:text-red-600'
+              currentIndex === 0
+                ? "text-gray-500"
+                : "text-white hover:text-red-600"
             } transition duration-200`}
           >
             <FaArrowLeftLong className="text-4xl" />
@@ -196,7 +250,9 @@ const OurPerfections: React.FC = () => {
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
             className={`p-2 mr-6 ${
-              currentIndex === maxIndex ? 'text-gray-500' : 'text-white hover:text-red-600'
+              currentIndex === maxIndex
+                ? "text-gray-500"
+                : "text-white hover:text-red-600"
             } transition duration-200`}
           >
             <FaArrowRightLong className="text-4xl" />
@@ -207,7 +263,9 @@ const OurPerfections: React.FC = () => {
             {Array.from({ length: totalSegments }).map((_, idx) => (
               <div
                 key={idx}
-                className={`h-1 rounded ${idx === currentIndex ? 'bg-gray-300' : 'bg-gray-500'}`}
+                className={`h-1 rounded ${
+                  idx === currentIndex ? "bg-gray-300" : "bg-gray-500"
+                }`}
                 style={{ flex: 1 }}
               />
             ))}

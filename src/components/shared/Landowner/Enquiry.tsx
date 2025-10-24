@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
 import React from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -44,7 +45,9 @@ const FormField: React.FC<{
       placeholder={placeholder}
       {...register(name, { required })}
       className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${
-        error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-500"
+        error
+          ? "border-red-500 focus:border-red-500"
+          : "border-gray-300 focus:border-blue-500"
       }`}
     />
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
@@ -61,11 +64,49 @@ const Enquiry: React.FC = () => {
     formState: { errors },
   } = useForm<FormInputs>();
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
-    console.log("Form Data:", data);
+const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+  try {
+    // Convert landSize to number and ensure message length >= 10
+    if (data.message.length < 10) {
+      toast.error("Message must be at least 10 characters long");
+      return;
+    }
+
+    const payload = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phoneLandowner,
+      secondPhone: data.phoneDifferent || "",
+      location: data.location,
+      landSize: data.landSize,
+      attractiveFeature: data.features || "",
+      message: data.message,
+      email: data.email,
+    };
+
+    const response = await fetch(
+      "https://job-task-2-backend.vercel.app/api/v1/enquiry/create",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to submit enquiry");
+    }
+
+    toast.success("Enquiry submitted successfully!");
     setIsSubmitted(true);
     reset();
-  };
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message || "Something went wrong");
+  }
+};
+
 
   if (isSubmitted) {
     return (
@@ -178,10 +219,16 @@ const Enquiry: React.FC = () => {
               {...register("message", { required: "Message is required" })}
               rows={3}
               className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${
-                errors.message ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-500"
+                errors.message
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-blue-500"
               }`}
             />
-            {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+            {errors.message && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.message.message}
+              </p>
+            )}
           </div>
 
           {/* Submit Button */}
