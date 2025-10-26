@@ -89,7 +89,6 @@ const TestimonialsPage = () => {
       );
 
       const result = await response.json();
-      console.log(result)
 
       if (result.success) {
         await fetchTestimonials();
