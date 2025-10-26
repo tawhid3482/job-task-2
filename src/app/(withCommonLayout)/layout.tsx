@@ -3,6 +3,7 @@
 import { Montserrat } from "next/font/google";
 import "../../app/globals.css";
 import CurtainTransition from "@/components/PageTransition";
+import { Toaster } from "react-hot-toast";
 
 // 👉 Montserrat font import
 const montserrat = Montserrat({
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.variable} font-montserrat antialiased`}>
         {children}
+         <Toaster position="top-right" reverseOrder={false} />
         <CurtainTransition />
       </body>
     </html>

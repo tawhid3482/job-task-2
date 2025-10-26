@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
+
 const buttonVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -13,102 +14,69 @@ const buttonVariants = {
       type: "spring" as const,
       stiffness: 100,
       damping: 10,
-      delay: 1.5, // Appears after the main text
+      delay: 1.5,
     },
   },
 };
-const projects = [
-  {
-    id: 1,
-    title: "ICON 100",
-    location: "Bashundhara R/A",
-    area: "6900 - 10300 Sq. Ft",
-    image:
-      "https://jcxbd.com/wp-content/uploads/2025/03/LAKE-CONDOS-01-1-1.jpg",
-    orientation: "South-West-East facing",
-    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
-    landSize: "32 Katha",
-    floors: "2B + G + M + 18",
-    parking: "140+",
-    apartmentSize: "3051-3204 sft (approx.)",
-    description: "A striking modern commercial tower.",
-  },
-  {
-    id: 2,
-    title: "JCX OLYMPUS",
-    location: "Bashundhara R/A, Dhaka",
-    area: "1790 - 2270 Sq. Ft",
-    image: "https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg",
-    orientation: "South-West-East facing",
-    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
-    landSize: "32 Katha",
-    floors: "2B + G + M + 18",
-    parking: "140+",
-    apartmentSize: "3051-3204 sft (approx.)",
-    description: "Green and sophisticated residential complex.",
-  },
-  {
-    id: 3,
-    title: "JCX N71 LAKE CONDOS",
-    location: "Bashundhara R/A",
-    area: "3000 - 3200 Sq. Ft (Approx)",
-    image:
-      "https://jcxbd.com/wp-content/uploads/2025/03/LAKE-CONDOS-01-1-1.jpg",
-    orientation: "South-West-East facing",
-    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
-    landSize: "32 Katha",
-    floors: "2B + G + M + 18",
-    parking: "140+",
-    apartmentSize: "3051-3204 sft (approx.)",
-    description: "Luxurious waterfront condominium living.",
-  },
-  {
-    id: 4,
-    title: "JCX GRAND RESIDENCES",
-    location: "Bashundhara R/A",
-    area: "3242 - 6370 Sq. Ft",
-    image: "https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg",
-    orientation: "South-West-East facing",
-    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
-    landSize: "32 Katha",
-    floors: "2B + G + M + 18",
-    parking: "140+",
-    apartmentSize: "3051-3204 sft (approx.)",
-    description: "Elegant and spacious grand residences.",
-  },
-  {
-    id: 5,
-    title: "JCX PREMIUM",
-    location: "Bashundhara R/A",
-    area: "3500 - 4000 Sq. Ft",
-    image: "https://jcxbd.com/wp-content/uploads/2024/05/4-1.jpg",
-    orientation: "South-West-East facing",
-    address: "Road: 71, Block: N, Bashundhara R/A, Dhaka",
-    landSize: "35 Katha",
-    floors: "G + M + 10",
-    parking: "100+",
-    apartmentSize: "3500-4000 sft (approx.)",
-    description: "Modern premium residence.",
-  },
-];
+
+interface Project {
+  id: string;
+  Title: string;
+  Type: string;
+  Image: string;
+  Orientation: string;
+  Address: string;
+  FrontRoad: string;
+  LandSize: string;
+  ApartmentSize: string;
+  NumberOfUnits: number;
+  NumberOfParking: number;
+  NumberOfFloors: number;
+  status: string;
+  createdAt: string;
+}
 
 const OurPerfections: React.FC = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4);
 
-  // Update visibleCount on resize
+  // Fetch data from backend
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await fetch(
+          "https://job-task-2-backend.vercel.app/api/v1/perfections"
+        );
+        const json = await res.json();
+        setProjects(Array.isArray(json.data) ? json.data : []);
+      } catch (err) {
+        console.error("Failed to fetch projects:", err);
+        setProjects([]);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  // Responsive visible count
   useEffect(() => {
     const updateVisibleCount = () => {
       const width = window.innerWidth;
-      if (width < 640) setVisibleCount(1); // mobile
-      else if (width < 1024) setVisibleCount(2); // tablet
-      else setVisibleCount(4); // desktop
+      if (width < 640) setVisibleCount(1);
+      else if (width < 1024) setVisibleCount(2);
+      else setVisibleCount(4);
     };
-
     updateVisibleCount();
     window.addEventListener("resize", updateVisibleCount);
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
+
+  if (!projects.length)
+    return (
+      <div className="py-20 flex justify-center items-center">
+        <p className="text-white text-xl">No projects available.</p>
+      </div>
+    );
 
   const maxIndex = projects.length - visibleCount;
   const totalSegments = projects.length - visibleCount + 1;
@@ -155,8 +123,8 @@ const OurPerfections: React.FC = () => {
               >
                 <div className="relative h-[420px]">
                   <img
-                    src={project.image}
-                    alt={project.title}
+                    src={project.Image}
+                    alt={project.Title}
                     className="w-72 h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <motion.div
@@ -165,34 +133,51 @@ const OurPerfections: React.FC = () => {
                     whileHover={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm text-gray-300 mb-1">
-                      <strong>Orientation:</strong> {project.orientation}
+                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div className="">
+                        <span>Orientation:</span> {project.Orientation}{" "}
+                      </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1">
-                      <strong>Address:</strong> {project.address}
+
+                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div className="">
+                        <span>Address:</span> {project.Address}
+                      </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1">
-                      <strong>Land Size:</strong> {project.landSize}
+                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div className="">
+                        <span>Land Size:</span> {project.LandSize}{" "}
+                      </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1">
-                      <strong>Floors:</strong> {project.floors}
+                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div className="">
+                        <span>Floors:</span> {project.NumberOfFloors}
+                      </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1">
-                      <strong>Parking:</strong> {project.parking}
+                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div className="">
+                        <span>Parking:</span> {project.NumberOfParking}
+                      </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1">
-                      <strong>Apartment Size:</strong> {project.apartmentSize}
+                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div className="">
+                        <span>Apartment Size:</span> {project.ApartmentSize}
+                      </div>
                     </p>
+
+                    {/* Explore Button */}
                     <motion.div
                       variants={buttonVariants}
                       initial="hidden"
                       animate="visible"
                       className="relative flex flex-col items-start mt-16 my-2"
                     >
-                      {/* Top Line */}
                       <motion.div
                         className="w-20 h-px bg-white"
                         initial={{ scaleX: 0 }}
@@ -200,19 +185,14 @@ const OurPerfections: React.FC = () => {
                         transition={{ duration: 0.8, delay: 1.6 }}
                         style={{ originX: 0.5 }}
                       />
-
-                      {/* Button Text */}
                       <motion.a
                         href="#contact"
                         className="uppercase tracking-widest text-sm font-light hover:text-gray-300 transition-colors duration-300 my-2"
-                        // Simple hover animation for the text
                         whileHover={{ scale: 0.5 }}
                         whileTap={{ scale: 0.5 }}
                       >
                         EXPLORE
                       </motion.a>
-
-                      {/* Bottom Line */}
                       <motion.div
                         className="w-20 h-px bg-white "
                         initial={{ scaleX: 0 }}
@@ -224,9 +204,9 @@ const OurPerfections: React.FC = () => {
                   </motion.div>
                 </div>
                 <div className="bg-black/80 p-4 text-left">
-                  <p className="text-sm text-gray-300">{project.location}</p>
-                  <h3 className="text-xl font-bold">{project.title}</h3>
-                  <p className="text-sm text-gray-300">{project.area}</p>
+                  <p className="text-sm text-gray-300">{project.Type}</p>
+                  <h3 className="text-xl font-bold">{project.Title}</h3>
+                  <p className="text-sm text-gray-300">{project.LandSize}</p>
                 </div>
               </div>
             ))}
@@ -258,7 +238,7 @@ const OurPerfections: React.FC = () => {
             <FaArrowRightLong className="text-4xl" />
           </button>
 
-          {/* Segment Progress (active-only highlight) */}
+          {/* Segment Progress */}
           <div className="hidden md:flex flex-1 h-px bg-gray-400 rounded overflow-hidden relative">
             <motion.div
               className="absolute top-0 left-0 h-full bg-gray-200"
