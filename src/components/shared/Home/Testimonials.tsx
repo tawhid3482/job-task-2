@@ -16,7 +16,7 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    image: "https://jcxbd.com/wp-content/uploads/2021/11/DSC04477-scaled-1.jpg", // Example image URL
+    image: "https://jcxbd.com/wp-content/uploads/2021/11/DSC04477-scaled-1.jpg",
     feedback:
       "Thank you for helping us throughout the project and also getting the apartment ready on time. Really happy with the effort of your team and wish you success.",
     author: "-Mehazabien Chowdhury",
@@ -55,7 +55,7 @@ const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Show 2 testimonials at a time, as per your screenshots
-  const visibleCount = 2; 
+  const visibleCount = 2;
   const maxIndex = testimonials.length - visibleCount;
 
   const nextSlide = () =>
@@ -100,7 +100,7 @@ const Testimonials: React.FC = () => {
               <div
                 key={testimonial.id}
                 // Each card takes 50% width minus half the gap
-                className="w-[calc(50%-1rem)] shrink-0 flex flex-col md:flex-row items-start bg-black" 
+                className="w-[calc(50%-1rem)] shrink-0 flex flex-col md:flex-row items-start bg-black"
               >
                 {/* Image Section */}
                 <div className="relative w-full md:w-1/2 h-[200px] md:h-[300px] overflow-hidden">
@@ -128,46 +128,55 @@ const Testimonials: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center mt-12 max-w-5xl mx-auto"> {/* Centered and slightly narrower navigation */}
+        <div className="flex items-center mt-12 max-w-5xl mx-auto">
+          {" "}
+          {/* Centered and slightly narrower navigation */}
           {/* Left Arrow */}
           <motion.button
             onClick={prevSlide}
             disabled={currentIndex === 0}
             className={`p-2 mr-4 ${
-              currentIndex === 0 ? "text-gray-600 cursor-not-allowed" : "text-white hover:text-red-600"
+              currentIndex === 0
+                ? "text-gray-600 cursor-not-allowed"
+                : "text-white hover:text-red-600"
             } transition duration-200`}
             whileHover={{ scale: currentIndex === 0 ? 1 : 1.1 }}
             whileTap={{ scale: currentIndex === 0 ? 1 : 0.9 }}
           >
             <FaArrowLeftLong className="text-3xl" />
           </motion.button>
-          
           {/* Right Arrow */}
           <motion.button
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
             className={`p-2 mr-6 ${
-              currentIndex === maxIndex ? "text-gray-600 cursor-not-allowed" : "text-white hover:text-red-600"
+              currentIndex === maxIndex
+                ? "text-gray-600 cursor-not-allowed"
+                : "text-white hover:text-red-600"
             } transition duration-200`}
             whileHover={{ scale: currentIndex === maxIndex ? 1 : 1.1 }}
             whileTap={{ scale: currentIndex === maxIndex ? 1 : 0.9 }}
           >
             <FaArrowRightLong className="text-3xl" />
           </motion.button>
-
           {/* Segment Progress */}
-          <div className="flex-1 flex gap-1 h-1 bg-gray-700 rounded">
-            {Array.from({ length: totalSegments }).map((_, idx) => (
-              <div
-                key={idx}
-                className={`h-1 rounded transition-colors duration-300 ${
-                  Math.floor(currentIndex / visibleCount) === idx // Highlight current "page"
-                    ? "bg-gray-300" 
-                    : "bg-gray-500"
-                }`}
-                style={{ flex: 1 }}
-              />
-            ))}
+          {/* Segment Progress (active-only highlight) */}
+          <div className="hidden md:flex flex-1 h-1 bg-gray-700 rounded overflow-hidden relative">
+            <motion.div
+              className="absolute top-0 left-0 h-full bg-gray-300"
+              animate={{
+                x: `${
+                  (currentIndex / (totalSegments - 2)) *
+                  (100 - 100 / totalSegments)
+                }%`,
+                width: `${100 / totalSegments}%`,
+              }}
+              transition={{
+                type: "tween",
+                duration: 0.5,
+                ease: "easeOut",
+              }}
+            />
           </div>
         </div>
       </div>

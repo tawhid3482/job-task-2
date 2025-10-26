@@ -120,7 +120,7 @@ const OurPerfections: React.FC = () => {
   return (
     <div className="bg-black text-white py-8 md:py-20">
       {/* Title */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-20">
         <motion.p
           className="text-3xl font-light uppercase tracking-widest"
           initial={{ opacity: 0, y: 50 }}
@@ -131,7 +131,7 @@ const OurPerfections: React.FC = () => {
           OUR PERFECTIONS
         </motion.p>
         <motion.div
-          className="mx-auto mt-2 h-0.5 w-24 bg-red-600"
+          className="mx-auto mt-2 h-1 w-14 bg-red-600"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
@@ -141,7 +141,7 @@ const OurPerfections: React.FC = () => {
       </div>
 
       {/* Slider */}
-      <div className="relative max-w-7xl mx-auto px-4">
+      <div className="relative max-w-7xl mx-auto px-8">
         <div className="overflow-hidden">
           <motion.div
             className="flex gap-6"
@@ -151,9 +151,9 @@ const OurPerfections: React.FC = () => {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 rounded-lg overflow-hidden group`}
+                className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group`}
               >
-                <div className="relative h-[350px]">
+                <div className="relative h-[420px]">
                   <img
                     src={project.image}
                     alt={project.title}
@@ -209,7 +209,7 @@ const OurPerfections: React.FC = () => {
                         whileHover={{ scale: 0.5 }}
                         whileTap={{ scale: 0.5 }}
                       >
-                       EXPLORE
+                        EXPLORE
                       </motion.a>
 
                       {/* Bottom Line */}
@@ -225,7 +225,7 @@ const OurPerfections: React.FC = () => {
                 </div>
                 <div className="bg-black/80 p-4 text-left">
                   <p className="text-sm text-gray-300">{project.location}</p>
-                  <h3 className="text-lg font-semibold">{project.title}</h3>
+                  <h3 className="text-xl font-bold">{project.title}</h3>
                   <p className="text-sm text-gray-300">{project.area}</p>
                 </div>
               </div>
@@ -258,17 +258,20 @@ const OurPerfections: React.FC = () => {
             <FaArrowRightLong className="text-4xl" />
           </button>
 
-          {/* Segment Progress */}
-          <div className="hidden flex-1 md:flex gap-1 h-1 bg-gray-700 rounded">
-            {Array.from({ length: totalSegments }).map((_, idx) => (
-              <div
-                key={idx}
-                className={`h-1 rounded ${
-                  idx === currentIndex ? "bg-gray-300" : "bg-gray-500"
-                }`}
-                style={{ flex: 1 }}
-              />
-            ))}
+          {/* Segment Progress (active-only highlight) */}
+          <div className="hidden md:flex flex-1 h-px bg-gray-400 rounded overflow-hidden relative">
+            <motion.div
+              className="absolute top-0 left-0 h-full bg-gray-200"
+              animate={{
+                x: `${(currentIndex / (totalSegments - 1)) * 100}%`,
+                width: `${100 / totalSegments}%`,
+              }}
+              transition={{
+                type: "tween",
+                duration: 0.5,
+                ease: "easeOut",
+              }}
+            />
           </div>
         </div>
       </div>

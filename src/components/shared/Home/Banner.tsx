@@ -66,15 +66,20 @@ const BannerText: React.FC<BannerTextProps> = ({ data, direction }) => {
     <div
       className={`max-w-2xl transition-all duration-1000 ease-out ${animationClasses}`}
     >
-      <p className="text-sm md:text-lg uppercase tracking-widest font-light mb-1 text-gray-200">
+      <p className="text-sm md:text-lg uppercase tracking-widest font-medium mb-1 text-gray-200">
         {data.smallText}
       </p>
-      <h3
-        className="font-[20px] leading-none tracking-wider uppercase text-gray-200"
-        style={{ fontSize: "7vw", lineHeight: 1.2 }}
-      >
-        {data.largeText}
-      </h3>
+   <h3
+  className="leading-none tracking-wider uppercase text-gray-200 font-light"
+  style={{
+    fontSize: "9vw",
+    lineHeight: 1.2,
+    fontWeight: 300, // extra-light effect
+  }}
+>
+  {data.largeText}
+</h3>
+
     </div>
   );
 };

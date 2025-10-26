@@ -1,15 +1,27 @@
-import Footer from "@/components/shared/Footer/Footer";
-import Navbar from "@/components/shared/Navbar/Navbar";
+"use client";
 
+import { Montserrat } from "next/font/google";
+import "../../app/globals.css";
+import CurtainTransition from "@/components/PageTransition";
 
-const CommonLayout = ({ children }: { children: React.ReactNode }) => {
+// 👉 Montserrat font import
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="max-w-7xl mx-auto">
-      <Navbar />
-      {children}
-      <Footer />
-    </div>
+    <html lang="en">
+      <body className={`${montserrat.variable} font-montserrat antialiased`}>
+        {children}
+        <CurtainTransition />
+      </body>
+    </html>
   );
-};
-
-export default CommonLayout;
+}
