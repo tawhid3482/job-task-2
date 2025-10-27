@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -28,7 +27,7 @@ const BannerText: React.FC<{ data: BannerSlide; direction: "next" | "prev" }> = 
       : "translate-x-[-2000px] opacity-100";
   const finalClasses = "translate-x-0 opacity-100";
 
-  const [animationClasses, setAnimationClasses] = useState(initialClasses);
+  const [animationClasses, setAnimationClasses] = React.useState(initialClasses);
 
   useEffect(() => {
     const timeout = setTimeout(() => setAnimationClasses(finalClasses), 50);
@@ -37,13 +36,13 @@ const BannerText: React.FC<{ data: BannerSlide; direction: "next" | "prev" }> = 
 
   return (
     <div
-      className={`max-w-2xl transition-all duration-1000 ease-out ${animationClasses}`}
+      className={`max-w-2xl transition-transform duration-700 ease-out ${animationClasses}`}
     >
-      <p className="text-sm md:text-lg uppercase tracking-widest font-medium mb-1 text-gray-200">
+      <p className="text-sm md:text-lg uppercase tracking-widest font-medium mb-1 text-white">
         {data.smallText}
       </p>
       <h3
-        className="leading-none tracking-wider uppercase text-gray-200 font-light"
+        className="leading-none tracking-wider uppercase text-white font-light"
         style={{ fontSize: "9vw", lineHeight: 1.2, fontWeight: 300 }}
       >
         {data.largeText}
@@ -57,7 +56,6 @@ const Banner: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
 
-  // Fetch from backend
   useEffect(() => {
     const fetchSlides = async () => {
       try {
@@ -72,7 +70,7 @@ const Banner: React.FC = () => {
           setSlides(mapped);
         }
       } catch (err) {
-        console.error("Failed to fetch slides", err);
+        console.error("Failed to fetch slides:", err);
       }
     };
     fetchSlides();
@@ -92,40 +90,25 @@ const Banner: React.FC = () => {
 
   useEffect(() => {
     if (totalSlides === 0) return;
-    const interval = setInterval(nextSlide, 4000);
+    const interval = setInterval(nextSlide, 4000); // fast slide
     return () => clearInterval(interval);
   }, [nextSlide, totalSlides]);
 
-  const getSlideClasses = (index: number) => {
-    const baseClasses =
-      "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out";
-
-    if (index === currentSlideIndex) return `${baseClasses} translate-x-0 scale-100`;
-
-    if (direction === "next") {
-      if (index > currentSlideIndex || (currentSlideIndex === totalSlides - 1 && index === 0))
-        return `${baseClasses} translate-x-full scale-105`;
-    }
-
-    if (direction === "prev") {
-      if (index < currentSlideIndex || (currentSlideIndex === 0 && index === totalSlides - 1))
-        return `${baseClasses} translate-x-[-100%] scale-105`;
-    }
-
-    return `${baseClasses} translate-x-[-100%] scale-105`;
-  };
-
   if (totalSlides === 0) return null;
+
+  const currentSlide = slides[currentSlideIndex];
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
+      {/* Slides */}
       {slides.map((slide, index) => (
         <img
           key={index}
           src={slide.url}
           alt={slide.largeText}
-          className={getSlideClasses(index)}
-          style={{ minWidth: "100%", minHeight: "100%" }}
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out ${
+            index === currentSlideIndex ? "translate-x-0 scale-100 z-10" : "translate-x-full scale-105 z-0"
+          }`}
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               "https://placehold.co/1920x1080/000000/FFFFFF?text=Image+Unavailable";
@@ -133,32 +116,31 @@ const Banner: React.FC = () => {
         />
       ))}
 
-      {/* Overlay */}
-      <div className="absolute inset-0 z-10"></div>
+      {/* Text */}
+      <div className="absolute inset-0 z-20 flex flex-col justify-end px-6 md:px-16">
+        <BannerText key={currentSlideIndex} data={currentSlide} direction={direction} />
+      </div>
 
-      {/* Content + Buttons */}
-      <div className="absolute inset-0 z-20 flex items-end justify-between px-4 md:px-8 pb-1 md:pb-2">
-        <BannerText key={currentSlideIndex} data={slides[currentSlideIndex]} direction={direction} />
-        <div className="flex gap-4">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              prevSlide();
-            }}
-            className="p-4 bg-transparent text-white transition-all duration-300 transform hover:scale-90 rounded-full"
-          >
-            <FaArrowLeftLong className="text-4xl" />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              nextSlide();
-            }}
-            className="p-4 bg-transparent text-white transition-all duration-300 transform hover:scale-90 rounded-full"
-          >
-            <FaArrowRightLong className="text-4xl" />
-          </button>
-        </div>
+      {/* Buttons */}
+      <div className="absolute bottom-10 right-10 z-30 flex gap-4">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            prevSlide();
+          }}
+          className="p-4 text-white transition-all duration-300"
+        >
+          <FaArrowLeftLong className="text-2xl md:text-4xl" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            nextSlide();
+          }}
+          className="p-4 text-white transition-all duration-300"
+        >
+          <FaArrowRightLong className="text-2xl md:text-4xl" />
+        </button>
       </div>
     </div>
   );

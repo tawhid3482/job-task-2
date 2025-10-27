@@ -121,7 +121,7 @@ const OurPerfections: React.FC = () => {
                 key={project.id}
                 className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group`}
               >
-                <div className="relative h-[420px]">
+                <div className="relative w-full h-[420px] overflow-hidden">
                   <img
                     src={project.Image}
                     alt={project.Title}

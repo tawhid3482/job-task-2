@@ -33,7 +33,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
   <div className="w-full sm:w-1/2 lg:w-1/3 p-3 shrink-0">
     <Link href={`/properties/${project.id}`} className="block">
       <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer">
-        <div className="relative h-96">
+        <div className="relative h-96 w-full overflow-hidden">
           <img
             src={project.Image}
             alt={project.Title}
