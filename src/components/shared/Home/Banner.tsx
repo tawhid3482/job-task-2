@@ -90,7 +90,7 @@ const Banner: React.FC = () => {
 
   useEffect(() => {
     if (totalSlides === 0) return;
-    const interval = setInterval(nextSlide, 4000); // fast slide
+    const interval = setInterval(nextSlide, 4000);
     return () => clearInterval(interval);
   }, [nextSlide, totalSlides]);
 
@@ -106,9 +106,8 @@ const Banner: React.FC = () => {
           key={index}
           src={slide.url}
           alt={slide.largeText}
-          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out ${
-            index === currentSlideIndex ? "translate-x-0 scale-100 z-10" : "translate-x-full scale-105 z-0"
-          }`}
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out ${index === currentSlideIndex ? "translate-x-0 scale-100 z-10" : "translate-x-full scale-105 z-0"
+            }`}
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               "https://placehold.co/1920x1080/000000/FFFFFF?text=Image+Unavailable";
@@ -128,16 +127,16 @@ const Banner: React.FC = () => {
             e.stopPropagation();
             prevSlide();
           }}
-          className="p-4 text-white transition-all duration-300"
+          className="p-3 text-gray-400 transition-all duration-300"
         >
-          <FaArrowLeftLong className="text-2xl md:text-4xl" />
+          <FaArrowLeftLong className="text-2xl md:text-4xl " />
         </button>
         <button
           onClick={(e) => {
             e.stopPropagation();
             nextSlide();
           }}
-          className="p-4 text-white transition-all duration-300"
+          className="p-3 text-gray-400 transition-all duration-300"
         >
           <FaArrowRightLong className="text-2xl md:text-4xl" />
         </button>

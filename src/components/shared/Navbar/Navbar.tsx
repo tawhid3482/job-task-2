@@ -94,7 +94,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="w-full fixed top-0 left-0 z-50 backdrop-blur-sm text-white transition-colors duration-300">
+    <header className="w-full fixed top-0 left-0 z-50 bg-black/20 backdrop-blur-sm text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo */}
@@ -107,18 +107,18 @@ export default function Navbar() {
             <div className="hidden md:flex justify-between items-center gap-12">
               <Link
                 href="/residential"
-                className="uppercase text-sm font-medium hover:text-sky-300 transition relative group"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Residential
-                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-sky-400 transition-all duration-300 ease-out group-hover:w-full"></span>
+              
               </Link>
               <span className="text-sm text-white/70">|</span>
               <Link
                 href="/commercial"
-                className="uppercase text-sm font-medium hover:text-sky-300 transition relative group"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Commercial
-                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-sky-400 transition-all duration-300 ease-out group-hover:w-full"></span>
+              
               </Link>
 
               <div className="flex items-center gap-3">

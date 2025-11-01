@@ -66,7 +66,7 @@ const BeliefsSection: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className="relative uppercase tracking-widest text-sm font-light transition-colors duration-300 mr-8 pb-1 z-10"
+                className="relative uppercase tracking-widest cursor-pointer text-sm font-light transition-colors duration-300 mr-8 pb-1 z-10"
                 style={{ color: activeTab === item.id ? 'white' : 'gray' }}
               >
                 {item.title}
