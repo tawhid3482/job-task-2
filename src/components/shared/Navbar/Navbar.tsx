@@ -110,7 +110,7 @@ export default function Navbar() {
                 className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Residential
-              
+
               </Link>
               <span className="text-sm text-white/70">|</span>
               <Link
@@ -118,7 +118,7 @@ export default function Navbar() {
                 className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Commercial
-              
+
               </Link>
 
               <div className="flex items-center gap-3">
@@ -161,7 +161,7 @@ export default function Navbar() {
                 {open && (
                   <div
                     id="jcxbd-menu"
-                    className="origin-top-right absolute right-0 -mt-15 w-[700px] p-10 rounded-md shadow-2xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
+                    className="origin-top-right  absolute -right-40 -mt-15 md:w-[900px] p-10 rounded-md shadow-2xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
                   >
                     {/* Close Button inside menu */}
                     <div className="flex justify-end mb-4">
@@ -169,19 +169,19 @@ export default function Navbar() {
                         onClick={handleCloseMenu}
                         className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
                       >
-                        <CloseIcon className="text-white transition w-6 h-6" />
+                        <CloseIcon className="text-[#F7F3F0] transition w-6 h-6" />
                       </button>
                     </div>
 
                     {/* Dropdown Links */}
                     <div className="py-4 px-6">
-                      <div className="flex justify-between gap-10">
+                      <div className="flex justify-between md:gap-48 text-[#F7F3F0]">
                         {/* Left Column */}
-                        <div className="flex flex-col gap-2 w-1/3 border-r border-gray-700 pr-4">
+                        <div className="flex flex-col gap-5 w-1/3  pr-4">
                           <Link
                             href={`/residential`}
                             onClick={handleCloseMenu}
-                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
+                            className="relative text-[24px] font-normal text-[#F7F3F0] after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
                           >
                             Residential
                           </Link>
@@ -190,7 +190,7 @@ export default function Navbar() {
                             href={`/
 commercial`}
                             onClick={handleCloseMenu}
-                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                            className="relative text-[24px] font-normal text-[#F7F3F0] after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                           >
                             Commercial
                           </Link>
@@ -212,7 +212,7 @@ commercial`}
                                     : `/${item.toLowerCase()}`
                                 }
                                 onClick={handleCloseMenu}
-                                className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                                className="relative w-32  text-[24px] font-normal text-[#F7F3F0] after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
                               >
                                 {item}
                               </Link>
@@ -220,8 +220,7 @@ commercial`}
                         </div>
                       </div>
 
-                      {/* Separator */}
-                      <div className="border-t border-gray-600 my-4"></div>
+                      <div className=" my-8"></div>
 
                       {/* Footer */}
                       <div className="text-sm text-gray-300">

@@ -127,7 +127,7 @@ const Banner: React.FC = () => {
             e.stopPropagation();
             prevSlide();
           }}
-          className="p-3 text-gray-400 transition-all duration-300"
+          className="p-3 text-gray-400 transition-all duration-300 cursor-pointer"
         >
           <FaArrowLeftLong className="text-2xl md:text-4xl " />
         </button>
@@ -136,7 +136,7 @@ const Banner: React.FC = () => {
             e.stopPropagation();
             nextSlide();
           }}
-          className="p-3 text-gray-400 transition-all duration-300"
+          className="p-3 text-gray-400 transition-all cursor-pointer duration-300"
         >
           <FaArrowRightLong className="text-2xl md:text-4xl" />
         </button>

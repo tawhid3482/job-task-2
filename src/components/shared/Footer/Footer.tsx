@@ -133,7 +133,7 @@ const Footer: React.FC = () => {
       </motion.a>
 
       {/* Fixed Scroll to Top Button */}
-      <div className="fixed right-10 bottom-10 z-50">
+      <div className="fixed right-3 bottom-2 z-50 ">
         <div className="relative">
           <motion.div
             className="absolute inset-0 rounded-full border border-gray-400"
