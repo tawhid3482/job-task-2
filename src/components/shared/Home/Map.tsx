@@ -13,8 +13,8 @@ const Map: React.FC = () => {
     "https://i.postimg.cc/7Pmqdw4y/Screenshot-2025-10-22-143005.png";
 
   return (
-    <div className="bg-black py-20 px-4 md:px-12 text-white">
-      <div className="max-w-7xl mx-auto">
+    <div className=" text-white w-full">
+      <div className="w-full mx-auto">
         {/* 1. Interactive Map Container (Triggers HOVER on the entire area) */}
         <motion.a
           href={MAP_URL}
@@ -43,19 +43,7 @@ const Map: React.FC = () => {
             }}
           >
             {/* JCX Logo (Icon) - Fades in with the button area */}
-            <motion.div
-              className="w-10 h-10 bg-white rounded-full flex justify-center items-center mb-4"
-              variants={{
-                restMap: { opacity: 0 },
-                hoverMap: {
-                  opacity: 1,
-                  scale: [1, 1.1, 1],
-                  transition: { delay: 0.1 },
-                }, // Pops slightly when appearing
-              }}
-            >
-              <span className="text-black font-bold text-xs">JCX</span>
-            </motion.div>
+
 
             {/* 3. The Button: Click to Load Map (This has a separate FILL animation on button hover) */}
             <motion.div
@@ -69,11 +57,11 @@ const Map: React.FC = () => {
               <motion.div
                 className="absolute top-0 left-0 w-full h-full bg-white z-0"
                 variants={{
-                  rest: { scaleX: 0, transformOrigin: "left" }, // Start at zero width
+                  rest: { scaleY: 0, transformOrigin: "bottom" }, // Start from top (no height)
                   fill: {
-                    scaleX: 1,
+                    scaleY: 1,
                     transition: { duration: 0.4, ease: "easeOut" },
-                  }, // Grow to full width on button hover
+                  }, // Expands downward
                 }}
               />
 
@@ -91,6 +79,8 @@ const Map: React.FC = () => {
                 CLICK TO LOAD THE MAP
               </motion.span>
             </motion.div>
+
+
           </motion.div>
         </motion.a>
       </div>

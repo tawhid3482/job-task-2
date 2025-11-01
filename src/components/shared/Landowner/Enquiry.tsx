@@ -44,11 +44,10 @@ const FormField: React.FC<{
       type={type}
       placeholder={placeholder}
       {...register(name, { required })}
-      className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${
-        error
+      className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${error
           ? "border-red-500 focus:border-red-500"
           : "border-gray-300 focus:border-blue-500"
-      }`}
+        }`}
     />
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
   </div>
@@ -64,48 +63,48 @@ const Enquiry: React.FC = () => {
     formState: { errors },
   } = useForm<FormInputs>();
 
-const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-  try {
-    // Convert landSize to number and ensure message length >= 10
-    if (data.message.length < 10) {
-      toast.error("Message must be at least 10 characters long");
-      return;
-    }
-
-    const payload = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phone: data.phoneLandowner,
-      secondPhone: data.phoneDifferent || "",
-      location: data.location,
-      landSize: data.landSize,
-      attractiveFeature: data.features || "",
-      message: data.message,
-      email: data.email,
-    };
-
-    const response = await fetch(
-      "https://job-task-2-backend.vercel.app/api/v1/enquiry/create",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    try {
+      // Convert landSize to number and ensure message length >= 10
+      if (data.message.length < 10) {
+        toast.error("Message must be at least 10 characters long");
+        return;
       }
-    );
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to submit enquiry");
+      const payload = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phoneLandowner,
+        secondPhone: data.phoneDifferent || "",
+        location: data.location,
+        landSize: data.landSize,
+        attractiveFeature: data.features || "",
+        message: data.message,
+        email: data.email,
+      };
+
+      const response = await fetch(
+        "https://job-task-2-backend.vercel.app/api/v1/enquiry/create",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to submit enquiry");
+      }
+
+      toast.success("Enquiry submitted successfully!");
+      setIsSubmitted(true);
+      reset();
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "Something went wrong");
     }
-
-    toast.success("Enquiry submitted successfully!");
-    setIsSubmitted(true);
-    reset();
-  } catch (err: any) {
-    console.error(err);
-    toast.error(err.message || "Something went wrong");
-  }
-};
+  };
 
 
   if (isSubmitted) {
@@ -144,7 +143,7 @@ const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     <>
       <Toaster />
       <div className="min-h-screen flex justify-center p-5 md:py-28 bg-white">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-7xl">
           {/* Header */}
           <div className="text-center mb-16">
             <h1 className="text-4xl font-semibold tracking-widest text-gray-800">
@@ -154,7 +153,7 @@ const onSubmit: SubmitHandler<FormInputs> = async (data) => {
           </div>
 
           {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 ">
             <FormField
               name="firstName"
               placeholder="First Name"
@@ -218,11 +217,10 @@ const onSubmit: SubmitHandler<FormInputs> = async (data) => {
               placeholder="Message"
               {...register("message", { required: "Message is required" })}
               rows={3}
-              className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${
-                errors.message
+              className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${errors.message
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-300 focus:border-blue-500"
-              }`}
+                }`}
             />
             {errors.message && (
               <p className="text-red-500 text-sm mt-1">

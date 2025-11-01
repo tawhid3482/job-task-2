@@ -94,12 +94,12 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="w-full fixed top-0 left-0 z-50 bg-black/10 backdrop-blur-sm text-white transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="w-full fixed top-0 left-0 z-50 backdrop-blur-sm text-white transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center">
-            <img src={logoUrl} alt="JCXBD Logo" className="h-12 w-auto" />
+            <img src={logoUrl} alt="JCXBD Logo" className="h-10 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -125,7 +125,7 @@ export default function Navbar() {
                 <PhoneIcon className="text-white hover:text-sky-300 transition" />
                 <a
                   href="tel:16777"
-                  className="text-base font-semibold text-white hover:text-sky-300 transition"
+                  className="text-sm font-light text-white hover:text-sky-300 transition"
                 >
                   16777
                 </a>

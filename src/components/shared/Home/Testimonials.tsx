@@ -92,7 +92,7 @@ const Testimonials: React.FC = () => {
                   <img
                     src={testimonial.Image}
                     alt={testimonial.name}
-                    className="w-full h-full object-cover"
+                    className="md:w-[362px] h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-linear-to-r from-blue-600/50 to-red-600/50 mix-blend-multiply opacity-70"></div>
                 </div>
@@ -111,33 +111,33 @@ const Testimonials: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center mt-12 max-w-5xl mx-auto">
-          <motion.button
-            onClick={prevSlide}
-            disabled={currentIndex === 0}
-            className={`p-2 mr-4 ${
-              currentIndex === 0
-                ? "text-gray-600 cursor-not-allowed"
-                : "text-white hover:text-red-600"
-            } transition duration-200`}
-            whileHover={{ scale: currentIndex === 0 ? 1 : 1.1 }}
-            whileTap={{ scale: currentIndex === 0 ? 1 : 0.9 }}
-          >
-            <FaArrowLeftLong className="text-3xl" />
-          </motion.button>
-          <motion.button
-            onClick={nextSlide}
-            disabled={currentIndex === maxIndex}
-            className={`p-2 mr-6 ${
-              currentIndex === maxIndex
-                ? "text-gray-600 cursor-not-allowed"
-                : "text-white hover:text-red-600"
-            } transition duration-200`}
-            whileHover={{ scale: currentIndex === maxIndex ? 1 : 1.1 }}
-            whileTap={{ scale: currentIndex === maxIndex ? 1 : 0.9 }}
-          >
-            <FaArrowRightLong className="text-3xl" />
-          </motion.button>
+        <div className="flex items-center mt-18 w-full mx-auto justify-between md:gap-28">
+          <div className="">
+            <motion.button
+              onClick={prevSlide}
+              disabled={currentIndex === 0}
+              className={`p-2 mr-4 ${currentIndex === 0
+                  ? "text-gray-600 cursor-not-allowed"
+                  : "text-white hover:text-red-600"
+                } transition duration-200`}
+              whileHover={{ scale: currentIndex === 0 ? 1 : 1.1 }}
+              whileTap={{ scale: currentIndex === 0 ? 1 : 0.9 }}
+            >
+              <FaArrowLeftLong className="text-4xl" />
+            </motion.button>
+            <motion.button
+              onClick={nextSlide}
+              disabled={currentIndex === maxIndex}
+              className={`p-2 mr-6 ${currentIndex === maxIndex
+                  ? "text-gray-600 cursor-not-allowed"
+                  : "text-white hover:text-red-600"
+                } transition duration-200`}
+              whileHover={{ scale: currentIndex === maxIndex ? 1 : 1.1 }}
+              whileTap={{ scale: currentIndex === maxIndex ? 1 : 0.9 }}
+            >
+              <FaArrowRightLong className="text-4xl" />
+            </motion.button>
+          </div>
 
           <div className="hidden md:flex flex-1 h-1 bg-gray-700 rounded overflow-hidden relative">
             <motion.div
