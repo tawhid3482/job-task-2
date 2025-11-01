@@ -13,7 +13,7 @@ import {
   Building2,
   ParkingSquare,
   Menu,
-} from "lucide-react"; // ✅ import all icons from lucide-react
+} from "lucide-react"; 
 
 import LandownerBanner from "@/components/shared/Landowner/LandownerBanner";
 import N71LakeCondos from "@/components/shared/Properties/propertiesText";

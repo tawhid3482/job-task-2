@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Play, PlayCircle, X } from "lucide-react"; // PlayCircle এর বদলে Play আইকন ব্যবহার করছি
+import { PlayCircle, X } from "lucide-react"; 
 
 interface VideoModalTriggerProps {
     thumbnailUrl: string;

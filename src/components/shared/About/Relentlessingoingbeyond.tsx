@@ -46,7 +46,7 @@ const Relentlessingoingbeyond: React.FC = () => {
     <motion.div
       ref={ref}
       style={{ y: moveY }}
-      className="py-24 px-4 sm:px-8 md:px-12 lg:px-24 bg-black text-white text-gray-800 font-sans overflow-hidden"
+      className="py-24 px-4 sm:px-8 md:px-12 lg:px-24 bg-black text-white  font-sans overflow-hidden"
     >
       {/* Title */}
       <div className="text-center mb-16">
