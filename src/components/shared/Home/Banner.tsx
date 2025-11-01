@@ -116,7 +116,7 @@ const Banner: React.FC = () => {
       ))}
 
       {/* Text */}
-      <div className="absolute inset-0 z-20 flex flex-col justify-end px-6 md:px-16">
+      <div className="absolute top-[450px] inset-0 z-20 flex flex-col  px-6 md:px-16">
         <BannerText key={currentSlideIndex} data={currentSlide} direction={direction} />
       </div>
 

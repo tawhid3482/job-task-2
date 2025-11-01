@@ -52,12 +52,12 @@ const OurAwardsandRecognition: React.FC = () => {
 
     return (
         // The background in the image appears to be a very light gray/off-white
-        <div className="bg-gray-50 py-20 px-4 md:px-12 text-gray-800">
+        <div className="bg-[#F2F2F2] py-20 px-4 md:px-12 text-gray-800">
             
             {/* Section Header */}
             <div className="text-center mb-16">
                 <motion.h2
-                    className="text-xl md:text-3xl font-light uppercase tracking-wider"
+                    className="text-xl md:text-4xl font-light uppercase tracking-wider"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}

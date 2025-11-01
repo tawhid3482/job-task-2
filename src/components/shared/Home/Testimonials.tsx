@@ -85,19 +85,19 @@ const Testimonials: React.FC = () => {
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="w-[calc(50%-1rem)] shrink-0 flex flex-col md:flex-row items-start border border-gray-800"
+                className="w-[calc(50%-1rem)] shrink-0 flex flex-col md:flex-row items-start"
               >
                 {/* Image Section */}
                 <div className="relative w-full md:w-1/2 **h-[180px] md:h-[280px]** overflow-hidden">
                   <img
                     src={testimonial.Image}
                     alt={testimonial.name}
-                    className="md:w-[362px] h-full object-cover"
+                    className="md:w-[362px] md:h-[332px] object-cover"
                   />
                   <div className="absolute inset-0 bg-linear-to-r from-blue-600/50 to-red-600/50 mix-blend-multiply opacity-70"></div>
                 </div>
 
-                <div className="w-full md:w-1/2 p-6 bg-black text-left md:mt-5 md:-ml-8 h-96 md:h-full **relative z-30 border border-gray-800 md:border-l-0 ">
+                <div className="w-full text-sm md:w-1/2 p-6 bg-black text-left md:mt-5 md:-ml-8   **relative z-30   ">
                   <p className="text-gray-300 text-base mb-4 leading-relaxed">
                     {testimonial.content}
                   </p>
