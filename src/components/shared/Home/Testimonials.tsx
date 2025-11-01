@@ -97,12 +97,12 @@ const Testimonials: React.FC = () => {
                   <div className="absolute inset-0 bg-linear-to-r from-blue-600/50 to-red-600/50 mix-blend-multiply opacity-70"></div>
                 </div>
 
-                <div className="w-full text-sm md:w-1/2 p-6 bg-black text-left md:mt-5 md:-ml-8   **relative z-30   ">
-                  <p className="text-gray-300 text-base mb-4 leading-relaxed">
+                <div className="w-full text-sm md:w-1/2 p-8 bg-black text-left md:mt-12 md:-ml-8  **relative z-30   ">
+                  <p className="text-white mb-4 leading-relaxed">
                     {testimonial.content}
                   </p>
-                  <p className="text-white font-semibold text-right">
-                    {testimonial.name}
+                  <p className="text-white  text-left">
+                    -{testimonial.name}
                   </p>
                 </div>
               </div>
@@ -117,8 +117,8 @@ const Testimonials: React.FC = () => {
               onClick={prevSlide}
               disabled={currentIndex === 0}
               className={`p-2 mr-4 ${currentIndex === 0
-                  ? "text-gray-600 cursor-not-allowed"
-                  : "text-white hover:text-red-600"
+                ? "text-gray-600 cursor-not-allowed"
+                : "text-white "
                 } transition duration-200`}
               whileHover={{ scale: currentIndex === 0 ? 1 : 1.1 }}
               whileTap={{ scale: currentIndex === 0 ? 1 : 0.9 }}
@@ -129,8 +129,8 @@ const Testimonials: React.FC = () => {
               onClick={nextSlide}
               disabled={currentIndex === maxIndex}
               className={`p-2 mr-6 ${currentIndex === maxIndex
-                  ? "text-gray-600 cursor-not-allowed"
-                  : "text-white hover:text-red-600"
+                ? "text-gray-600 cursor-not-allowed"
+                : "text-white"
                 } transition duration-200`}
               whileHover={{ scale: currentIndex === maxIndex ? 1 : 1.1 }}
               whileTap={{ scale: currentIndex === maxIndex ? 1 : 0.9 }}

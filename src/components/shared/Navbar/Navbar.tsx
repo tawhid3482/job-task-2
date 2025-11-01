@@ -72,6 +72,9 @@ const CloseIcon = ({ className = "" }) => (
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isAtTop, setIsAtTop] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleMenuToggle = useCallback(() => {
@@ -88,13 +91,54 @@ export default function Navbar() {
     setOpen(false);
   }, []);
 
+  // Scroll handler to show/hide navbar
+  const handleScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+
+    // Check if at the very top of the page
+    setIsAtTop(currentScrollY === 0);
+
+    if (currentScrollY <= 0) {
+      // At the top of the page - always show
+      setIsVisible(true);
+    } else if (currentScrollY < lastScrollY) {
+      // Scrolling UP - show navbar
+      setIsVisible(true);
+    } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Scrolling DOWN and past 100px - hide navbar
+      setIsVisible(false);
+    }
+
+    setLastScrollY(currentScrollY);
+  }, [lastScrollY]);
+
   useEffect(() => {
     audioRef.current = new Audio(menuClickSound);
     audioRef.current.preload = "auto";
-  }, []);
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   return (
-    <header className="w-full fixed top-0 left-0 z-50 bg-black/20 backdrop-blur-sm text-white transition-colors duration-300">
+    <header 
+      className={`w-full fixed top-0 left-0 z-50 text-white transition-all duration-500 ${
+        isVisible 
+          ? 'translate-y-0' 
+          : '-translate-y-full'
+      } ${
+        // Background conditions
+        open 
+          ? 'bg-black/80 backdrop-blur-md' 
+          : isAtTop 
+            ? 'bg-transparent' 
+            : 'bg-black/70 backdrop-blur-sm'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo */}
@@ -110,7 +154,6 @@ export default function Navbar() {
                 className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Residential
-
               </Link>
               <span className="text-sm text-white/70">|</span>
               <Link
@@ -118,7 +161,6 @@ export default function Navbar() {
                 className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Commercial
-
               </Link>
 
               <div className="flex items-center gap-3">
