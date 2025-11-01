@@ -127,7 +127,7 @@ export default function ProjectDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-white my-10 py-8">
       <LandownerBanner
         img="https://jcxbd.com/wp-content/uploads/2021/09/10-scaled-1.jpg"
         title="Properties"
@@ -135,11 +135,11 @@ export default function ProjectDetailPage() {
 
       <N71LakeCondos />
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 my-24">
         {/* Title Section */}
         <div className="text-center my-20 uppercase">
           <motion.p
-            className="text-3xl font-light uppercase tracking-widest"
+            className="text-3xl font-light uppercase tracking-widest text-black"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

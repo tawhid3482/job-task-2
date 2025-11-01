@@ -20,7 +20,7 @@ export default function GalleryPage() {
 
          <div className="text-center mb-20">
         <motion.p
-          className="text-4xl font-light uppercase tracking-widest"
+          className="text-4xl font-light uppercase tracking-widest text-black"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

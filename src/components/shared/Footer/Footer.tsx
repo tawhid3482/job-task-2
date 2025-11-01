@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Corrected variants type
+  // Multiple ripple layers with different delays
   const continuousRippleVariants: Variants = {
     animate: {
       scale: [1, 1.4, 1.8],
@@ -48,26 +48,27 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-black text-[#C1C1C0;
-] pt-20 pb-4  px-4 md:px-12 relative">
+    <footer className="bg-black text-[#C1C1C0] pt-20 pb-4 px-4 md:px-12 relative">
       <div className="max-w-7xl md:h-96 mx-auto">
         {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 mb-20  pb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 mb-20 pb-10">
           {footerLinks.map((column, colIndex) => (
             <div
               key={colIndex}
-              className={`col-span-1 text-sm text-gray-300 ${colIndex === 2 ? "md:col-span-2 lg:col-span-2" : ""
-                }`}
+              className={`col-span-1 text-sm text-gray-300 ${
+                colIndex === 2 ? "md:col-span-2 lg:col-span-2" : ""
+              }`}
             >
               <ul className="space-y-8">
                 {column.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${link.name === "Privacy Policy"
+                      className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${
+                        link.name === "Privacy Policy"
                           ? "text-sm text-gray-400"
                           : "uppercase"
-                        }`}
+                      }`}
                     >
                       {link.name}
                     </Link>
@@ -132,14 +133,33 @@ const Footer: React.FC = () => {
         <FaWhatsapp className="text-white text-3xl" />
       </motion.a>
 
-      {/* Fixed Scroll to Top Button */}
-      <div className="fixed right-3 bottom-2 z-50 ">
+      {/* Fixed Scroll to Top Button with Multiple Ripple Layers */}
+      <div className="fixed right-3 bottom-2 z-50">
         <div className="relative">
+          {/* First Ripple Layer */}
           <motion.div
             className="absolute inset-0 rounded-full border border-gray-400"
             variants={continuousRippleVariants}
             animate="animate"
+            style={{ animationDelay: "0s" }}
           />
+          
+          {/* Second Ripple Layer */}
+          <motion.div
+            className="absolute inset-0 rounded-full border border-gray-400"
+            variants={continuousRippleVariants}
+            animate="animate"
+            style={{ animationDelay: "0.6s" }}
+          />
+          
+          {/* Third Ripple Layer */}
+          <motion.div
+            className="absolute inset-0 rounded-full border border-gray-400"
+            variants={continuousRippleVariants}
+            animate="animate"
+            style={{ animationDelay: "1.33s" }}
+          />
+          
           <motion.button
             onClick={scrollToTop}
             className="relative w-12 h-12 rounded-full bg-transparent text-gray-500 shadow-lg flex items-center justify-center overflow-hidden"

@@ -45,8 +45,8 @@ const FormField: React.FC<{
       placeholder={placeholder}
       {...register(name, { required })}
       className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${error
-          ? "border-red-500 focus:border-red-500"
-          : "border-gray-300 focus:border-blue-500"
+        ? "border-red-500 focus:border-red-500"
+        : "border-gray-300 focus:border-blue-500"
         }`}
     />
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
@@ -146,7 +146,7 @@ const Enquiry: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-7xl">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl font-semibold tracking-widest text-gray-800">
+            <h1 className="text-[35px] font-light  tracking-widest text-gray-800">
               ENQUIRY
             </h1>
             <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-2"></div>
@@ -218,8 +218,8 @@ const Enquiry: React.FC = () => {
               {...register("message", { required: "Message is required" })}
               rows={3}
               className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${errors.message
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
+                ? "border-red-500 focus:border-red-500"
+                : "border-gray-300 focus:border-blue-500"
                 }`}
             />
             {errors.message && (
