@@ -10,7 +10,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { IoIosArrowUp } from "react-icons/io";
-import { motion, Variants, easeOut } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 const Footer: React.FC = () => {
   const footerLinks = [
@@ -34,7 +34,6 @@ const Footer: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Multiple ripple layers with different delays
   const continuousRippleVariants: Variants = {
     animate: {
       scale: [1, 1.4, 1.8],
@@ -55,20 +54,18 @@ const Footer: React.FC = () => {
           {footerLinks.map((column, colIndex) => (
             <div
               key={colIndex}
-              className={`col-span-1 text-sm text-gray-300 ${
-                colIndex === 2 ? "md:col-span-2 lg:col-span-2" : ""
-              }`}
+              className={`col-span-1 text-sm text-gray-300 ${colIndex === 2 ? "md:col-span-2 lg:col-span-2" : ""
+                }`}
             >
               <ul className="space-y-8">
                 {column.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${
-                        link.name === "Privacy Policy"
+                      className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${link.name === "Privacy Policy"
                           ? "text-sm text-gray-400"
                           : "uppercase"
-                      }`}
+                        }`}
                     >
                       {link.name}
                     </Link>
@@ -79,7 +76,6 @@ const Footer: React.FC = () => {
           ))}
         </div>
 
-        {/* Footer Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 pt-4">
           <p className="mb-4 md:mb-0 text-gray-300">
             © 2025 JCX BD | All Rights Reserved.
@@ -88,7 +84,6 @@ const Footer: React.FC = () => {
             Designed & Developed by Dcastalia
           </p>
 
-          {/* Social Media Icons */}
           <div className="flex items-center space-x-4">
             {[FaFacebookF, FaLinkedinIn, FaYoutube, FaInstagram].map(
               (Icon, idx) => {
@@ -121,9 +116,8 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Fixed WhatsApp Icon */}
       <motion.a
-        href="https://wa.me/yourphonenumber"
+        href="https://wa.me/8801826853371"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed left-4 bottom-4 md:left-12 md:bottom-12 z-50 w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center shadow-lg"
@@ -133,7 +127,7 @@ const Footer: React.FC = () => {
         <FaWhatsapp className="text-white text-3xl" />
       </motion.a>
 
-      {/* Fixed Scroll to Top Button with Multiple Ripple Layers */}
+
       <div className="fixed right-3 bottom-2 z-50">
         <div className="relative">
           {/* First Ripple Layer */}
@@ -143,15 +137,15 @@ const Footer: React.FC = () => {
             animate="animate"
             style={{ animationDelay: "0s" }}
           />
-          
+
           {/* Second Ripple Layer */}
           <motion.div
             className="absolute inset-0 rounded-full border border-gray-400"
             variants={continuousRippleVariants}
             animate="animate"
-            style={{ animationDelay: "0.6s" }}
+            style={{ animationDelay: "0.66s" }}
           />
-          
+
           {/* Third Ripple Layer */}
           <motion.div
             className="absolute inset-0 rounded-full border border-gray-400"
@@ -159,7 +153,7 @@ const Footer: React.FC = () => {
             animate="animate"
             style={{ animationDelay: "1.33s" }}
           />
-          
+
           <motion.button
             onClick={scrollToTop}
             className="relative w-12 h-12 rounded-full bg-transparent text-gray-500 shadow-lg flex items-center justify-center overflow-hidden"
