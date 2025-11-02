@@ -54,7 +54,7 @@ const BeliefsSection: React.FC = () => {
         <h2 className="text-xl md:text-2xl font-light uppercase tracking-widest text-white">
           THE BASIS OF OUR BELIEFS
         </h2>
-        <div className="mx-auto h-0.5 w-12 bg-red-500 mt-2" />
+        <div className="mx-auto h-0.5 w-12 bg-orange-400t mt-2" />
       </div>
 
       <div className="flex flex-col lg:flex-row items-center justify-center max-w-7xl mx-auto">

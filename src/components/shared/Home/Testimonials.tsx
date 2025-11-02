@@ -78,7 +78,7 @@ const Testimonials: React.FC = () => {
           TESTIMONIALS
         </motion.h2>
         <motion.div
-          className="mx-auto mt-2 h-0.5 w-24 bg-red-600"
+          className="mx-auto mt-2 h-0.5 w-24 bg-orange-400"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}

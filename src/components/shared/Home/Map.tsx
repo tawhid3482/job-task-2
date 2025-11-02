@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 
 const Map: React.FC = () => {
   const MAP_URL =
-    "https://www.google.com/maps/search/?api=1&query=Plot+11,Signature+House,10th+Floor,Main+Road,Block+D,Aftabnagar,Dhaka,Bangladesh,1212";
+    "https://maps.app.goo.gl/FLAbB1VWtX5XFpRm7";
   const STATIC_MAP_IMAGE =
-    "https://i.postimg.cc/PfmwQvcB/Screenshot-2025-11-02-131643.png";
+    "https://i.postimg.cc/50d43C4C/Screenshot-2025-11-02-163318.png";
 
   return (
     <div className="text-white w-full">

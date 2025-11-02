@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
             © 2025 Assist Holdings Limited | All Rights Reserved.
           </p>
           <p className="mb-4 md:mb-0 text-gray-300">
-            Designed & Developed by Development, SEO, & Ads By{" "}
+           Development, SEO, & Ads By{" "}
             <a className="font-bold " href="https://nextgent.org">NextGent.org </a>
           </p>
 

@@ -100,7 +100,7 @@ const OurPerfections: React.FC = () => {
           OUR PERFECTIONS
         </motion.p>
         <motion.div
-          className="mx-auto mt-2 h-1 w-14 bg-red-600"
+          className="mx-auto mt-2 h-1 w-14 bg-orange-400"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
