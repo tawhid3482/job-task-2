@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-// app/admin/properties/page.tsx
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
