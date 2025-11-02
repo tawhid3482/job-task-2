@@ -78,7 +78,7 @@ const OurAwardsandRecognition: React.FC = () => {
 
             {/* Awards Grid Container */}
             <motion.div
-                className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10"
+                className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-10"
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
@@ -88,7 +88,7 @@ const OurAwardsandRecognition: React.FC = () => {
                     <motion.div
                         key={award.id}
                         variants={itemVariants}
-                        className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center justify-center h-80 transition-shadow duration-300 hover:shadow-xl"
+                        className="bg-white md:p-8 rounded-lg flex flex-col items-center justify-center md:h-80 transition-shadow duration-300 hover:shadow-xl"
                     >
                         {/* Award Logo/Badge */}
                         <div className="relative w-full h-40 flex items-center justify-center">

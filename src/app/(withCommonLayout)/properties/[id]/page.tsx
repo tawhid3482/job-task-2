@@ -127,7 +127,7 @@ export default function ProjectDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white my-10 py-8">
+    <div className="min-h-screen bg-white">
       <LandownerBanner
         img="https://jcxbd.com/wp-content/uploads/2021/09/10-scaled-1.jpg"
         title="Properties"

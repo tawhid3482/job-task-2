@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { HiArrowLongRight } from "react-icons/hi2";
 
 interface BannerSlide {
   url: string;
@@ -71,13 +70,13 @@ const BannerText: React.FC<{ data: BannerSlide; direction: "next" | "prev" }> = 
 
   return (
     <div
-      className={`max-w-2xl transition-transform duration-700 ease-out ${animationClasses}`}
+      className={`max-w-2xl transition-transform duration-1000 ease-out ${animationClasses}`}
     >
       <p className="text-sm md:text-lg uppercase tracking-widest font-medium mb-1 text-[#E9EBDD]">
         {data.smallText}
       </p>
       <h3
-        className="leading-none tracking-wider uppercase text-[#E9EBDD] text-[125px]"
+        className="leading-none tracking-wider uppercase text-[#E9EBDD] text-4xl md:text-[125px]"
         style={{ lineHeight: 1.2, fontWeight: 300 }}
       >
         {data.largeText}
@@ -90,6 +89,7 @@ const Banner: React.FC = () => {
   const [slides, setSlides] = useState<BannerSlide[]>([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const fetchSlides = async () => {
@@ -114,14 +114,28 @@ const Banner: React.FC = () => {
   const totalSlides = slides.length;
 
   const nextSlide = useCallback(() => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
     setDirection("next");
     setCurrentSlideIndex((prev) => (prev + 1) % totalSlides);
-  }, [totalSlides]);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1000);
+  }, [totalSlides, isTransitioning]);
 
   const prevSlide = useCallback(() => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
     setDirection("prev");
     setCurrentSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  }, [totalSlides]);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1000);
+  }, [totalSlides, isTransitioning]);
 
   useEffect(() => {
     if (totalSlides === 0) return;
@@ -132,31 +146,46 @@ const Banner: React.FC = () => {
   if (totalSlides === 0) return null;
 
   const currentSlide = slides[currentSlideIndex];
+  const nextSlideIndex = (currentSlideIndex + 1) % totalSlides;
+  const prevSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      {/* Slides */}
-      {slides.map((slide, index) => (
-        <img
-          key={index}
-          src={slide.url}
-          alt={slide.largeText}
-          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out ${index === currentSlideIndex ? "translate-x-0 scale-100 z-10" : "translate-x-full scale-105 z-0"
-            }`}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              "https://placehold.co/1920x1080/000000/FFFFFF?text=Image+Unavailable";
-          }}
-        />
-      ))}
+      {/* Previous Slide (for smooth transition) */}
+      {slides.map((slide, index) => {
+        let transformClass = "translate-x-full";
+        
+        if (index === currentSlideIndex) {
+          transformClass = "translate-x-0";
+        } else if (index === prevSlideIndex && direction === "prev") {
+          transformClass = "-translate-x-full";
+        } else if (index === nextSlideIndex && direction === "next") {
+          transformClass = "translate-x-full";
+        } else {
+          transformClass = "translate-x-full";
+        }
+
+        return (
+          <img
+            key={index}
+            src={slide.url}
+            alt={slide.largeText}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out ${transformClass}`}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                "https://placehold.co/1920x1080/000000/FFFFFF?text=Image+Unavailable";
+            }}
+          />
+        );
+      })}
 
       {/* Text */}
-      <div className="absolute top-[450px] inset-0 z-20 flex flex-col  px-6 md:px-16">
+      <div className="absolute top-96 md:top-[450px] inset-0 z-20 flex flex-col px-6 md:px-16">
         <BannerText key={currentSlideIndex} data={currentSlide} direction={direction} />
       </div>
 
       {/* Buttons - Using custom thin arrows */}
-      <div className="absolute bottom-10 right-10 z-30 flex gap-8">
+      <div className="absolute bottom-12 md:bottom-10 right-0 md:right-10 z-30 flex md:gap-8">
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -164,7 +193,7 @@ const Banner: React.FC = () => {
           }}
           className="p-2 text-white hover:text-gray-300 transition-all duration-300 cursor-pointer group"
         >
-          <ThinArrowLeft className="w-20 h-12  transition-transform duration-300 group-hover:scale-110" />
+          <ThinArrowLeft className="w-20 h-12 transition-transform duration-300 group-hover:scale-110" />
         </button>
         <button
           onClick={(e) => {
@@ -173,7 +202,7 @@ const Banner: React.FC = () => {
           }}
           className="p-2 text-white hover:text-gray-300 transition-all cursor-pointer duration-300 group"
         >
-          <ThinArrowRight className="w-20 h-12   transition-transform duration-300 group-hover:scale-110" />
+          <ThinArrowRight className="w-20 h-12 transition-transform duration-300 group-hover:scale-110" />
         </button>
       </div>
     </div>
