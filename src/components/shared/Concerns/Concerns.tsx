@@ -19,7 +19,7 @@ const Concerns = () => {
                 text-white 
             "
       >
-        <div className="absolute inset-0 bg-black opacity-40"></div>
+        <div className="absolute inset-0 bg-black opacity-20"></div>
 
         {/* Container for the text, positioned on top of the overlay */}
         <div className="relative text-center p-4">
