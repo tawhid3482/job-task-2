@@ -37,9 +37,8 @@ const BuyerInfo: React.FC = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.4 }}
-      className="bg-black text-white py-20 px-[5%] min-h-screen flex flex-col gap-10 font-sans"
+      className="bg-black text-white py-10 md:py-20 px-[5%] min-h-screen flex flex-col gap-10 font-sans"
     >
-      {/* Heading */}
       <motion.h1
         variants={textItemVariants}
         className="text-[1.5em] leading-relaxed max-w-3xl my-10"

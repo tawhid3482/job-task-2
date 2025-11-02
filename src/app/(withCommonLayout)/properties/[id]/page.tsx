@@ -135,11 +135,11 @@ export default function ProjectDetailPage() {
 
       <N71LakeCondos />
 
-      <div className="container mx-auto px-4 my-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-12 md:my-24">
         {/* Title Section */}
-        <div className="text-center my-20 uppercase">
+        <div className="text-center my-12 md:my-20 uppercase">
           <motion.p
-            className="text-3xl font-light uppercase tracking-widest text-black"
+            className="text-2xl sm:text-3xl font-light uppercase tracking-widest text-black"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -158,45 +158,56 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Project Details Section */}
-        <div className=" max-w-7xl mx-auto flex flex-col lg:flex-row items-start ">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
           {/* Left: Project Image */}
-          <div className="relative lg:w-1/2  ">
-            <img
-              src={project.Image}
-              alt={project.Title}
-              className="md:h-[690px] md:w-[498px] object-cover"
-            />
+          <div className="w-full lg:w-1/2 flex justify-center">
+            <div className="relative w-full max-w-md lg:max-w-full">
+              <img
+                src={project.Image}
+                alt={project.Title}
+                className="w-full h-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:h-[690px] lg:max-h-none object-cover rounded-lg shadow-lg"
+              />
+            </div>
           </div>
 
           {/* Right: Project Info */}
-          <div className="lg:w-1/2 flex flex-col justify-center">
-            <div className="w-full">
+          <div className="w-full lg:w-1/2">
+            <div className="w-full space-y-4 sm:space-y-6">
               {glanceFeatures.map((feature) => (
-                <div key={feature.name} className="flex items-center py-2.5">
-                  <feature.icon className="w-8 h-8 text-gray-700 shrink-0 mr-12" />
-                  <div className="font-semibold text-[#003C8C] w-48 shrink-0 ml-4 mr-20">
-                    {feature.name}
+                <motion.div 
+                  key={feature.name} 
+                  className="flex items-start sm:items-center py-3 sm:py-4 border-b border-gray-200"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-gray-700 shrink-0 mr-4 sm:mr-6 lg:mr-12" />
+                  <div className="flex flex-col sm:flex-row sm:items-center w-full">
+                    <div className="font-semibold text-[#003C8C] text-sm sm:text-base w-32 sm:w-40 lg:w-48 shrink-0 mb-1 sm:mb-0">
+                      {feature.name}
+                    </div>
+                    <div className="flex items-center space-x-2 sm:ml-4 lg:ml-8">
+                      <span className="text-gray-900 hidden sm:inline">:</span>
+                      <span className="font-normal text-gray-700 text-sm sm:text-base wrap-break-word">
+                        {project[feature.value]}
+                        {feature.unit || ""}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center ml-2 space-x-2">
-                    <span className="text-gray-900">:</span>
-                    <span className="font-normal text-gray-700">
-                      {project[feature.value]}
-                      {feature.unit || ""}
-                    </span>
-                  </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
       </div>
 
-      <FeaturesAmenities></FeaturesAmenities>
-      <Video></Video>
-      <GalleryPage></GalleryPage>
-      <Enquiry></Enquiry>
-      <Testimonials></Testimonials>
-      <OurAwardsandRecognition></OurAwardsandRecognition>
+      <FeaturesAmenities />
+      <Video />
+      <GalleryPage />
+      <Enquiry />
+      <Testimonials />
+      <OurAwardsandRecognition />
     </div>
   );
 }

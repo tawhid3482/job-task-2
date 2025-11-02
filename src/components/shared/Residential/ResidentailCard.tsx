@@ -1,3 +1,4 @@
+
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
@@ -30,68 +31,68 @@ const buttonVariants = {
 };
 
 const ProjectCard = ({ project }: { project: Project }) => (
-  <div className="w-full sm:w-1/2 lg:w-1/3 p-3 shrink-0">
-    <Link href={`/properties/${project.id}`} className="block">
-      <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer md:w-[430px] md:h-[680px]">
-        <div className="relative overflow-hidden">
+  <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/3 p-2 sm:p-3 shrink-0">
+    <Link href={`/properties/${project.id}`} className="block h-full">
+      <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer w-full h-full flex flex-col bg-white">
+        {/* Image Section - Fixed Height */}
+        <div className="relative overflow-hidden w-full h-64 sm:h-72 md:h-80 lg:h-[580px]">
           <img
             src={project.Image}
             alt={project.Title}
-            className="md:h-[580px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <motion.div
-            className="absolute inset-0 bg-black/70 flex flex-col justify-start py-10 px-8 text-white opacity-0 group-hover:opacity-100 z-10 space-y-5"
+            className="absolute inset-0 bg-black/70 flex flex-col justify-start p-4 sm:p-6 md:p-8 text-white opacity-0 group-hover:opacity-100 z-10 space-y-2 sm:space-y-3 md:space-y-4 overflow-y-auto"
             initial={{ y: 50, opacity: 0 }}
             whileHover={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-           
-
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
               <span>
-                <span>Orientation:</span> {project.Orientation}
+                <span className="font-medium">Orientation:</span> {project.Orientation}
               </span>
             </p>
 
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
               <span>
-                <span>Address:</span> {project.Address}
+                <span className="font-medium">Address:</span> {project.Address}
               </span>
             </p>
 
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
               <span>
-                <span>Land Size:</span> {project.LandSize} Katha
-              </span>
-            </p>
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-              <span>
-                <span>Font Road:</span> {project.NumberOfParking} 
+                <span className="font-medium">Land Size:</span> {project.LandSize} Katha
               </span>
             </p>
 
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
               <span>
-                <span>Number of Floors:</span> {project.NumberOfFloors}
+                <span className="font-medium">Front Road:</span> {project.FrontRoad}
               </span>
             </p>
 
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
               <span>
-                <span>Number of Parking:</span> {project.NumberOfParking}
+                <span className="font-medium">Number of Floors:</span> {project.NumberOfFloors}
               </span>
             </p>
 
-            <p className="text-sm  mb-1 flex items-baseline gap-2">
-              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
               <span>
-                <span>Apartment Size:</span> {project.ApartmentSize} Sq. Ft
+                <span className="font-medium">Number of Parking:</span> {project.NumberOfParking}
+              </span>
+            </p>
+
+            <p className="text-xs sm:text-sm flex items-start gap-2">
+              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
+              <span>
+                <span className="font-medium">Apartment Size:</span> {project.ApartmentSize} Sq. Ft
               </span>
             </p>
 
@@ -100,20 +101,20 @@ const ProjectCard = ({ project }: { project: Project }) => (
               variants={buttonVariants}
               initial="hidden"
               animate="visible"
-              className="relative flex flex-col items-start mt-8 md:mt-24 my-2"
+              className="relative flex flex-col items-start mt-4 sm:mt-6 md:mt-8 my-2"
             >
               <motion.div
-                className="w-20 h-px bg-white"
+                className="w-16 sm:w-20 h-px bg-white"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.8, delay: 1.6 }}
                 style={{ originX: 0.5 }}
               />
-              <div className="uppercase tracking-widest text-sm font-light hover:text-gray-300 transition-colors duration-300 my-2">
+              <div className="uppercase tracking-widest text-xs sm:text-sm font-light hover:text-gray-300 transition-colors duration-300 my-1 sm:my-2">
                 EXPLORE
               </div>
               <motion.div
-                className="w-20 h-px bg-white"
+                className="w-16 sm:w-20 h-px bg-white"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.8, delay: 1.6 }}
@@ -123,10 +124,15 @@ const ProjectCard = ({ project }: { project: Project }) => (
           </motion.div>
         </div>
 
-        <div className="bg-white p-4 text-left text-black">
-          <p className="text-sm text-gray-600">{project.Type}</p>
-          <h3 className="text-xl font-bold">{project.Title}</h3>
-          <p className="text-sm text-gray-600">{project.LandSize} Katha</p>
+        {/* Content Section - Fixed Height */}
+        <div className="bg-white p-3 sm:p-4 text-left text-black flex flex-col flex-1 min-h-[120px]">
+          <p className="text-xs sm:text-sm text-gray-600 mb-1">{project.Type}</p>
+          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 line-clamp-2 flex-1">
+            {project.Title}
+          </h3>
+          <p className="text-xs sm:text-sm text-gray-600 mt-auto">
+            {project.LandSize} Katha
+          </p>
         </div>
       </div>
     </Link>
@@ -246,17 +252,16 @@ const ProjectFilter = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Filter Header */}
-      <div className="bg-black text-white flex border-b border-gray-700 relative z-20">
+      <div className="bg-black text-white flex flex-col sm:flex-row border-b border-gray-700 relative z-20">
         {/* Select Category */}
-        <div className="relative w-1/3 border-r border-gray-700">
+        <div className="relative w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-gray-700">
           <div
-            className={`flex items-center justify-center py-4 cursor-pointer text-lg ${
-              activeCategory !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
-            }`}
+            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${activeCategory !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
+              }`}
             onClick={() => handleDropdownClick("SELECT CATEGORY")}
           >
-            SELECT CATEGORY
-            <span className="absolute right-4 text-xl">
+            <span>SELECT CATEGORY</span>
+            <span className="text-xl sm:absolute sm:right-4">
               {openDropdown === "SELECT CATEGORY" ? "×" : "+"}
             </span>
           </div>
@@ -269,11 +274,11 @@ const ProjectFilter = () => {
                 : { height: 0, opacity: 0 }
             }
             transition={{ duration: 0.3 }}
-            className="absolute top-full left-0 w-full bg-black shadow-xl overflow-hidden"
+            className="absolute top-full left-0 w-full bg-black shadow-xl overflow-hidden z-30"
           >
             {openDropdown === "SELECT CATEGORY" && (
               <div className="border-t border-white">
-                <div className="py-3 px-6 text-sm text-gray-400 font-light text-left border-b border-gray-700">
+                <div className="py-3 px-4 sm:px-6 text-sm text-gray-400 font-light text-left border-b border-gray-700">
                   SELECT CATEGORY
                 </div>
                 {categories.map((category) => (
@@ -281,11 +286,10 @@ const ProjectFilter = () => {
                     key={category}
                     onClick={() => handleFilterSelect("CATEGORY", category)}
                     className={`
-                      py-3 px-6 text-sm text-left transition duration-200
-                      ${
-                        activeCategory === category
-                          ? "bg-blue-900 font-semibold"
-                          : "hover:bg-gray-800"
+                      py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
+                      ${activeCategory === category
+                        ? "bg-blue-900 font-semibold"
+                        : "hover:bg-gray-800"
                       }
                     `}
                   >
@@ -298,15 +302,14 @@ const ProjectFilter = () => {
         </div>
 
         {/* Select Type */}
-        <div className="relative w-1/3 border-r border-gray-700">
+        <div className="relative w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-gray-700">
           <div
-            className={`flex items-center justify-center py-4 cursor-pointer text-lg ${
-              activeType !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
-            }`}
+            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${activeType !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
+              }`}
             onClick={() => handleDropdownClick("SELECT TYPE")}
           >
-            SELECT TYPE
-            <span className="absolute right-4 text-xl">
+            <span>SELECT TYPE</span>
+            <span className="text-xl sm:absolute sm:right-4">
               {openDropdown === "SELECT TYPE" ? "×" : "+"}
             </span>
           </div>
@@ -319,11 +322,11 @@ const ProjectFilter = () => {
                 : { height: 0, opacity: 0 }
             }
             transition={{ duration: 0.3 }}
-            className="absolute top-full left-0 w-full bg-black shadow-xl overflow-hidden"
+            className="absolute top-full left-0 w-full bg-black shadow-xl overflow-hidden z-30"
           >
             {openDropdown === "SELECT TYPE" && (
               <div className="border-t border-white">
-                <div className="py-3 px-6 text-sm text-gray-400 font-light text-left border-b border-gray-700">
+                <div className="py-3 px-4 sm:px-6 text-sm text-gray-400 font-light text-left border-b border-gray-700">
                   SELECT TYPE
                 </div>
                 {types.map((type) => (
@@ -331,11 +334,10 @@ const ProjectFilter = () => {
                     key={type}
                     onClick={() => handleFilterSelect("TYPE", type)}
                     className={`
-                      py-3 px-6 text-sm text-left transition duration-200
-                      ${
-                        activeType === type
-                          ? "bg-blue-900 font-semibold"
-                          : "hover:bg-gray-800"
+                      py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
+                      ${activeType === type
+                        ? "bg-blue-900 font-semibold"
+                        : "hover:bg-gray-800"
                       }
                     `}
                   >
@@ -348,15 +350,14 @@ const ProjectFilter = () => {
         </div>
 
         {/* Select Location */}
-        <div className="relative w-1/3">
+        <div className="relative w-full sm:w-1/3">
           <div
-            className={`flex items-center justify-center py-4 cursor-pointer text-lg ${
-              activeLocation !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
-            }`}
+            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${activeLocation !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
+              }`}
             onClick={() => handleDropdownClick("SELECT LOCATION")}
           >
-            SELECT LOCATION
-            <span className="absolute right-4 text-xl">
+            <span>SELECT LOCATION</span>
+            <span className="text-xl sm:absolute sm:right-4">
               {openDropdown === "SELECT LOCATION" ? "×" : "+"}
             </span>
           </div>
@@ -369,11 +370,11 @@ const ProjectFilter = () => {
                 : { height: 0, opacity: 0 }
             }
             transition={{ duration: 0.3 }}
-            className="absolute top-full left-0 w-full bg-black shadow-xl overflow-hidden"
+            className="absolute top-full left-0 w-full bg-black shadow-xl overflow-hidden z-30"
           >
             {openDropdown === "SELECT LOCATION" && (
               <div className="border-t border-white">
-                <div className="py-3 px-6 text-sm text-gray-400 font-light text-left border-b border-gray-700">
+                <div className="py-3 px-4 sm:px-6 text-sm text-gray-400 font-light text-left border-b border-gray-700">
                   SELECT LOCATION
                 </div>
                 {locations.map((location) => (
@@ -381,11 +382,10 @@ const ProjectFilter = () => {
                     key={location}
                     onClick={() => handleFilterSelect("LOCATION", location)}
                     className={`
-                      py-3 px-6 text-sm text-left transition duration-200
-                      ${
-                        activeLocation === location
-                          ? "bg-blue-900 font-semibold"
-                          : "hover:bg-gray-800"
+                      py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
+                      ${activeLocation === location
+                        ? "bg-blue-900 font-semibold"
+                        : "hover:bg-gray-800"
                       }
                     `}
                   >
@@ -399,12 +399,18 @@ const ProjectFilter = () => {
       </div>
 
       {/* Projects Grid */}
-      <div className="p-8">
-        <div className="flex flex-wrap -m-3 justify-start">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8">
+        {filteredProjects.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg">No projects found matching your filters.</p>
+          </div>
+        ) : (
+          <div className="flex flex-wrap -m-1 sm:-m-2 md:-m-3 justify-center sm:justify-start">
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
