@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { IoIosArrowUp } from "react-icons/io";
 import { motion, Variants } from "framer-motion";
+import FixedDrawer from "../Home/Recapcha";
 
 const Footer: React.FC = () => {
   const footerLinks = [
@@ -63,8 +64,8 @@ const Footer: React.FC = () => {
                     <Link
                       href={link.href}
                       className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${link.name === "Privacy Policy"
-                          ? "text-sm text-gray-400"
-                          : "uppercase"
+                        ? "text-sm text-gray-400"
+                        : "uppercase"
                         }`}
                     >
                       {link.name}
@@ -128,7 +129,7 @@ const Footer: React.FC = () => {
       </motion.a>
 
 
-      <div className="fixed right-3 bottom-2 z-50">
+      <div className="fixed right-16 bottom-2 z-50">
         <div className="relative">
           {/* First Ripple Layer */}
           <motion.div
@@ -163,8 +164,11 @@ const Footer: React.FC = () => {
           >
             <IoIosArrowUp className="text-xl" />
           </motion.button>
+
         </div>
       </div>
+      <FixedDrawer></FixedDrawer>
+
     </footer>
   );
 };

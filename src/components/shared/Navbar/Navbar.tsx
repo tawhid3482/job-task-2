@@ -33,7 +33,6 @@ function slugify(text: string) {
     .replace(/(^-|-$)/g, "");
 }
 
-const menuClickSound = "/sounds/click.mp3";
 
 const PhoneIcon = ({ className = "" }) => (
   <svg
@@ -113,8 +112,6 @@ export default function Navbar() {
   }, [lastScrollY]);
 
   useEffect(() => {
-    audioRef.current = new Audio(menuClickSound);
-    audioRef.current.preload = "auto";
 
     // Add scroll event listener
     window.addEventListener('scroll', handleScroll, { passive: true });
