@@ -38,13 +38,13 @@ const ContactInfo: React.FC = () => {
           </motion.h2>
           
           <motion.p variants={itemVariants} className="font-semibold mb-4">
-            JCX Business Tower
+           Assist Holdings Limited 
           </motion.p>
           
           <motion.address variants={itemVariants} className="not-italic text-sm text-gray-300 mb-6 leading-relaxed">
-            Plot 1136/A, Japan Street, Block # I,
+           Plot :11,Signature House,10th Floor, Main Road, Block: D,
             <br />
-            Bashundhara R/A, Dhaka - 1229,
+            Aftabnagar, Dhaka, 
             <br />
             Bangladesh
           </motion.address>
@@ -54,15 +54,15 @@ const ContactInfo: React.FC = () => {
             href="mailto:sales@jcxbd.com" 
             className="text-white hover:text-blue-500 transition-colors duration-300 mb-1"
           >
-            sales@jcxbd.com
+            assistholdingslimited@gmail.com
           </motion.a>
           
           <motion.a 
             variants={itemVariants} 
-            href="mailto:info@jcxbd.com" 
+            href="assistholdingslimited@gmail.com" 
             className="text-white hover:text-blue-500 transition-colors duration-300"
           >
-            info@jcxbd.com
+           {/* assistholdingslimited@gmail.com */}
           </motion.a>
         </div>
 
@@ -81,11 +81,11 @@ const ContactInfo: React.FC = () => {
             href="tel:+8801324437947" 
             className="text-xl font-bold mb-6 hover:text-blue-500 transition-colors duration-300"
           >
-            +8801324-437947
+            +8801711-181453
           </motion.a>
           
           <motion.p variants={itemVariants} className="text-xl font-bold">
-            16777
+            09649112235
           </motion.p>
         </div>
 

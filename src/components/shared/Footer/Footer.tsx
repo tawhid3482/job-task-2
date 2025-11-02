@@ -79,19 +79,19 @@ const Footer: React.FC = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 pt-4">
           <p className="mb-4 md:mb-0 text-gray-300">
-            © 2025 JCX BD | All Rights Reserved.
+            © 2025 Assist Holdings Limited  | All Rights Reserved.
           </p>
           <p className="mb-4 md:mb-0 text-gray-300">
-            Designed & Developed by Dcastalia
+            Designed & Developed by Assist Holdings Limited 
           </p>
 
           <div className="flex items-center space-x-4">
             {[FaFacebookF, FaLinkedinIn, FaYoutube, FaInstagram].map(
               (Icon, idx) => {
                 const links = [
-                  "https://www.facebook.com/",
-                  "https://www.linkedin.com/",
-                  "https://www.youtube.com/",
+                  "https://www.facebook.com/Assistholdingslimited",
+                  "https://l.facebook.com/l.php?u=https%3A%2F%2Flinkedin.com%2Fin%2Fassist-holdings-limited-116007383%3Ffbclid%3DIwZXh0bgNhZW0CMTAAYnJpZBExV2QyM2JWU0d3dHp4eEhjOQEeh4rY43DU4QhaXdtS-5qa9EdeIEuTGm0vBxuwubqsr3j3_yJj-xKOdAtmzNI_aem_yV49j2VOaYtzkGVZCnkD-A&h=AT1xtyHf18PbLq0Zv4QfdT-DF6VlVyd0zCxte2uw7XRw9TIagmw4TWGB2XJnb8a3DNTRUh5TCBihafd4tFfykHjlcWXTWRPyjzDqCn2UBrCtVn1aNEzEjeURyqRNmYKK8Zwl",
+                  "https://www.youtube.com/@AssistHoldingsLimited",
                   "https://www.instagram.com/",
                 ];
                 const colors = ["#3b5998", "#0077b5", "#ff0000", "#C13584"];
@@ -118,7 +118,7 @@ const Footer: React.FC = () => {
       </div>
 
       <motion.a
-        href="https://wa.me/8801826853371"
+        href="https://wa.me/8801711-181453"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed left-4 bottom-4 md:left-12 md:bottom-12 z-50 w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center shadow-lg"

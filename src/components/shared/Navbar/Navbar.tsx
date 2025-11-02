@@ -5,7 +5,7 @@
 import Link from "next/link";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-const logoUrl = "https://jcxbd.com/wp-content/uploads/2021/09/logo.svg";
+const logoUrl = "https://scontent.fdac5-2.fna.fbcdn.net/v/t39.30808-6/567191205_122157075998770899_3578105491613803550_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFOSNUDhNQG0MyDUAkO2DBY8iMgOVPZ0unyIyA5U9nS6XqzwE2SPXLXJTkp18od3YowI9kR6Oo-05U5bUkoXp5W&_nc_ohc=dz6doY5ikNoQ7kNvwFGMesV&_nc_oc=AdlAaPn4R_K4ZaaIk617yza_Le7vSVl9uSFN1Vf3i6Jf-rtF2kVB67oJnTRKWObA1Ek&_nc_zt=23&_nc_ht=scontent.fdac5-2.fna&_nc_gid=z7ZKqDuY9DeFnuCJP4WjLw&oh=00_AfhIbGOFRGvFbSd09S_cOCL_wLRWAR-oD-ZfGzFfxhKNVg&oe=690CBD55";
 
 const menuItems = [
   "Residential",
@@ -122,25 +122,24 @@ export default function Navbar() {
   }, [handleScroll]);
 
   return (
-    <header 
-      className={`w-full fixed top-0 left-0 z-50 text-white transition-all duration-500 ${
-        isVisible 
-          ? 'translate-y-0' 
-          : '-translate-y-full'
-      } ${
+    <header
+      className={`w-full fixed top-0 left-0 z-50 text-white transition-all duration-500 ${isVisible
+        ? 'translate-y-0'
+        : '-translate-y-full'
+        } ${
         // Background conditions
-        open 
-          ? 'bg-black/80 backdrop-blur-md' 
-          : isAtTop 
-            ? 'bg-transparent' 
+        open
+          ? 'bg-black/80 backdrop-blur-md'
+          : isAtTop
+            ? 'bg-transparent'
             : 'bg-black/70 backdrop-blur-sm'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center">
-            <img src={logoUrl} alt="JCXBD Logo" className="h-10 w-auto" />
+            <img src={logoUrl} alt="Assist Holdings Limited  Logo" className="h-16 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -166,7 +165,7 @@ export default function Navbar() {
                   href="tel:16777"
                   className="text-sm font-light text-white hover:text-sky-300 transition"
                 >
-                  16777
+                   09649112235
                 </a>
               </div>
             </div>
@@ -265,13 +264,14 @@ commercial`}
                       <div className="text-sm text-gray-300">
                         <div className="mb-4">
                           <h3 className="font-semibold text-white mb-2">
-                            JCX Business Tower
+                            Assist Holdings Limited
                           </h3>
-                          <p>Plot 1136/A, Japan Street, Block # I,</p>
-                          <p>Bashundhara R/A, Dhaka -1229, Bangladesh.</p>
+                          <p>Plot :11,Signature House,10th Floor, Main Road, Block: D,
+                          </p>
+                          <p> Aftabnagar, Dhaka, Bangladesh</p>
                         </div>
                         <div className="text-xs text-gray-400">
-                          <p>© 2025 JCXBD | All Rights Reserved.</p>
+                          <p>© 2025 Assist Holdings Limited  | All Rights Reserved.</p>
                         </div>
                       </div>
                     </div>
@@ -357,13 +357,16 @@ commercial`}
                     <div className="text-sm text-gray-300">
                       <div className="mb-4">
                         <h3 className="font-semibold text-white mb-2">
-                          JCX Business Tower
+                          Assist Holdings Limited
                         </h3>
-                        <p>Plot 1136/A, Japan Street, Block # I,</p>
-                        <p>Bashundhara R/A, Dhaka -1229, Bangladesh.</p>
+                        <p>Plot :11,Signature House,10th Floor, Main Road, Block: D,
+                        </p>
+                        <p> Aftabnagar, Dhaka, Bangladesh
+
+                        </p>
                       </div>
                       <div className="text-xs text-gray-400">
-                        <p>© 2025 JCXBD | All Rights Reserved.</p>
+                        <p>© 2025 Assist Holdings Limited  | All Rights Reserved.</p>
                       </div>
                     </div>
                   </div>
