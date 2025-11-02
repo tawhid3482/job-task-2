@@ -149,7 +149,7 @@ const Enquiry: React.FC = () => {
             <h1 className="text-[35px] font-light  tracking-widest text-gray-800">
               ENQUIRY
             </h1>
-            <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-2"></div>
+            <div className="w-12 h-0.5 bg-orange-400 mx-auto mt-2"></div>
           </div>
 
           {/* Form Fields */}
