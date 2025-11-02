@@ -3,9 +3,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import Logo from "../../../../public/logo.png"
 
-const logoUrl = "https://scontent.fdac5-2.fna.fbcdn.net/v/t39.30808-6/567191205_122157075998770899_3578105491613803550_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFOSNUDhNQG0MyDUAkO2DBY8iMgOVPZ0unyIyA5U9nS6XqzwE2SPXLXJTkp18od3YowI9kR6Oo-05U5bUkoXp5W&_nc_ohc=dz6doY5ikNoQ7kNvwFGMesV&_nc_oc=AdlAaPn4R_K4ZaaIk617yza_Le7vSVl9uSFN1Vf3i6Jf-rtF2kVB67oJnTRKWObA1Ek&_nc_zt=23&_nc_ht=scontent.fdac5-2.fna&_nc_gid=z7ZKqDuY9DeFnuCJP4WjLw&oh=00_AfhIbGOFRGvFbSd09S_cOCL_wLRWAR-oD-ZfGzFfxhKNVg&oe=690CBD55";
+// const logoUrl = "https://scontent.fdac5-2.fna.fbcdn.net/v/t39.30808-6/567191205_122157075998770899_3578105491613803550_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFOSNUDhNQG0MyDUAkO2DBY8iMgOVPZ0unyIyA5U9nS6XqzwE2SPXLXJTkp18od3YowI9kR6Oo-05U5bUkoXp5W&_nc_ohc=dz6doY5ikNoQ7kNvwFGMesV&_nc_oc=AdlAaPn4R_K4ZaaIk617yza_Le7vSVl9uSFN1Vf3i6Jf-rtF2kVB67oJnTRKWObA1Ek&_nc_zt=23&_nc_ht=scontent.fdac5-2.fna&_nc_gid=z7ZKqDuY9DeFnuCJP4WjLw&oh=00_AfhIbGOFRGvFbSd09S_cOCL_wLRWAR-oD-ZfGzFfxhKNVg&oe=690CBD55";
 
 const menuItems = [
   "Residential",
@@ -138,8 +140,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo */}
-          <Link href="/" className="flex items-center">
-            <img src={logoUrl} alt="Assist Holdings Limited  Logo" className="h-16 w-auto" />
+         <Link href="/" className="flex items-center">
+            <Image src={Logo} alt="Assist Holdings Limited  Logo" width={64} height={64} className="h-16 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

@@ -172,7 +172,7 @@ const SliderPage = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               <button
                 onClick={handleFormToggle}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+                className="bg-[#783D1B] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
               >
                 {showForm ? "Cancel" : "Add New Slider"}
               </button>

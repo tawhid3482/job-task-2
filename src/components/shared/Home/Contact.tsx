@@ -25,10 +25,9 @@ const FixedSocialSidebar: React.FC = () => {
             href={item.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-12 h-12 bg-[#0047AB] border-b border-gray-700 flex items-center justify-center cursor-pointer transition-all duration-300"
+            className="w-12 h-12 bg-[#783D1B] border-b border-gray-700 flex items-center justify-center cursor-pointer transition-all duration-300"
             // Set initial state for background (Dark Blue)
-            initial={{ backgroundColor: '#0047AB' }}
-            // Animate on hover: change color to brand color and scale up slightly
+            initial={{ backgroundColor: '#783D1B' }}
             whileHover={{
               backgroundColor: item.color,
               scale: 1.05,

@@ -251,7 +251,6 @@ const ProjectFilter = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Filter Header */}
       <div className="bg-black text-white flex flex-col sm:flex-row border-b border-gray-700 relative z-20">
         {/* Select Category */}
         <div className="relative w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-gray-700">
@@ -288,7 +287,7 @@ const ProjectFilter = () => {
                     className={`
                       py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
                       ${activeCategory === category
-                        ? "bg-blue-900 font-semibold"
+                        ? "bg-[#783D1B] font-semibold"
                         : "hover:bg-gray-800"
                       }
                     `}
@@ -336,7 +335,7 @@ const ProjectFilter = () => {
                     className={`
                       py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
                       ${activeType === type
-                        ? "bg-blue-900 font-semibold"
+                        ? "bg-[#783D1B] font-semibold"
                         : "hover:bg-gray-800"
                       }
                     `}
@@ -384,7 +383,7 @@ const ProjectFilter = () => {
                     className={`
                       py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
                       ${activeLocation === location
-                        ? "bg-blue-900 font-semibold"
+                        ? "bg-[#783D1B] font-semibold"
                         : "hover:bg-gray-800"
                       }
                     `}
