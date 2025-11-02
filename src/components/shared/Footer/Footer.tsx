@@ -121,7 +121,7 @@ const Footer: React.FC = () => {
         href="https://wa.me/8801711-181453"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed left-4 bottom-4 md:left-12 md:bottom-12 z-50 w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center shadow-lg"
+        className="fixed left-4 bottom-4 md:left-8 md:bottom-8 z-50 w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center shadow-lg"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
