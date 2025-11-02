@@ -128,34 +128,36 @@ const SliderPage = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 md:my-24 text-black">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 md:my-24 text-black">
       {/* Sidebar */}
-      <div className="bg-gray-800 text-white w-64 space-y-6 py-7 px-2">
-        <div className="text-white flex items-center space-x-2 px-4">
-          <span className="text-2xl font-extrabold">Admin Panel</span>
+      <div className="bg-gray-800 text-white w-full md:w-64 space-y-6 py-4 md:py-7 px-2 md:px-4">
+        <div className="text-white flex items-center justify-center md:justify-start space-x-2 px-4">
+          <span className="text-xl md:text-2xl font-extrabold">
+            Admin Panel
+          </span>
         </div>
-        <nav className="space-y-2">
+        <nav className="space-y-1 md:space-y-2">
           <a
             href="/admin/dashboard"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
+            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
           >
             Dashboard
           </a>
           <a
             href="/admin/properties"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
+            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
           >
             Properties
           </a>
           <a
             href="/admin/slider"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white bg-gray-700"
+            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white bg-gray-700 text-sm md:text-base"
           >
             Slider ({sliders.length})
           </a>
           <a
             href="/admin/testimonial"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
+            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
           >
             Testimonial
           </a>
@@ -165,14 +167,14 @@ const SliderPage = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm">
-          <div className="flex justify-between items-center px-6 py-4">
-            <h1 className="text-2xl font-bold text-gray-900">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-6 py-4 space-y-3 sm:space-y-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
               Slider Management
             </h1>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               <button
                 onClick={handleFormToggle}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
               >
                 {showForm ? "Cancel" : "Add New Slider"}
               </button>
@@ -181,7 +183,7 @@ const SliderPage = () => {
                   localStorage.removeItem("token");
                   router.push("/login");
                 }}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm sm:text-base"
               >
                 Logout
               </button>
@@ -189,16 +191,16 @@ const SliderPage = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 md:p-6">
           {/* Add Slider Form */}
           {showForm && (
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
               <h2 className="text-lg font-semibold mb-4">Add New Slider</h2>
               <form
                 onSubmit={handleSubmit}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                className="grid grid-cols-1 gap-3 sm:gap-4"
               >
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Title
                   </label>
@@ -207,13 +209,16 @@ const SliderPage = () => {
                     required
                     value={formData.title}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, title: e.target.value }))
+                      setFormData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   />
                 </div>
 
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Text/Description
                   </label>
@@ -226,11 +231,12 @@ const SliderPage = () => {
                         text: e.target.value,
                       }))
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   />
                 </div>
 
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Image
                   </label>
@@ -238,31 +244,31 @@ const SliderPage = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   />
                   {formData.Image && (
                     <div className="mt-2">
                       <img
                         src={formData.Image}
                         alt="Preview"
-                        className="w-32 h-32 object-cover rounded-lg"
+                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
                       />
                     </div>
                   )}
                 </div>
 
-                <div className="md:col-span-2 flex justify-end space-x-4">
+                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
                   <button
                     type="button"
                     onClick={handleFormToggle}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 text-sm sm:text-base"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={uploading}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
                   >
                     {uploading ? "Saving..." : "Add Slider"}
                   </button>
@@ -271,47 +277,55 @@ const SliderPage = () => {
             </div>
           )}
 
-          {/* Sliders List - Table Layout like Testimonials */}
+          {/* Sliders List - Responsive Table Layout */}
           <div className="bg-white rounded-lg shadow">
-            <div className="p-6">
+            <div className="p-3 sm:p-4 md:p-6">
               <h2 className="text-lg font-semibold mb-4">
                 All Sliders ({sliders.length})
               </h2>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead>
+                  <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Image
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Title
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                         Text/Description
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
                         Created At
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-200">
                     {sliders.map((slider) => (
-                      <tr key={slider.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                      <tr key={slider.id} className="hover:bg-gray-50">
+                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                           <img
                             src={slider.Image}
                             alt={slider.title}
-                            className="w-16 h-16 object-cover rounded-lg"
+                            className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
                           />
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {slider.title}
+                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {slider.title}
+                          </div>
+                          <div className="text-xs text-gray-500 sm:hidden mt-1 line-clamp-2">
+                            {slider.text}
+                          </div>
+                          <div className="text-xs text-gray-500 md:hidden">
+                            {new Date(slider.createdAt).toLocaleDateString()}
+                          </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {slider.text}
+                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+                          <div className="line-clamp-2">{slider.text}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
                           {new Date(slider.createdAt).toLocaleDateString()}
                         </td>
                       </tr>
@@ -319,6 +333,36 @@ const SliderPage = () => {
                   </tbody>
                 </table>
               </div>
+
+              {/* Mobile Card View for smaller screens */}
+              {/* <div className="sm:hidden mt-4 space-y-4">
+                {sliders.map((slider) => (
+                  <div
+                    key={slider.id}
+                    className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <img
+                        src={slider.Image}
+                        alt={slider.title}
+                        className="w-16 h-16 object-cover rounded-lg shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-medium text-gray-900 mb-1">
+                          {slider.title}
+                        </h3>
+                        <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+                          {slider.text}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Created:{" "}
+                          {new Date(slider.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div> */}
             </div>
           </div>
         </main>
