@@ -80,7 +80,7 @@ const OurAscendance: React.FC = () => {
               viewport={{ once: true }}
               variants={fadeUp}
             >
-              JCX Developments Ltd embarked on the Real Estate journey with the
+              Assist-holdings-limited Developments Ltd embarked on the Real Estate journey with the
               commitment to bring contemporary design and develop large-scale
               Residential, Commercial, and Condominium projects in Bangladesh
               with Japanese collaboration and experience.
@@ -122,7 +122,7 @@ const OurAscendance: React.FC = () => {
           <motion.div style={{ y: imgMove1 }} className="w-full mt-10">
             <img
               src="https://jcxbd.com/wp-content/uploads/2022/11/Our-ascendence-1.jpg"
-              alt="JCX Developments"
+              alt="Assist-holdings-limited Developments"
               className="w-full h-[400px] object-cover rounded-lg shadow-lg"
             />
           </motion.div>

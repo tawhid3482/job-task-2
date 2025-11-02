@@ -23,7 +23,7 @@ const Map: React.FC = () => {
         >
           <img
             src={STATIC_MAP_IMAGE}
-            alt="Map of Dhaka, Bangladesh showing JCX location"
+            alt="Map of Dhaka, Bangladesh showing assist-holdings-limited location"
             className="w-full h-full object-cover"
           />
 

@@ -64,7 +64,7 @@ const Team4: React.FC = () => {
           {/* Paragraphs */}
           <div className="space-y-6 text-base leading-relaxed ">
             <p>
-              Md. Mirja Golam Rahman was born in 1989 in Lakshmipur district. In past days he was involved in stock market, garment business & import business. Currently he is a Director of Construction, SCM and Administration Department of JCX Development Limited & he is young entrepreneur. Being a young and dynamic leader, he works on various innovations in procurement strategy implementation and management for the sake of company development.
+              Md. Mirja Golam Rahman was born in 1989 in Lakshmipur district. In past days he was involved in stock market, garment business & import business. Currently he is a Director of Construction, SCM and Administration Department of assist-holdings-limited Development Limited & he is young entrepreneur. Being a young and dynamic leader, he works on various innovations in procurement strategy implementation and management for the sake of company development.
             </p>
 
             <p>

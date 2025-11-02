@@ -57,7 +57,7 @@ const BuyerInfo: React.FC = () => {
         >
           <img
             src="https://jcxbd.com/wp-content/uploads/2021/11/Page-Banners-Buyer-1.jpg"
-            alt="Landowner JCX"
+            alt="Landowner assist-holdings-limited"
             className="w-full md:h-[450px] object-cover rounded-md"
           />
         </motion.div>
@@ -68,10 +68,10 @@ const BuyerInfo: React.FC = () => {
             style={{ y: yFirstText }}
             className="text-base leading-relaxed md:w-1/2"
           >
-            At <b className="text-gray-400">JCX</b>, you can put your faith
+            At <b className="text-gray-400">assist-holdings-limited</b>, you can put your faith
             without any hesitation because we ensure creating true value for
             your investment. Alongside, by putting your resources here at{" "}
-            <b className="text-gray-400">JCX</b>, you would be endowed with
+            <b className="text-gray-400">assist-holdings-limited</b>, you would be endowed with
             opulence and unique properties in the market and feel the ultimate
             pleasure of triumph.
           </motion.p>

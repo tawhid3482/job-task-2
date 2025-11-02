@@ -57,7 +57,7 @@ const CSRSection: React.FC = () => {
         variants={textItemVariants}
         className="text-xl mb-16 max-w-4xl leading-relaxed"
       >
-        Here at JCX, we believe that proactive environmental responsibility and a dedication to the communities in which we invest are the most effective ways for us to generate value for our clients. And we are committed to upholding strong legal and ethical standards in our organization to reflect our motive.
+        Here at assist-holdings-limited, we believe that proactive environmental responsibility and a dedication to the communities in which we invest are the most effective ways for us to generate value for our clients. And we are committed to upholding strong legal and ethical standards in our organization to reflect our motive.
       </motion.p>
       
       {/* Accordion-like Category List */}
@@ -81,7 +81,7 @@ const CSRSection: React.FC = () => {
         
         {/* Right Column Text */}
         <motion.p variants={textItemVariants}>
-          Community and Social Responsibility come equally high on our priorities as the environment does. In the journey of our social service at JCX, we want it feel to make dreams come true and this extends to the communities of the underprivileged in the country.
+          Community and Social Responsibility come equally high on our priorities as the environment does. In the journey of our social service at assist-holdings-limited, we want it feel to make dreams come true and this extends to the communities of the underprivileged in the country.
         </motion.p>
       </div>
      </div>
