@@ -55,18 +55,20 @@ const Footer: React.FC = () => {
           {footerLinks.map((column, colIndex) => (
             <div
               key={colIndex}
-              className={`col-span-1 text-sm text-gray-300 ${colIndex === 2 ? "md:col-span-2 lg:col-span-2" : ""
-                }`}
+              className={`col-span-1 text-sm text-gray-300 ${
+                colIndex === 2 ? "md:col-span-2 lg:col-span-2" : ""
+              }`}
             >
               <ul className="space-y-8">
                 {column.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${link.name === "Privacy Policy"
-                        ? "text-sm text-gray-400"
-                        : "uppercase"
-                        }`}
+                      className={`text-xs font-light tracking-wider hover:text-gray-400 transition-colors duration-200 ${
+                        link.name === "Privacy Policy"
+                          ? "text-sm text-gray-400"
+                          : "uppercase"
+                      }`}
                     >
                       {link.name}
                     </Link>
@@ -79,10 +81,11 @@ const Footer: React.FC = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 pt-4">
           <p className="mb-4 md:mb-0 text-gray-300">
-            © 2025 Assist Holdings Limited  | All Rights Reserved.
+            © 2025 Assist Holdings Limited | All Rights Reserved.
           </p>
           <p className="mb-4 md:mb-0 text-gray-300">
-            Designed & Developed by Assist Holdings Limited 
+            Designed & Developed by Development, SEO, & Ads By{" "}
+            <a href="https://nextgent.org">NextGent.org </a>
           </p>
 
           <div className="flex items-center space-x-4">
@@ -128,7 +131,6 @@ const Footer: React.FC = () => {
         <FaWhatsapp className="text-white text-3xl" />
       </motion.a>
 
-
       <div className="fixed right-16 bottom-2 z-50">
         <div className="relative">
           {/* First Ripple Layer */}
@@ -164,11 +166,9 @@ const Footer: React.FC = () => {
           >
             <IoIosArrowUp className="text-xl" />
           </motion.button>
-
         </div>
       </div>
       <FixedDrawer></FixedDrawer>
-
     </footer>
   );
 };
