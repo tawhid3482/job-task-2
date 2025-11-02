@@ -54,7 +54,7 @@ const BuyerInfo: React.FC = () => {
         {/* Left Image */}
         <motion.div
           variants={imageVariants}
-          className="w-full md:w-[400px] md:h-[450px] rounded-md overflow-hidden flex-shrink-0"
+          className="w-full md:w-[400px] md:h-[450px] rounded-md overflow-hidden shrink-0"
         >
           <img
             src="https://jcxbd.com/wp-content/uploads/2021/11/Page-Banners-Buyer-1.jpg"
@@ -64,7 +64,7 @@ const BuyerInfo: React.FC = () => {
         </motion.div>
 
         {/* Right Texts — 2 columns */}
-        <div className="flex flex-col md:flex-row justify-between gap-8 flex-grow">
+        <div className="flex flex-col md:flex-row justify-between gap-8 grow">
           <motion.p
             style={{ y: yFirstText }}
             className="text-base leading-relaxed md:w-1/2"

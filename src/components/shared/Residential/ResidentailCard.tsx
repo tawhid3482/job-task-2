@@ -32,60 +32,63 @@ const buttonVariants = {
 const ProjectCard = ({ project }: { project: Project }) => (
   <div className="w-full sm:w-1/2 lg:w-1/3 p-3 shrink-0">
     <Link href={`/properties/${project.id}`} className="block">
-      <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer">
-        <div className="relative h-96 w-full overflow-hidden">
+      <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer md:w-[430px] md:h-[680px]">
+        <div className="relative overflow-hidden">
           <img
             src={project.Image}
             alt={project.Title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="md:h-[580px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          {/* হোভার ডিটেইলস ওভারলে */}
           <motion.div
-            className="absolute inset-0 bg-black/70 flex flex-col justify-center p-6 text-white opacity-0 group-hover:opacity-100 z-10"
+            className="absolute inset-0 bg-black/70 flex flex-col justify-start py-10 px-8 text-white opacity-0 group-hover:opacity-100 z-10 space-y-5"
             initial={{ y: 50, opacity: 0 }}
             whileHover={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-xl font-bold mb-2 border-b border-gray-600 pb-2">
-              {project.Title}
-            </h3>
+           
 
-            <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
               <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
               <span>
                 <span>Orientation:</span> {project.Orientation}
               </span>
             </p>
 
-            <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
               <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
               <span>
                 <span>Address:</span> {project.Address}
               </span>
             </p>
 
-            <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
               <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
               <span>
                 <span>Land Size:</span> {project.LandSize} Katha
               </span>
             </p>
-
-            <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
               <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
               <span>
-                <span>Floors:</span> {project.NumberOfFloors}
+                <span>Font Road:</span> {project.NumberOfParking} 
               </span>
             </p>
 
-            <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
               <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
               <span>
-                <span>Parking:</span> {project.NumberOfParking}
+                <span>Number of Floors:</span> {project.NumberOfFloors}
               </span>
             </p>
 
-            <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
+              <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
+              <span>
+                <span>Number of Parking:</span> {project.NumberOfParking}
+              </span>
+            </p>
+
+            <p className="text-sm  mb-1 flex items-baseline gap-2">
               <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
               <span>
                 <span>Apartment Size:</span> {project.ApartmentSize} Sq. Ft
@@ -97,7 +100,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
               variants={buttonVariants}
               initial="hidden"
               animate="visible"
-              className="relative flex flex-col items-start mt-8 my-2"
+              className="relative flex flex-col items-start mt-8 md:mt-24 my-2"
             >
               <motion.div
                 className="w-20 h-px bg-white"
@@ -120,11 +123,10 @@ const ProjectCard = ({ project }: { project: Project }) => (
           </motion.div>
         </div>
 
-        {/* কার্ডের নিচের অংশ */}
-        <div className="bg-black/80 p-4 text-left text-white">
-          <p className="text-sm text-gray-300">{project.Type}</p>
+        <div className="bg-white p-4 text-left text-black">
+          <p className="text-sm text-gray-600">{project.Type}</p>
           <h3 className="text-xl font-bold">{project.Title}</h3>
-          <p className="text-sm text-gray-300">{project.LandSize} Katha</p>
+          <p className="text-sm text-gray-600">{project.LandSize} Katha</p>
         </div>
       </div>
     </Link>
@@ -136,7 +138,6 @@ const ProjectFilter = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // সবগুলো ফিল্টার ডিফল্টভাবে ALL সেট করা
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [activeType, setActiveType] = useState("ALL");
   const [activeLocation, setActiveLocation] = useState("ALL");

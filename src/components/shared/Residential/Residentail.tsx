@@ -11,7 +11,7 @@ const Residential = () => {
             }}
             // 2. Add classes for height, background size/position, and flex for centering.
             className="
-                h-96 md:h-[420px]
+                h-96 md:h-[552px]
                 bg-cover bg-center 
                 flex items-center justify-center 
                 relative 

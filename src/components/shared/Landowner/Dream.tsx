@@ -32,16 +32,16 @@ const Dream: React.FC = () => {
           className="relative px-8 py-3 text-sm tracking-widest border-t border-b border-white overflow-hidden group inline-block"
         >
           {/* Top border animates left → right */}
-          <span className="absolute top-0 left-0 w-0 h-[2px] bg-white group-hover:w-full transition-all duration-500"></span>
+          <span className="absolute top-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-500"></span>
 
           {/* Bottom border animates right → left */}
-          <span className="absolute bottom-0 right-0 w-0 h-[2px] bg-white group-hover:w-full transition-all duration-500"></span>
+          <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-500"></span>
 
           {/* Left border animates top → bottom */}
-          <span className="absolute top-0 left-0 w-[2px] h-0 bg-white group-hover:h-full transition-all duration-500 delay-300"></span>
+          <span className="absolute top-0 left-0 w-0.5 h-0 bg-white group-hover:h-full transition-all duration-500 delay-300"></span>
 
           {/* Right border animates bottom → top */}
-          <span className="absolute bottom-0 right-0 w-[2px] h-0 bg-white group-hover:h-full transition-all duration-500 delay-300"></span>
+          <span className="absolute bottom-0 right-0 w-0.5 h-0 bg-white group-hover:h-full transition-all duration-500 delay-300"></span>
             {/* full bg white niche thake upre animation → top */}
           <span className="absolute bottom-0 right-0 w-full h-full hover:bg-white  transition-all duration-500 delay-300"></span>
 
