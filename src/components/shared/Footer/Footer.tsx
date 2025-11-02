@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
           </p>
           <p className="mb-4 md:mb-0 text-gray-300">
             Designed & Developed by Development, SEO, & Ads By{" "}
-            <a href="https://nextgent.org">NextGent.org </a>
+            <a className="font-bold " href="https://nextgent.org">NextGent.org </a>
           </p>
 
           <div className="flex items-center space-x-4">
