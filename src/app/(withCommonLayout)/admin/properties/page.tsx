@@ -164,7 +164,7 @@ const PropertiesPage = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 md:my-24 text-black">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 my-24 text-black">
       {/* Sidebar - Hidden on mobile, shown on desktop */}
       <div className="bg-gray-800 text-white w-full md:w-64 space-y-6 py-4 md:py-7 px-2 md:px-4">
         <div className="text-white flex items-center justify-center md:justify-start space-x-2 px-4">
