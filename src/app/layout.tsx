@@ -5,6 +5,8 @@ import "./globals.css";
 import CurtainTransition from "@/components/PageTransition";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
+import { ToastContainer } from "react-toastify";
+import ReduxProvider from "@/lib/ReduxProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,18 +24,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="w-full mx-auto ">
-          <Navbar />
-          {children}
-
-          <CurtainTransition />
-          <Footer />
-        </div>
-      </body>
-    </html>
+    <ReduxProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <div className="w-full mx-auto ">
+            <Navbar />
+            {children}
+            <ToastContainer />
+            <CurtainTransition />
+            <Footer />
+          </div>
+        </body>
+      </html>
+    </ReduxProvider>
   );
 }

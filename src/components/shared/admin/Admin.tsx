@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// app/admin/dashboard/page.tsx
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 interface DashboardStats {
   usersCount: number;
@@ -137,69 +132,8 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-100 mt-20">
-      {/* Sidebar */}
-      <div className="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
-        <div className="text-white flex items-center space-x-2 px-4">
-          <span className="text-2xl font-extrabold">Admin Panel</span>
-        </div>
-
-        <nav className="space-y-2">
-          <Link
-            href="/admin/dashboard"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white bg-gray-700"
-          >
-            Dashboard
-          </Link>
-
-          <Link
-            href="/admin/properties"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
-          >
-            Properties ({stats.propertiesCount})
-          </Link>
-
-          <Link
-            href="/admin/slider"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
-          >
-            Slider ({stats.slidersCount})
-          </Link>
-
-          <Link
-            href="/admin/testimonial"
-            className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
-          >
-            Testimonial ({stats.testimonialsCount})
-          </Link>
-
-         
-        </nav>
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <header className="bg-white shadow-sm">
-          <div className="flex justify-between items-center px-6 py-4">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">
-                Dashboard Overview
-              </h1>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              
-
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </header>
-
         {/* Dashboard Content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
