@@ -2,7 +2,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useCreatePropertiesMutation, useGetAllPropertiesQuery } from "@/redux/features/properties/propertiesApi";
+import {
+  useCreatePropertiesMutation,
+  useGetAllPropertiesQuery,
+} from "@/redux/features/properties/propertiesApi";
 
 interface Property {
   id: string;
@@ -22,7 +25,8 @@ interface Property {
 }
 
 const PropertiesPage = () => {
-  const [createProperties, { isLoading: creating }] = useCreatePropertiesMutation();
+  const [createProperties, { isLoading: creating }] =
+    useCreatePropertiesMutation();
   const {
     data: properties = [],
     isLoading,
@@ -82,8 +86,6 @@ const PropertiesPage = () => {
     try {
       // Create FormData for file upload
       const submissionFormData = new FormData();
-
-      // ✅ সঠিকভাবে fields append করুন
       submissionFormData.append("Title", formData.Title);
       submissionFormData.append("Type", formData.Type);
       submissionFormData.append("Orientation", formData.Orientation);
@@ -119,7 +121,6 @@ const PropertiesPage = () => {
         setShowForm(false);
         refetch();
       }
-
     } catch (error: any) {
       console.error("Error:", error);
       toast.error(error?.data?.message || "Failed to create property");
@@ -560,9 +561,7 @@ const PropertiesPage = () => {
                             >
                               Edit
                             </button>
-                            <button
-                              className="text-red-600 hover:text-red-900"
-                            >
+                            <button className="text-red-600 hover:text-red-900">
                               Delete
                             </button>
                           </td>
