@@ -1,11 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  useCreatePropertiesMutation,
-  useGetAllPropertiesQuery
-} from "@/redux/features/properties/propertiesApi";
 import { toast } from "react-toastify";
+import { useCreatePropertiesMutation, useGetAllPropertiesQuery } from "@/redux/features/properties/propertiesApi";
 
 interface Property {
   id: string;
@@ -25,13 +22,7 @@ interface Property {
 }
 
 const PropertiesPage = () => {
-  const [createProperties, { isLoading: creating }] =
-    useCreatePropertiesMutation();
-  const [updateProperties, { isLoading: updating }] =
-    useUpdatePropertiesMutation();
-  const [deleteProperties, { isLoading: deleting }] =
-    useDeletePropertiesMutation();
-
+  const [createProperties, { isLoading: creating }] = useCreatePropertiesMutation();
   const {
     data: properties = [],
     isLoading,
@@ -84,83 +75,56 @@ const PropertiesPage = () => {
     }
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setUploading(true);
-
-  try {
-    // Create FormData for file upload
-    const submissionFormData = new FormData();
-
-    // ✅ সঠিকভাবে fields append করুন
-    submissionFormData.append("Title", formData.Title);
-    submissionFormData.append("Type", formData.Type);
-    submissionFormData.append("Orientation", formData.Orientation);
-    submissionFormData.append("Address", formData.Address);
-    submissionFormData.append("FrontRoad", formData.FrontRoad);
-    submissionFormData.append("LandSize", formData.LandSize);
-    submissionFormData.append("ApartmentSize", formData.ApartmentSize);
-    submissionFormData.append("NumberOfUnits", formData.NumberOfUnits);
-    submissionFormData.append("NumberOfParking", formData.NumberOfParking);
-    submissionFormData.append("NumberOfFloors", formData.NumberOfFloors);
-
-    // ✅ Image file append করুন
-    if (imageFile) {
-      submissionFormData.append("Image", imageFile);
-    } else if (!editingProperty) {
-      // New property-তে image required
-      toast.error("Please select an image");
-      setUploading(false);
-      return;
-    }
-
-    // ✅ Debug: Console-এ check করুন কি send করছেন
-    console.log("Sending FormData:");
-    for (let [key, value] of submissionFormData.entries()) {
-      console.log(key, value);
-    }
-
-    const result = await createProperties(submissionFormData).unwrap();
-
-    if (result.success) {
-      toast.success("Property created successfully!");
-      resetForm();
-      setShowForm(false);
-      refetch();
-    }
-
-  } catch (error: any) {
-    console.error("Error:", error);
-    toast.error(error?.data?.message || "Failed to create property");
-  } finally {
-    setUploading(false);
-  }
-};
-
-  const handleDeleteProperty = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this property?")) {
-      return;
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUploading(true);
 
     try {
-      const result = await deleteProperties(id).unwrap();
+      // Create FormData for file upload
+      const submissionFormData = new FormData();
 
-      if (result.success || result.status === "success") {
-        toast.success("Property deleted successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+      // ✅ সঠিকভাবে fields append করুন
+      submissionFormData.append("Title", formData.Title);
+      submissionFormData.append("Type", formData.Type);
+      submissionFormData.append("Orientation", formData.Orientation);
+      submissionFormData.append("Address", formData.Address);
+      submissionFormData.append("FrontRoad", formData.FrontRoad);
+      submissionFormData.append("LandSize", formData.LandSize);
+      submissionFormData.append("ApartmentSize", formData.ApartmentSize);
+      submissionFormData.append("NumberOfUnits", formData.NumberOfUnits);
+      submissionFormData.append("NumberOfParking", formData.NumberOfParking);
+      submissionFormData.append("NumberOfFloors", formData.NumberOfFloors);
+
+      // ✅ Image file append করুন
+      if (imageFile) {
+        submissionFormData.append("Image", imageFile);
+      } else if (!editingProperty) {
+        // New property-তে image required
+        toast.error("Please select an image");
+        setUploading(false);
+        return;
+      }
+
+      // ✅ Debug: Console-এ check করুন কি send করছেন
+      console.log("Sending FormData:");
+      for (let [key, value] of submissionFormData.entries()) {
+        console.log(key, value);
+      }
+
+      const result = await createProperties(submissionFormData).unwrap();
+
+      if (result.success) {
+        toast.success("Property created successfully!");
+        resetForm();
+        setShowForm(false);
         refetch();
       }
+
     } catch (error: any) {
-      console.error("Error deleting property:", error);
-      toast.error(
-        error?.data?.message || "Failed to delete property. Please try again.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-        }
-      );
+      console.error("Error:", error);
+      toast.error(error?.data?.message || "Failed to create property");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -229,7 +193,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <button
               onClick={handleFormToggle}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-              disabled={uploading || creating || updating}
+              disabled={uploading || creating}
             >
               <span>+</span>
               <span>{showForm ? "Cancel" : "Add Property"}</span>
@@ -470,17 +434,17 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <button
                     type="button"
                     onClick={handleFormToggle}
-                    disabled={uploading || creating || updating}
+                    disabled={uploading || creating}
                     className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50 text-sm sm:text-base"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={uploading || creating || updating}
+                    disabled={uploading || creating}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base flex items-center justify-center gap-2"
                   >
-                    {uploading || creating || updating ? (
+                    {uploading || creating ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                         {editingProperty ? "Updating..." : "Creating..."}
@@ -592,17 +556,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                           <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap text-sm font-medium">
                             <button
                               onClick={() => handleEditProperty(property)}
-                              className="text-blue-600 hover:text-blue-900 mr-3 disabled:opacity-50"
-                              disabled={deleting}
+                              className="text-blue-600 hover:text-blue-900 mr-3"
                             >
                               Edit
                             </button>
                             <button
-                              onClick={() => handleDeleteProperty(property.id)}
-                              className="text-red-600 hover:text-red-900 disabled:opacity-50"
-                              disabled={deleting}
+                              className="text-red-600 hover:text-red-900"
                             >
-                              {deleting ? "Deleting..." : "Delete"}
+                              Delete
                             </button>
                           </td>
                         </tr>
