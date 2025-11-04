@@ -19,6 +19,16 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+    rules: {
+      // ⛔️ Disable next/image enforcement
+      "@next/next/no-img-element": "off",
+
+      // ⛔️ Allow normal quotes like 'It's'
+      "react/no-unescaped-entities": "off",
+
+      // ⛔️ Ignore unused vars warning
+      "@typescript-eslint/no-unused-vars": "off",
+    },
   },
 ];
 

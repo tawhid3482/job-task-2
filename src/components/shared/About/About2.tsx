@@ -44,7 +44,7 @@ const About2: React.FC = () => {
               Directors of Bengal Commercial Bank Limited representing B. Dash
               Japan Co. Ltd. Mr. Chowdhury is well known as one of the
               established Real Estate business personalities of the country. He
-              is the Managing Director of renowned JCX Development Ltd and JCX
+              is the Managing Director of renowned Assist-holdings-limited Development Ltd and JCX
               Trading Ltd. He has played a great role in the industry by earning
               FDI (Foreign Direct Investment) through joint venture business
               enterprise with Japanese CREED Group, which is the ever first of

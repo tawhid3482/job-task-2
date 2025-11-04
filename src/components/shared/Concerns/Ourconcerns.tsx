@@ -59,14 +59,14 @@ const Ourconcerns = () => {
   const projects = [
     {
       id: 1,
-      title: "JCX Development Ltd.",
+      title: "assist-holdings-limited",
       location: "Dhaka, Bangladesh",
       area: "Real Estate & Property Development",
       image: "https://jcxbd.com/wp-content/uploads/2024/12/Picture2.jpg",
     },
     {
       id: 2,
-      title: "JCX Trading Ltd.",
+      title: "assist-holdings-limited",
       location: "Dhaka, Bangladesh",
       area: "Trading & Import Business",
       image: "https://jcxbd.com/wp-content/uploads/2024/12/Picture1.jpg",

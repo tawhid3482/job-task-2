@@ -37,9 +37,8 @@ const BuyerInfo: React.FC = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.4 }}
-      className="bg-black text-white py-20 px-[5%] min-h-screen flex flex-col gap-10 font-sans"
+      className="bg-black text-white py-10 md:py-20 px-[5%] min-h-screen flex flex-col gap-10 font-sans"
     >
-      {/* Heading */}
       <motion.h1
         variants={textItemVariants}
         className="text-[1.5em] leading-relaxed max-w-3xl my-10"
@@ -54,25 +53,25 @@ const BuyerInfo: React.FC = () => {
         {/* Left Image */}
         <motion.div
           variants={imageVariants}
-          className="w-full md:w-[400px] md:h-[450px] rounded-md overflow-hidden flex-shrink-0"
+          className="w-full md:w-[400px] md:h-[450px] rounded-md overflow-hidden shrink-0"
         >
           <img
             src="https://jcxbd.com/wp-content/uploads/2021/11/Page-Banners-Buyer-1.jpg"
-            alt="Landowner JCX"
+            alt="Landowner assist-holdings-limited"
             className="w-full md:h-[450px] object-cover rounded-md"
           />
         </motion.div>
 
         {/* Right Texts — 2 columns */}
-        <div className="flex flex-col md:flex-row justify-between gap-8 flex-grow">
+        <div className="flex flex-col md:flex-row justify-between gap-8 grow">
           <motion.p
             style={{ y: yFirstText }}
             className="text-base leading-relaxed md:w-1/2"
           >
-            At <b className="text-gray-400">JCX</b>, you can put your faith
+            At <b className="text-gray-400">assist-holdings-limited</b>, you can put your faith
             without any hesitation because we ensure creating true value for
             your investment. Alongside, by putting your resources here at{" "}
-            <b className="text-gray-400">JCX</b>, you would be endowed with
+            <b className="text-gray-400">assist-holdings-limited</b>, you would be endowed with
             opulence and unique properties in the market and feel the ultimate
             pleasure of triumph.
           </motion.p>

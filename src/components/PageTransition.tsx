@@ -10,7 +10,7 @@ import {
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const NUM_PANELS = 8;
+const NUM_PANELS = 7;
 const PANEL_INDICES = Array.from({ length: NUM_PANELS }, (_, i) => i);
 
 const panelVariants: Variants = {
@@ -19,19 +19,18 @@ const panelVariants: Variants = {
   animate: (i: number): TargetAndTransition => ({
     y: "-100%",
     transition: {
-      duration: 0.3,
-      ease: [0.6, 0.01, -0.05, 0.9] as any,
-      delay: i * 0.08,
+      duration: 0.35, // ⏱ একটু দ্রুত
+      ease: [0.45, 0, 0.55, 1] as any,
+      delay: (NUM_PANELS - 1 - i) * 0.05, // ⚡ delay অর্ধেক কমানো হয়েছে
     },
   }),
 
   exit: (i: number): TargetAndTransition => ({
     y: 0,
     transition: {
-      duration: 0.3,
-
-      ease: [0.76, 0.05, 0.24, 1] as any,
-      delay: (NUM_PANELS - 1 - i) * 0.08,
+      duration: 0.35,
+      ease: [0.45, 0, 0.55, 1] as any,
+      delay: i * 0.05, // ⚡ exit একইভাবে দ্রুত
     },
   }),
 };
@@ -45,17 +44,16 @@ export default function CurtainTransition() {
         key={pathname}
         className="fixed inset-0 z-9999 pointer-events-none"
       >
-        {PANEL_INDICES.map((i) => (
+        {[...PANEL_INDICES].reverse().map((i) => (
           <motion.div
             key={i}
-            custom={i} // Pass the index to the panel variants
+            custom={i}
             variants={panelVariants}
             initial="initial"
             animate="animate"
             exit="exit"
             className="absolute top-0 bottom-0 bg-black"
             style={{
-              // Distribute the panels horizontally
               left: `${(i / NUM_PANELS) * 100}%`,
               width: `${(1 / NUM_PANELS) * 100}%`,
             }}

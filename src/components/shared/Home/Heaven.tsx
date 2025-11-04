@@ -103,7 +103,7 @@ const HeroBanner: React.FC = () => {
           
           {/* Button Text */}
           <motion.a
-            href="#contact"
+            href="contact"
             className="uppercase tracking-widest text-sm font-light px-8 py-2 hover:text-gray-300 transition-colors duration-300"
             // Simple hover animation for the text
             whileHover={{ scale: 0.5 }} 

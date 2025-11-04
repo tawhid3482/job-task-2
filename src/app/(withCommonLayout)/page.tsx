@@ -14,11 +14,11 @@ export default function Home() {
       <Banner></Banner>
       <OurPerfections />
       <Ourascendance />
-      <TheBasisOfOurBeliefs/>
-      <Heaven/>
-      <MapSection/>
-      <Testimonials/>
-      <OurAwardsandRecognition/>
+      <TheBasisOfOurBeliefs />
+      <Heaven />
+      <MapSection />
+      <Testimonials />
+      <OurAwardsandRecognition />
       <FixedSocialSidebar />
     </div>
   );

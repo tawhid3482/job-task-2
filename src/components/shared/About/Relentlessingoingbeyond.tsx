@@ -46,7 +46,7 @@ const Relentlessingoingbeyond: React.FC = () => {
     <motion.div
       ref={ref}
       style={{ y: moveY }}
-      className="py-24 px-4 sm:px-8 md:px-12 lg:px-24 bg-black text-white text-gray-800 font-sans overflow-hidden"
+      className="py-24 px-4 sm:px-8 md:px-12 lg:px-24 bg-black text-white  font-sans overflow-hidden"
     >
       {/* Title */}
       <div className="text-center mb-16">
@@ -60,7 +60,7 @@ const Relentlessingoingbeyond: React.FC = () => {
           RELENT LESS IN GOING BEYOND
         </motion.p>
         <motion.div
-          className="mx-auto mt-2 h-0.5 w-24 bg-red-600"
+          className="mx-auto mt-2 h-0.5 w-24 bg-orange-400"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}

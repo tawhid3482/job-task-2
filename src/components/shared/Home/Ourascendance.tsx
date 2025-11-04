@@ -59,7 +59,7 @@ const OurAscendance: React.FC = () => {
           OUR ASCENDANCE
         </motion.p>
         <motion.div
-          className="mx-auto mt-2 h-0.5 w-24 bg-red-600"
+          className="mx-auto mt-2 h-0.5 w-24 bg-[#F6BD2F]"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
@@ -80,10 +80,10 @@ const OurAscendance: React.FC = () => {
               viewport={{ once: true }}
               variants={fadeUp}
             >
-              JCX Developments Ltd embarked on the Real Estate journey with the
-              commitment to bring contemporary design and develop large-scale
-              Residential, Commercial, and Condominium projects in Bangladesh
-              with Japanese collaboration and experience.
+              Welcome to Assist Holdings Limited, a trusted name in real estate
+              and land share investment. We specialize in helping individuals
+              and organizations secure valuable land assets with transparency,
+              reliability, and long-term growth in mind
             </motion.p>
 
             <motion.p
@@ -94,11 +94,40 @@ const OurAscendance: React.FC = () => {
               variants={fadeUp}
               transition={{ delay: 0.2, duration: 0.9, ease: easeOut }}
             >
-              We will strive to deliver precise, exquisite solutions to our
-              client&apos;s wishes and requirements so that their aspirations
-              become a reality. This will be accomplished by introducing
-              state-of-the-art innovative Japanese technologies with the
-              partnership with Creed Group from Japan.
+              At Assist Holdings Limited, our mission is simple — to make land
+              ownership accessible and profitable for everyone. We believe that
+              every piece of land holds potential, and our goal is to assist our
+              clients in unlocking that value through smart investments and
+              innovative land-sharing opportunities. .
+            </motion.p>
+            <motion.p
+              className="text-base leading-relaxed mb-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              transition={{ delay: 0.2, duration: 0.9, ease: easeOut }}
+            >
+              With a team of experienced professionals and a deep understanding
+              of the real estate market, we ensure every project we undertake
+              meets the highest standards of quality, legality, and return on
+              investment. From identifying prime land locations to managing
+              share ownership and development, we guide our clients every step
+              of the way. .
+            </motion.p>
+            <motion.p
+              className="text-base leading-relaxed mb-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              transition={{ delay: 0.2, duration: 0.9, ease: easeOut }}
+            >
+              Whether you’re looking to invest, expand, or secure your future
+              through land ownership, Assist Holdings Limited is here to help
+              you build your foundation for success.
+              <br /> Assist Holdings Limited —
+              Better To Be Trusted Than famous .
             </motion.p>
 
             <motion.a
@@ -122,7 +151,7 @@ const OurAscendance: React.FC = () => {
           <motion.div style={{ y: imgMove1 }} className="w-full mt-10">
             <img
               src="https://jcxbd.com/wp-content/uploads/2022/11/Our-ascendence-1.jpg"
-              alt="JCX Developments"
+              alt="Assist-holdings-limited Developments"
               className="w-full h-[400px] object-cover rounded-lg shadow-lg"
             />
           </motion.div>

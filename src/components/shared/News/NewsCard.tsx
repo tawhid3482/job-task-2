@@ -10,7 +10,7 @@ interface Blog {
   date: string;
   title: string;
   imageUrl: string;
-  dipped: boolean; // Flag to indicate the central, dipped card
+  dipped: boolean; 
 }
 
 const blogData: Blog[] = [
@@ -26,7 +26,7 @@ const blogData: Blog[] = [
     date: '10 September, 2025',
     title: 'How to Transfer Property Ownership Legally in Bangladesh?',
     imageUrl: 'https://jcxbd.com/wp-content/uploads/2025/08/Astoria-Ground-Breking-01.jpg',
-    dipped: true, // This card will be dipped/lowered
+    dipped: true,
   },
   {
     id: 3,
@@ -47,7 +47,7 @@ const blogData: Blog[] = [
     date: '10 September, 2025',
     title: 'How to Transfer Property Ownership Legally in Bangladesh?',
     imageUrl: 'https://jcxbd.com/wp-content/uploads/2025/09/property-handover.jpg',
-    dipped: true, // This card will be dipped/lowered
+    dipped: true, 
   },
   {
     id: 6,
@@ -59,7 +59,6 @@ const blogData: Blog[] = [
 ];
 
 
-// --- Sub-Component: Individual Blog Card ---
 
 const BlogCard: React.FC<{ blog: Blog }> = ({ blog }) => {
   const controls = useAnimation();

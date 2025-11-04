@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const buttonVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -78,7 +79,8 @@ const OurPerfections: React.FC = () => {
       </div>
     );
 
-  const maxIndex = projects.length - visibleCount;
+  const maxIndex = Math.max(0, projects.length - visibleCount);
+  //  Math.max(0, testimonials.length - visibleCount);
   const totalSegments = projects.length - visibleCount + 1;
 
   const nextSlide = () =>
@@ -86,8 +88,7 @@ const OurPerfections: React.FC = () => {
   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
 
   return (
-    <div className="bg-black text-white py-8 md:py-20">
-      {/* Title */}
+    <div className="bg-black text-white py-8 md:py-24">
       <div className="text-center mb-20">
         <motion.p
           className="text-3xl font-light uppercase tracking-widest"
@@ -99,7 +100,7 @@ const OurPerfections: React.FC = () => {
           OUR PERFECTIONS
         </motion.p>
         <motion.div
-          className="mx-auto mt-2 h-1 w-14 bg-red-600"
+          className="mx-auto mt-2 h-1 w-14 bg-[#F6BD2F]"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
@@ -117,56 +118,64 @@ const OurPerfections: React.FC = () => {
             transition={{ type: "tween", duration: 0.5 }}
           >
             {projects.map((project) => (
-              <div
+              <Link
+                href={`/properties/${project.id}`}
                 key={project.id}
-                className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group`}
+                className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group cursor-pointer`}
               >
-                <div className="relative w-full h-[420px] overflow-hidden">
+                <div className="relative w-full h-full overflow-hidden">
                   <img
                     src={project.Image}
                     alt={project.Title}
                     className="w-72 h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <motion.div
-                    className="absolute inset-0 bg-black/70 flex flex-col justify-center p-6 opacity-0 group-hover:opacity-100 z-10"
+                    className="absolute inset-0 bg-black/70 flex flex-col justify-start p-6 opacity-0 group-hover:opacity-100 z-10"
                     initial={{ y: 50, opacity: 0 }}
                     whileHover={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div className="">
-                        <span>Orientation:</span> {project.Orientation}{" "}
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
+                        <span>Orientation:</span> {project.Orientation}
                       </div>
                     </p>
 
-                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div className="">
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
                         <span>Address:</span> {project.Address}
                       </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div className="">
-                        <span>Land Size:</span> {project.LandSize}{" "}
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
+                        <span>Land Size:</span> {project.LandSize}
                       </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div className="">
-                        <span>Floors:</span> {project.NumberOfFloors}
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
+                        <span>Number of Units:</span> {project.ApartmentSize}
                       </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div className="">
-                        <span>Parking:</span> {project.NumberOfParking}
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
+                        <span>Floors Road:</span> {project.NumberOfFloors}
                       </div>
                     </p>
-                    <p className="text-sm text-gray-300 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white text-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div className="">
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
+                        <span>Number of Parking:</span>{" "}
+                        {project.NumberOfParking}
+                      </div>
+                    </p>
+                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
+                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
+                      <div>
                         <span>Apartment Size:</span> {project.ApartmentSize}
                       </div>
                     </p>
@@ -185,16 +194,15 @@ const OurPerfections: React.FC = () => {
                         transition={{ duration: 0.8, delay: 1.6 }}
                         style={{ originX: 0.5 }}
                       />
-                      <motion.a
-                        href="#contact"
+                      <motion.span
                         className="uppercase tracking-widest text-sm font-light hover:text-gray-300 transition-colors duration-300 my-2"
-                        whileHover={{ scale: 0.5 }}
-                        whileTap={{ scale: 0.5 }}
+                        whileHover={{ scale: 0.95 }}
+                        whileTap={{ scale: 0.9 }}
                       >
                         EXPLORE
-                      </motion.a>
+                      </motion.span>
                       <motion.div
-                        className="w-20 h-px bg-white "
+                        className="w-20 h-px bg-white"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ duration: 0.8, delay: 1.6 }}
@@ -208,13 +216,13 @@ const OurPerfections: React.FC = () => {
                   <h3 className="text-xl font-bold">{project.Title}</h3>
                   <p className="text-sm text-gray-300">{project.LandSize}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </motion.div>
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center mt-6">
+        <div className="flex items-center mt-20">
           <button
             onClick={prevSlide}
             disabled={currentIndex === 0}

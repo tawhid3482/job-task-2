@@ -54,25 +54,25 @@ const JCXSection: React.FC = () => {
         {/* Left Image */}
         <motion.div
           variants={imageVariants}
-          className="w-full md:w-[400px] h-[300px] rounded-md overflow-hidden flex-shrink-0"
+          className="w-full md:w-[400px] h-[300px] rounded-md overflow-hidden shrink-0"
         >
           <img
             src="https://jcxbd.com/wp-content/uploads/2021/11/Page-Banners-Landowner-1.jpg"
-            alt="Landowner JCX"
+            alt="Landowner assist-holdings-limited"
             className="w-full h-full object-cover rounded-md"
           />
         </motion.div>
 
         {/* Right Texts — 2 columns */}
-        <div className="flex flex-col md:flex-row justify-between gap-8 flex-grow">
+        <div className="flex flex-col md:flex-row justify-between gap-8 grow">
           <motion.p
             style={{ y: yFirstText }}
             className="text-base leading-relaxed md:w-1/2"
           >
-            At <b className="text-gray-400">JCX</b>, you can put your faith
+            At <b className="text-gray-400">Assist-holdings-limited</b>, you can put your faith
             without any hesitation because we ensure creating true value for
             your investment. Alongside, by putting your resources here at{" "}
-            <b className="text-gray-400">JCX</b>, you would be endowed with
+            <b className="text-gray-400">Assist-holdings-limited</b>, you would be endowed with
             opulence and unique properties in the market and feel the ultimate
             pleasure of triumph.
           </motion.p>

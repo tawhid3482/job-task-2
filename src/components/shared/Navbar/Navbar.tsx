@@ -3,9 +3,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-
-const logoUrl = "https://jcxbd.com/wp-content/uploads/2021/09/logo.svg";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Logo from "../../../../public/logo.png";
+import { useCreateScheduleMutation } from "@/redux/features/schedule/scheduleApi";
 
 const menuItems = [
   "Residential",
@@ -32,8 +35,6 @@ function slugify(text: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
-
-const menuClickSound = "/sounds/click.mp3";
 
 const PhoneIcon = ({ className = "" }) => (
   <svg
@@ -70,8 +71,276 @@ const CloseIcon = ({ className = "" }) => (
   </svg>
 );
 
+const CalendarIcon = ({ className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
+
+// Schedule Modal Component
+const ScheduleModal = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
+    date: "",
+  });
+
+  const [createSchedule, { isLoading, isError, isSuccess }] =
+    useCreateScheduleMutation();
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const result = await createSchedule(formData).unwrap();
+      console.log(result);
+      if (result.success) {
+        toast.success("Schedule created successfully!", {
+          position: "top-right",
+        });
+      }
+
+      // Reset form and close modal
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        message: "",
+        date: "",
+      });
+      onClose();
+    } catch (error: any) {
+      console.error("Failed to create schedule:", error);
+      toast.error(
+        error?.data?.message || "Failed to create schedule. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Show success/error toasts based on mutation state
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Schedule created successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+
+    if (isError) {
+      toast.error("Failed to create schedule. Please try again.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  }, [isSuccess, isError]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+      <div className="bg-gray-300 rounded-lg shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">
+              Schedule Appointment
+            </h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 transition-colors"
+              disabled={isLoading}
+            >
+              <CloseIcon className="w-6 h-6" />
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex justify-between items-center gap-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className="w-full text-black px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#783D1B] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Enter your full name"
+                />
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  value={formData.phone}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className="w-full px-3 py-2 text-black border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#783D1B] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center gap-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className="w-full px-3 text-black py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#783D1B] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="date"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Preferred Date *
+                </label>
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  required
+                  value={formData.date}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className="w-full px-3 py-2 text-black border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#783D1B] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={4}
+                value={formData.message}
+                onChange={handleChange}
+                disabled={isLoading}
+                className="w-full px-3 py-2 text-black border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#783D1B] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                placeholder="Any additional information..."
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={isLoading}
+                className="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="flex-1 px-4 py-2 text-white bg-[#783D1B] rounded-md hover:bg-[#6a3518] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Scheduling...
+                  </>
+                ) : (
+                  "Schedule"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleMenuToggle = useCallback(() => {
@@ -88,61 +357,141 @@ export default function Navbar() {
     setOpen(false);
   }, []);
 
+  const handleScheduleClick = () => {
+    setIsScheduleModalOpen(true);
+  };
+
+  // Scroll handler to show/hide navbar
+  const handleScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+
+    // Check if at the very top of the page
+    setIsAtTop(currentScrollY === 0);
+
+    if (currentScrollY <= 0) {
+      // At the top of the page - always show
+      setIsVisible(true);
+    } else if (currentScrollY < lastScrollY) {
+      // Scrolling UP - show navbar
+      setIsVisible(true);
+    } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Scrolling DOWN and past 100px - hide navbar
+      setIsVisible(false);
+    }
+
+    setLastScrollY(currentScrollY);
+  }, [lastScrollY]);
+
   useEffect(() => {
-    audioRef.current = new Audio(menuClickSound);
-    audioRef.current.preload = "auto";
-  }, []);
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
 
   return (
-    <header className="w-full fixed top-0 left-0 z-50 bg-black/10 backdrop-blur-sm text-white transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Left: Logo */}
-          <Link href="/" className="flex items-center">
-            <img src={logoUrl} alt="JCXBD Logo" className="h-12 w-auto" />
-          </Link>
+    <>
+      <header
+        className={`w-full fixed top-0 left-0 z-50 text-white transition-all duration-500 bg-black/60  ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
+        } ${
+          // Background conditions
+          open
+            ? "bg-black/80 backdrop-blur-md"
+            : isAtTop
+            ? "bg-black/50"
+            : "bg-black/70 backdrop-blur-sm"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 ">
+          <div className="flex items-center justify-between h-20">
+            {/* Left: Logo */}
+            <Link href="/" className="flex items-center">
+              <Image
+                src={Logo}
+                alt="Assist Holdings Limited Logo"
+                width={96}
+                height={96}
+                className="h-16 w-auto"
+              />
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex justify-between items-center gap-16">
-            <div className="hidden md:flex justify-between items-center gap-12">
+            {/* Desktop Navigation - Middle Menu Items */}
+            <div className="hidden lg:flex items-center gap-8">
+              <Link
+                href="/"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
+              >
+                About
+              </Link>
               <Link
                 href="/residential"
-                className="uppercase text-sm font-medium hover:text-sky-300 transition relative group"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Residential
-                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-sky-400 transition-all duration-300 ease-out group-hover:w-full"></span>
               </Link>
-              <span className="text-sm text-white/70">|</span>
               <Link
                 href="/commercial"
-                className="uppercase text-sm font-medium hover:text-sky-300 transition relative group"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
               >
                 Commercial
-                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-sky-400 transition-all duration-300 ease-out group-hover:w-full"></span>
               </Link>
-
+              <Link
+                href="/properties"
+                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
+              >
+                Properties
+              </Link>
               <div className="flex items-center gap-3">
                 <PhoneIcon className="text-white hover:text-sky-300 transition" />
                 <a
-                  href="tel:16777"
-                  className="text-base font-semibold text-white hover:text-sky-300 transition"
+                  href="tel:09649112235"
+                  className="text-sm font-light text-white hover:text-sky-300 transition"
                 >
-                  16777
+                  09649112235
                 </a>
               </div>
             </div>
 
-            <div className="flex items-center gap-5">
-              <p className="uppercase text-sm font-medium transition">MENU</p>
+            {/* Desktop Navigation - Right Side */}
+            <div className="hidden md:flex items-center gap-6">
+              <button
+                onClick={handleScheduleClick}
+                className="flex items-center gap-2 px-4 border-2 border-[#F6BE2C] py-2 hover:bg-[#F6BE2C] hover:text-white  rounded-md  transition-colors"
+              >
+                <CalendarIcon className="w-4 h-4" />
+                <span className="text-sm font-medium uppercase">Schedule a visit</span>
+              </button>
+            </div>
 
-              {/* Hamburger / Close */}
+            {/* Mobile Navigation */}
+            <div className="flex md:hidden items-center gap-4">
+              {/* Schedule Button for Mobile */}
+              <button
+                onClick={handleScheduleClick}
+                className="flex items-center gap-1 p-2 bg-white text-black rounded-md hover:bg-gray-100 transition-colors"
+              >
+                <CalendarIcon className="w-4 h-4" />
+              </button>
+
+              <p className="uppercase text-sm font-medium hover:text-sky-300 transition">
+                MENU
+              </p>
               <div className="relative group">
                 {!open ? (
                   <button
                     aria-expanded={open}
                     aria-controls="jcxbd-menu"
                     onClick={handleMenuToggle}
-                    className="flex flex-col justify-between w-8 h-4 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
+                    className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
                   >
                     <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
                     <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
@@ -161,7 +510,7 @@ export default function Navbar() {
                 {open && (
                   <div
                     id="jcxbd-menu"
-                    className="origin-top-right absolute right-0 -mt-15 w-[700px] p-10 rounded-md shadow-2xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
+                    className="origin-top-right absolute right-0 -mt-15 w-80 p-5 rounded-md shadow-xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
                   >
                     {/* Close Button inside menu */}
                     <div className="flex justify-end mb-4">
@@ -175,29 +524,27 @@ export default function Navbar() {
 
                     {/* Dropdown Links */}
                     <div className="py-4 px-6">
-                      <div className="flex justify-between gap-10">
-                        {/* Left Column */}
-                        <div className="flex flex-col gap-2 w-1/3 border-r border-gray-700 pr-4">
+                      <div className="flex flex-col gap-6">
+                        {/* Main Menu Items */}
+                        <div className="flex flex-col gap-4">
                           <Link
-                            href={`/residential`}
+                            href="/residential"
                             onClick={handleCloseMenu}
-                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
+                            className="relative text-xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
                           >
                             Residential
                           </Link>
-
                           <Link
-                            href={`/
-commercial`}
+                            href="/commercial"
                             onClick={handleCloseMenu}
-                            className="relative text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                            className="relative text-xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
                           >
                             Commercial
                           </Link>
                         </div>
 
-                        {/* Right Column */}
-                        <div className="grid grid-cols-1 gap-3 w-2/3">
+                        {/* Other Menu Items */}
+                        <div className="grid grid-cols-1 gap-3">
                           {menuItems
                             .filter(
                               (item) =>
@@ -209,10 +556,10 @@ commercial`}
                                 href={
                                   item.toLowerCase() === "home"
                                     ? "/"
-                                    : `/${item.toLowerCase()}`
+                                    : `/${slugify(item)}`
                                 }
                                 onClick={handleCloseMenu}
-                                className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
+                                className="relative text-lg font-normal text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
                               >
                                 {item}
                               </Link>
@@ -221,19 +568,36 @@ commercial`}
                       </div>
 
                       {/* Separator */}
-                      <div className="border-t border-gray-600 my-4"></div>
+                      <div className="border-t border-gray-600 my-6"></div>
+
+                      {/* Phone Number */}
+                      <div className="flex items-center gap-3 mb-4">
+                        <PhoneIcon className="text-white" />
+                        <a
+                          href="tel:09649112235"
+                          className="text-sm font-light text-white hover:text-sky-300 transition"
+                        >
+                          09649112235
+                        </a>
+                      </div>
 
                       {/* Footer */}
                       <div className="text-sm text-gray-300">
                         <div className="mb-4">
                           <h3 className="font-semibold text-white mb-2">
-                            JCX Business Tower
+                            Assist Holdings Limited
                           </h3>
-                          <p>Plot 1136/A, Japan Street, Block # I,</p>
-                          <p>Bashundhara R/A, Dhaka -1229, Bangladesh.</p>
+                          <p>
+                            Plot :11,Signature House,10th Floor, Main Road,
+                            Block: D,
+                          </p>
+                          <p>Aftabnagar, Dhaka, Bangladesh</p>
                         </div>
                         <div className="text-xs text-gray-400">
-                          <p>© 2025 JCXBD | All Rights Reserved.</p>
+                          <p>
+                            © 2025 Assist Holdings Limited | All Rights
+                            Reserved.
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -242,99 +606,14 @@ commercial`}
               </div>
             </div>
           </div>
-
-          {/* Mobile Navigation */}
-          <div className="flex md:hidden items-center gap-4">
-            <p className="uppercase text-sm font-medium hover:text-sky-300 transition">
-              MENU
-            </p>
-            <div className="relative group">
-              {!open ? (
-                <button
-                  aria-expanded={open}
-                  aria-controls="jcxbd-menu"
-                  onClick={handleMenuToggle}
-                  className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
-                >
-                  <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-full"></span>
-                  <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[70%] group-hover:self-center"></span>
-                  <span className="block h-px bg-white rounded-full w-full transition-all duration-300 group-hover:w-[40%] group-hover:self-end"></span>
-                </button>
-              ) : (
-                <button
-                  onClick={handleCloseMenu}
-                  className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
-                >
-                  <CloseIcon className="text-white hover:text-sky-300 transition w-6 h-6" />
-                </button>
-              )}
-
-              {/* Dropdown Menu */}
-              {open && (
-                <div
-                  id="jcxbd-menu"
-                  className="origin-top-right absolute right-0 -mt-15 w-60 p-5 rounded-md shadow-xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
-                >
-                  {/* Close Button inside menu */}
-                  <div className="flex justify-end mb-4">
-                    <button
-                      onClick={handleCloseMenu}
-                      className="flex items-center justify-center w-10 h-10 p-2 bg-transparent cursor-pointer focus:outline-none transition-all duration-300 border-2 border-white rounded-full hover:border-sky-300"
-                    >
-                      <CloseIcon className="text-white transition w-6 h-6" />
-                    </button>
-                  </div>
-
-                  {/* Dropdown Links */}
-                  <div className="py-4 px-6">
-                    <div className="flex justify-between gap-10">
-                      {/* Right Column */}
-                      <div className="grid grid-cols-1 gap-3 w-2/3">
-                        {menuItems
-                          .filter(
-                            (item) =>
-                              item !== "Residential" && item !== "Commercial"
-                          )
-                          .map((item) => (
-                            <Link
-                              key={item}
-                              href={
-                                item.toLowerCase() === "home"
-                                  ? "/"
-                                  : `/${item.toLowerCase()}`
-                              }
-                              onClick={handleCloseMenu}
-                              className="relative w-32  text-2xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1 "
-                            >
-                              {item}
-                            </Link>
-                          ))}
-                      </div>
-                    </div>
-
-                    {/* Separator */}
-                    <div className="border-t border-gray-600 my-4"></div>
-
-                    {/* Footer */}
-                    <div className="text-sm text-gray-300">
-                      <div className="mb-4">
-                        <h3 className="font-semibold text-white mb-2">
-                          JCX Business Tower
-                        </h3>
-                        <p>Plot 1136/A, Japan Street, Block # I,</p>
-                        <p>Bashundhara R/A, Dhaka -1229, Bangladesh.</p>
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        <p>© 2025 JCXBD | All Rights Reserved.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Schedule Modal */}
+      <ScheduleModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+      />
+    </>
   );
 }

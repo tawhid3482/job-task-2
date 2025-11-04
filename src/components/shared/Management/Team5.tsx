@@ -63,14 +63,14 @@ const Team5: React.FC = () => {
           <div className="space-y-6 text-base leading-relaxed text-gray-200">
             <p>
               Mr. Siddiquar Rahman has been in the real estate business for the
-              last 10 years. Being a CEO at JCX Developments he overlooks the
+              last 10 years. Being a CEO at assist-holdings-limited Developments he overlooks the
               overall planning, design, and development of the company. Other
-              than JCX, he is also the director of NRB Global Insurance.
+              than assist-holdings-limited, he is also the director of NRB Global Insurance.
             </p>
 
             <p>
               With his leadership in the planning, designing, and development
-              department, JCX has witnessed contemporary growth in all aspects.
+              department, assist-holdings-limited has witnessed contemporary growth in all aspects.
               From the professional development of the employees to the planning
               of capital projects, all are efficiently being administered by Mr.
               Asif Mahamud Chowdhury.

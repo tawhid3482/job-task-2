@@ -3,13 +3,12 @@ const BACKGROUND_IMAGE_URL ="https://jcxbd.com/wp-content/uploads/2024/04/About-
 const AboutBanner = () => {
     return (
             <div 
-            // 1. Set the background image and cover the container.
             style={{ 
                 backgroundImage: `url(${BACKGROUND_IMAGE_URL})`,
             }}
-            // 2. Add classes for height, background size/position, and flex for centering.
+           
             className="
-                h-96 md:h-[420px]
+                h-96 md:h-[555px]
                 bg-cover bg-center 
                 flex items-center justify-center 
                 relative 
@@ -17,7 +16,7 @@ const AboutBanner = () => {
             "
         >
            
-            <div className="absolute inset-0 bg-black opacity-40"></div>
+            <div className="absolute inset-0 bg-black opacity-20"></div>
             
             {/* Container for the text, positioned on top of the overlay */}
             <div className="relative text-center p-4 space-y-2">

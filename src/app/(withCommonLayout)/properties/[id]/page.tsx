@@ -1,9 +1,28 @@
-// app/projects/[id]/page.tsx
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  Home,
+  MapPin,
+  Map,
+  Waypoints,
+  Ruler,
+  Layout,
+  Building2,
+  ParkingSquare,
+  Menu,
+} from "lucide-react"; 
+
 import LandownerBanner from "@/components/shared/Landowner/LandownerBanner";
+import N71LakeCondos from "@/components/shared/Properties/propertiesText";
+import FeaturesAmenities from "@/components/shared/Properties/PropertiesFeatures/PropertiesFeatures";
+import Video from "@/components/shared/Properties/PropertiesFeatures/Vedio";
+import GalleryPage from "@/components/shared/Properties/PropertiesFeatures/PropertiesPhoto";
+import Enquiry from "@/components/shared/Landowner/Enquiry";
+import Testimonials from "@/components/shared/Home/Testimonials";
+import OurAwardsandRecognition from "@/components/shared/Home/OurAwardsandRecognition";
 
 interface Project {
   id: string;
@@ -24,8 +43,8 @@ interface Project {
 
 export default function ProjectDetailPage() {
   const params = useParams();
-  const id = params.id as string;
-  
+  const id = params?.id as string;
+
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +59,9 @@ export default function ProjectDetailPage() {
         const result = await response.json();
 
         if (result.success) {
-          const foundProject = result.data.find((p: Project) => p.id === id);
+          const foundProject = result.data.find(
+            (p: Project) => String(p.id) === String(id)
+          );
           if (foundProject) {
             setProject(foundProject);
           } else {
@@ -50,16 +71,14 @@ export default function ProjectDetailPage() {
           setError("Failed to fetch project");
         }
       } catch (err) {
-        setError("Error fetching project");
         console.error("Error fetching project:", err);
+        setError("Error fetching project");
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) {
-      fetchProject();
-    }
+    if (id) fetchProject();
   }, [id]);
 
   if (loading) {
@@ -72,149 +91,123 @@ export default function ProjectDetailPage() {
 
   if (error || !project) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-xl text-red-600">{error || "Project not found"}</div>
-        <Link href="/" className="ml-4 text-blue-600 hover:underline">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center flex-col">
+        <div className="text-xl text-red-600 mb-4">
+          {error || "Project not found"}
+        </div>
+        <Link href="/" className="text-blue-600 hover:underline">
           Back to Home
         </Link>
       </div>
     );
   }
 
+  interface FeatureItem {
+    icon: React.ElementType;
+    name: string;
+    value: keyof Project;
+    unit?: string;
+  }
+
+  const glanceFeatures: FeatureItem[] = [
+    { icon: Home, name: "Type", value: "Type" },
+    { icon: MapPin, name: "Orientation", value: "Orientation" },
+    { icon: Map, name: "Address", value: "Address" },
+    { icon: Waypoints, name: "Front Road", value: "FrontRoad" },
+    { icon: Ruler, name: "Land Size", value: "LandSize", unit: " Katha" },
+    {
+      icon: Layout,
+      name: "Apartment Size",
+      value: "ApartmentSize",
+      unit: " sft (approx.)",
+    },
+    { icon: Building2, name: "Number of Units", value: "NumberOfUnits" },
+    { icon: ParkingSquare, name: "Number of Parking", value: "NumberOfParking" },
+    { icon: Menu, name: "Number of Floors", value: "NumberOfFloors" },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-       <LandownerBanner
-        img={
-          "https://jcxbd.com/wp-content/uploads/2021/09/10-scaled-1.jpg"
-        }
+    <div className="min-h-screen bg-white">
+      <LandownerBanner
+        img="https://jcxbd.com/wp-content/uploads/2021/09/10-scaled-1.jpg"
         title="Properties"
-        // text="find your nest"
-      ></LandownerBanner>  
+      />
 
-      <div className="container mx-auto px-4">
-        {/* Back Button */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center mb-6 text-blue-600 hover:text-blue-800 transition-colors"
-        >
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Projects
-        </Link>
+      <N71LakeCondos />
 
-        {/* Project Details */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Project Image */}
-          <div className="relative h-96">
-            <img
-              src={project.Image}
-              alt={project.Title}
-              className="w-full h-full object-cover"
-            />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-12 md:my-24">
+        {/* Title Section */}
+        <div className="text-center my-12 md:my-20 uppercase">
+          <motion.p
+            className="text-2xl sm:text-3xl font-light uppercase tracking-widest text-black"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            at a glance
+          </motion.p>
+          <motion.div
+            className="mx-auto mt-2 h-1 w-14 bg-blue-600"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            style={{ transformOrigin: "left" }}
+          />
+        </div>
+
+        {/* Project Details Section */}
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
+          {/* Left: Project Image */}
+          <div className="w-full lg:w-1/2 flex justify-center">
+            <div className="relative w-full max-w-md lg:max-w-full">
+              <img
+                src={project.Image}
+                alt={project.Title}
+                className="w-full h-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:h-[690px] lg:max-h-none object-cover rounded-lg shadow-lg"
+              />
+            </div>
           </div>
 
-          {/* Project Details */}
-          <div className="p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Basic Information */}
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                  {project.Title}
-                </h1>
-                <p className="text-lg text-gray-600 mb-6">{project.Type}</p>
-                
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Orientation
-                    </h3>
-                    <p className="text-lg text-gray-900">{project.Orientation}</p>
+          {/* Right: Project Info */}
+          <div className="w-full lg:w-1/2">
+            <div className="w-full space-y-4 sm:space-y-6">
+              {glanceFeatures.map((feature) => (
+                <motion.div 
+                  key={feature.name} 
+                  className="flex items-start sm:items-center py-3 sm:py-4 border-b border-gray-200"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-gray-700 shrink-0 mr-4 sm:mr-6 lg:mr-12" />
+                  <div className="flex flex-col sm:flex-row sm:items-center w-full">
+                    <div className="font-semibold text-[#003C8C] text-sm sm:text-base w-32 sm:w-40 lg:w-48 shrink-0 mb-1 sm:mb-0">
+                      {feature.name}
+                    </div>
+                    <div className="flex items-center space-x-2 sm:ml-4 lg:ml-8">
+                      <span className="text-gray-900 hidden sm:inline">:</span>
+                      <span className="font-normal text-gray-700 text-sm sm:text-base wrap-break-word">
+                        {project[feature.value]}
+                        {feature.unit || ""}
+                      </span>
+                    </div>
                   </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Address
-                    </h3>
-                    <p className="text-lg text-gray-900">{project.Address}</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Front Road
-                    </h3>
-                    <p className="text-lg text-gray-900">{project.FrontRoad}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Specifications */}
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Specifications
-                </h2>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      Land Size
-                    </h3>
-                    <p className="text-xl font-bold text-gray-900">{project.LandSize} Katha</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      Apartment Size
-                    </h3>
-                    <p className="text-xl font-bold text-gray-900">{project.ApartmentSize} Sq. Ft</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      Number of Units
-                    </h3>
-                    <p className="text-xl font-bold text-gray-900">{project.NumberOfUnits}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      Number of Parking
-                    </h3>
-                    <p className="text-xl font-bold text-gray-900">{project.NumberOfParking}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      Number of Floors
-                    </h3>
-                    <p className="text-xl font-bold text-gray-900">{project.NumberOfFloors}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      Status
-                    </h3>
-                    <p className="text-xl font-bold text-gray-900">{project.status}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact/Inquiry Section */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Interested in this Project?
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Contact us for more information about {project.Title}
-              </p>
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
-                Contact Sales Team
-              </button>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
       </div>
+
+      <FeaturesAmenities />
+      <Video />
+      <GalleryPage />
+      <Enquiry />
+      <Testimonials />
+      <OurAwardsandRecognition />
     </div>
   );
 }

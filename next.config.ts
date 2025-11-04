@@ -5,7 +5,7 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "jcxbd.com",
-        port: "",           // optional, leave empty if default
+        port: "",          
         pathname: "/**",    // allow all paths
       },
     ],
