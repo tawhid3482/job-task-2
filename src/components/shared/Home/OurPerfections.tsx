@@ -79,7 +79,8 @@ const OurPerfections: React.FC = () => {
       </div>
     );
 
-  const maxIndex = projects.length - visibleCount;
+  const maxIndex = Math.max(0, projects.length - visibleCount);
+  //  Math.max(0, testimonials.length - visibleCount);
   const totalSegments = projects.length - visibleCount + 1;
 
   const nextSlide = () =>
@@ -88,7 +89,6 @@ const OurPerfections: React.FC = () => {
 
   return (
     <div className="bg-black text-white py-8 md:py-24">
-      {/* Title */}
       <div className="text-center mb-20">
         <motion.p
           className="text-3xl font-light uppercase tracking-widest"
@@ -157,9 +157,7 @@ const OurPerfections: React.FC = () => {
                     <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
                       <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
                       <div>
-                        <span>
-
-                          Number of Units:</span> {project.ApartmentSize}
+                        <span>Number of Units:</span> {project.ApartmentSize}
                       </div>
                     </p>
                     <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
@@ -171,17 +169,16 @@ const OurPerfections: React.FC = () => {
                     <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
                       <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
                       <div>
-                        <span>Number of Parking:</span> {project.NumberOfParking}
+                        <span>Number of Parking:</span>{" "}
+                        {project.NumberOfParking}
                       </div>
                     </p>
                     <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
                       <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
                       <div>
-                        <span>
-                          Apartment Size:</span> {project.ApartmentSize}
+                        <span>Apartment Size:</span> {project.ApartmentSize}
                       </div>
                     </p>
-
 
                     {/* Explore Button */}
                     <motion.div
@@ -229,20 +226,22 @@ const OurPerfections: React.FC = () => {
           <button
             onClick={prevSlide}
             disabled={currentIndex === 0}
-            className={`p-2 mr-4 ${currentIndex === 0
-              ? "text-gray-500"
-              : "text-white hover:text-red-600"
-              } transition duration-200`}
+            className={`p-2 mr-4 ${
+              currentIndex === 0
+                ? "text-gray-500"
+                : "text-white hover:text-red-600"
+            } transition duration-200`}
           >
             <FaArrowLeftLong className="text-4xl" />
           </button>
           <button
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
-            className={`p-2 mr-6 ${currentIndex === maxIndex
-              ? "text-gray-500"
-              : "text-white hover:text-red-600"
-              } transition duration-200`}
+            className={`p-2 mr-6 ${
+              currentIndex === maxIndex
+                ? "text-gray-500"
+                : "text-white hover:text-red-600"
+            } transition duration-200`}
           >
             <FaArrowRightLong className="text-4xl" />
           </button>
