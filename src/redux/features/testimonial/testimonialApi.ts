@@ -1,0 +1,51 @@
+import { baseApi } from "@/redux/api/baseApi";
+import { tagTypes } from "@/redux/tag-types";
+
+const testimonialApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    createTestimonial: builder.mutation({
+      query: (formData) => {
+        return {
+          url: "/testimonial/create",
+          method: "POST",
+          data: formData,
+        };
+      },
+      invalidatesTags: [tagTypes.testimonial],
+    }),
+
+    getAllTestimonial: builder.query({
+      query: () => ({
+        url: "/testimonial",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.testimonial],
+    }),
+    updateTestimonial: builder.mutation({
+      query: ({ testimonialId, data }) => {
+        console.log("Updating opinionId:", testimonialId);
+        return {
+          url: `/testimonial/update/${testimonialId}`,
+          method: "PATCH",
+          data,
+        };
+      },
+      invalidatesTags: [tagTypes.testimonial],
+    }),
+
+    deleteTestimonial: builder.mutation({
+      query: (id: string) => ({
+        url: `/opinion/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.testimonial],
+    }),
+  }),
+});
+
+export const {
+useCreateTestimonialMutation,
+useGetAllTestimonialQuery,
+useUpdateTestimonialMutation,
+useDeleteTestimonialMutation
+} = testimonialApi;

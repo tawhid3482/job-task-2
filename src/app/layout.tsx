@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import CurtainTransition from "@/components/PageTransition";
 import Navbar from "@/components/shared/Navbar/Navbar";
+import Navbar2nd from "@/components/shared/Navbar/Navbar2nd";
 import Footer from "@/components/shared/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import ReduxProvider from "@/lib/ReduxProvider";
@@ -30,7 +31,8 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <div className="w-full mx-auto ">
-            <Navbar />
+            {/* <Navbar /> */}
+            <Navbar2nd />
             {children}
             <ToastContainer />
             <CurtainTransition />

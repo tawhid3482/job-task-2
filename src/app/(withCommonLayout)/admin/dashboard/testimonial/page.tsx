@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import { useCreateTestimonialMutation, useDeleteTestimonialMutation, useGetAllTestimonialQuery, useUpdateTestimonialMutation } from "@/redux/features/testimonial/testimonialApi";
 
 interface Testimonial {
   id: string;
@@ -16,9 +14,27 @@ interface Testimonial {
 }
 
 const TestimonialsPage = () => {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [createTestimonial, { isLoading: creating }] =
+    useCreateTestimonialMutation();
+  const [updateTestimonial, { isLoading: updating }] =
+    useUpdateTestimonialMutation();
+  const [deleteTestimonial, { isLoading: deleting }] =
+    useDeleteTestimonialMutation();
+
+  const {
+    data: testimonialsData,
+    isLoading,
+    refetch,
+  } = useGetAllTestimonialQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  
+  const testimonials: Testimonial[] = testimonialsData || [];
+  console.log("Fetched Testimonials Data:", testimonials);
+
   const [showForm, setShowForm] = useState(false);
+  const [editingTestimonial, setEditingTestimonial] =
+    useState<Testimonial | null>(null);
   const [formData, setFormData] = useState({
     content: "",
     name: "",
@@ -30,78 +46,97 @@ const TestimonialsPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    fetchTestimonials();
+    if (!token) router.push("/login");
   }, [router]);
 
-  const fetchTestimonials = async () => {
-    try {
-      const response = await fetch(
-        "https://job-task-2-backend.vercel.app/api/v1/testimonial"
-      );
-      const result = await response.json();
-      if (result.success) {
-        setTestimonials(result.data);
-      }
-    } catch (error) {
-      console.error("Error fetching testimonials:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // ✅ Image Preview - Properties এর মতোই
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImageFile(file);
-
-      const reader = new FileReader();
-      reader.onload = (event: ProgressEvent<FileReader>) => {
-        const result = event.target?.result;
-        if (typeof result === "string") {
-          setFormData((prev) => ({ ...prev, Image: result }));
-        }
-      };
-      reader.readAsDataURL(file);
+      // Preview only
+      setFormData((prev) => ({
+        ...prev,
+        Image: URL.createObjectURL(file),
+      }));
     }
   };
 
+  // ✅ Upload image to CPANEL - Properties এর মতোই
+  const uploadImageToCPanel = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/v1/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Failed to upload image");
+
+      const data = await res.json();
+      return data.url;
+    } catch (error) {
+      toast.error("Image upload failed");
+      throw error;
+    }
+  };
+
+  // ✅ Add / Update Testimonial - Properties এর মতোই Logic
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploading(true);
 
     try {
-      const testimonialData = { ...formData };
+      let imageUrl = formData.Image;
 
-      const response = await fetch(
-        "https://job-task-2-backend.vercel.app/api/v1/testimonial/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(testimonialData),
-        }
-      );
-
-      const result = await response.json();
-
-      if (result.success) {
-        await fetchTestimonials();
-        resetForm();
-        setShowForm(false);
-        toast.success("Testimonial added successfully!");
-      } else {
-        toast.error("Error saving testimonial: " + result.message);
+      // Upload new image if selected
+      if (imageFile) {
+        imageUrl = await uploadImageToCPanel(imageFile);
+      } else if (!editingTestimonial) {
+        toast.error("Please select an image");
+        setUploading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error saving testimonial:", error);
-      toast.error("Error saving testimonial");
+
+      const testimonialData = {
+        content: formData.content,
+        name: formData.name,
+        Image: imageUrl,
+      };
+
+      if (editingTestimonial) {
+        await updateTestimonial({
+          id: editingTestimonial.id,
+          data: testimonialData,
+        }).unwrap();
+        toast.success("Testimonial updated successfully!");
+      } else {
+        await createTestimonial(testimonialData).unwrap();
+        toast.success("Testimonial created successfully!");
+      }
+
+      resetForm();
+      setShowForm(false);
+      refetch();
+    } catch (error: any) {
+      console.error("Error:", error);
+      toast.error(error?.data?.message || "Something went wrong!");
     } finally {
       setUploading(false);
+    }
+  };
+
+  // ✅ Delete Testimonial - Properties এর মতোই
+  const handleDeleteTestimonial = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this testimonial?")) return;
+    try {
+      await deleteTestimonial(id).unwrap();
+      toast.success("Testimonial deleted successfully!");
+      refetch();
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to delete testimonial");
     }
   };
 
@@ -112,6 +147,7 @@ const TestimonialsPage = () => {
       Image: "",
     });
     setImageFile(null);
+    setEditingTestimonial(null);
   };
 
   const handleFormToggle = () => {
@@ -119,325 +155,228 @@ const TestimonialsPage = () => {
     if (showForm) resetForm();
   };
 
-  if (loading) {
+  const handleEditTestimonial = (testimonial: Testimonial) => {
+    setEditingTestimonial(testimonial);
+    setFormData({
+      content: testimonial.content,
+      name: testimonial.name,
+      Image: testimonial.Image,
+    });
+    setImageFile(null);
+    setShowForm(true);
+  };
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading testimonials...</div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 my-24 text-black">
-      {/* Sidebar */}
-      <div className="bg-gray-800 text-white w-full md:w-64 space-y-6 py-4 md:py-7 px-2 md:px-4">
-        <div className="text-white flex items-center justify-center md:justify-start space-x-2 px-4">
-          <span className="text-xl md:text-2xl font-extrabold">
-            Admin Panel
-          </span>
-        </div>
-        <nav className="space-y-1 md:space-y-2">
-          <a
-            href="/admin/dashboard"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
-          >
-            Dashboard
-          </a>
-          <a
-            href="/admin/properties"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
-          >
-            Properties
-          </a>
-          <a
-            href="/admin/slider"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
-          >
-            Slider
-          </a>
-          <a
-            href="/admin/testimonial"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white bg-gray-700 text-sm md:text-base"
-          >
-            Testimonial ({testimonials.length})
-          </a>
-        </nav>
-      </div>
-
-      {/* Main Content */}
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 text-black">
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-6 py-4 space-y-3 sm:space-y-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 md:p-6">
+          {/* Header - Properties এর মতোই */}
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-800">
               Testimonials Management
             </h1>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-              <button
-                onClick={handleFormToggle}
-                className="bg-[#783D1B] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
-              >
-                {showForm ? "Cancel" : "Add New Testimonial"}
-              </button>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  router.push("/login");
-                }}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm sm:text-base"
-              >
-                Logout
-              </button>
-            </div>
+            <button
+              onClick={handleFormToggle}
+              className="bg-[#7A3E1B] hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              disabled={uploading || creating || updating}
+            >
+              <span>+</span>
+              <span>{showForm ? "Cancel" : "Add Testimonial"}</span>
+            </button>
           </div>
-        </header>
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 md:p-6">
-          {/* Add Testimonial Form */}
+          {/* Form - Properties এর মতোই Design */}
           {showForm && (
             <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
               <h2 className="text-lg font-semibold mb-4">
-                Add New Testimonial
+                {editingTestimonial
+                  ? "Edit Testimonial"
+                  : "Add New Testimonial"}
               </h2>
+
               <form
                 onSubmit={handleSubmit}
                 className="grid grid-cols-1 gap-3 sm:gap-4"
               >
+                {/* Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Name
+                    Name *
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                      setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter customer name"
                   />
                 </div>
 
+                {/* Content */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Content
+                    Content *
                   </label>
                   <textarea
                     required
                     value={formData.content}
                     onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        content: e.target.value,
-                      }))
+                      setFormData({ ...formData, content: e.target.value })
                     }
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter testimonial content"
                   />
                 </div>
 
+                {/* Image - Properties এর মতোই */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image
+                    Image {!editingTestimonial && "*"}
                   </label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                    required={!editingTestimonial}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                   {formData.Image && (
                     <div className="mt-2">
                       <img
                         src={formData.Image}
                         alt="Preview"
-                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
+                        className="w-24 h-24 object-cover rounded-md border"
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {editingTestimonial
+                          ? "Current Image - Select new image to update"
+                          : "Preview"}
+                      </p>
                     </div>
                   )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={handleFormToggle}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 text-sm sm:text-base"
+                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100"
+                    disabled={uploading || creating || updating}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={uploading}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
+                    disabled={uploading || creating || updating}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
                   >
-                    {uploading ? "Saving..." : "Add Testimonial"}
+                    {(uploading || creating || updating) && (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    )}
+                    {editingTestimonial
+                      ? "Update Testimonial"
+                      : "Add Testimonial"}
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          {/* Testimonials List */}
+          {/* Testimonials Table - Properties এর মতোই Design */}
           <div className="bg-white rounded-lg shadow">
-            <div className="p-3 sm:p-4 md:p-6">
+            <div className="p-4 md:p-6">
               <h2 className="text-lg font-semibold mb-4">
-                All Testimonials ({testimonials.length})
+                All Testimonials ({testimonials?.length || 0})
               </h2>
-
-              {/* Desktop Table View */}
-              <div className="hidden md:block overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Image
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Content
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Created At
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {testimonials.map((t) => (
-                      <tr key={t.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <img
-                            src={t.Image}
-                            alt={t.name}
-                            className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
-                          />
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {t.name}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-500">
-                          <div className="line-clamp-2">{t.content}</div>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <span
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              t.status === "CONFIRMED"
-                                ? "bg-green-100 text-green-800"
-                                : t.status === "PENDING"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {t.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(t.createdAt).toLocaleDateString()}
-                        </td>
+              {!testimonials?.length ? (
+                <div className="text-center py-8 text-gray-500">
+                  No testimonials found.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Image
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Name
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Content
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Status
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Actions
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Tablet Table View */}
-              <div className="hidden sm:block md:hidden overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Image
-                      </th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Content
-                      </th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {testimonials.map((t) => (
-                      <tr key={t.id} className="hover:bg-gray-50">
-                        <td className="px-3 py-2 whitespace-nowrap">
-                          <img
-                            src={t.Image}
-                            alt={t.name}
-                            className="w-10 h-10 object-cover rounded-lg"
-                          />
-                        </td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {t.name}
-                        </td>
-                        <td className="px-3 py-2 text-sm text-gray-500">
-                          <div className="line-clamp-1">{t.content}</div>
-                        </td>
-                        <td className="px-3 py-2 whitespace-nowrap">
-                          <span
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              t.status === "CONFIRMED"
-                                ? "bg-green-100 text-green-800"
-                                : t.status === "PENDING"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {t.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile Card View */}
-              <div className="sm:hidden space-y-4">
-                {testimonials.map((t) => (
-                  <div
-                    key={t.id}
-                    className="bg-gray-50 rounded-lg p-4 border border-gray-200"
-                  >
-                    <div className="flex items-start space-x-3">
-                      <img
-                        src={t.Image}
-                        alt={t.name}
-                        className="w-12 h-12 object-cover rounded-lg shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-sm font-medium text-gray-900">
-                            {t.name}
-                          </h3>
-                          <span
-                            className={`px-2 py-1 text-xs rounded-full shrink-0 ml-2 ${
-                              t.status === "CONFIRMED"
-                                ? "bg-green-100 text-green-800"
-                                : t.status === "PENDING"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {t.status}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-                          {t.content}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Created: {new Date(t.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {testimonials.map((t: Testimonial) => (
+                        <tr key={t.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2">
+                            <img
+                              src={t.Image}
+                              alt={t.name}
+                              className="w-14 h-14 rounded-md object-cover"
+                            />
+                          </td>
+                          <td className="px-4 py-2 font-medium">{t.name}</td>
+                          <td className="px-4 py-2 text-sm text-gray-500 max-w-xs">
+                            <div className="line-clamp-2">{t.content}</div>
+                          </td>
+                          <td className="px-4 py-2">
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full ${
+                                t.status === "CONFIRMED"
+                                  ? "bg-green-100 text-green-800"
+                                  : t.status === "PENDING"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-gray-100 text-gray-800"
+                              }`}
+                            >
+                              {t.status || "PENDING"}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2">
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleEditTestimonial(t)}
+                                className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                                disabled={deleting}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteTestimonial(t.id)}
+                                className="text-red-600 hover:text-red-900 text-sm font-medium"
+                                disabled={deleting}
+                              >
+                                {deleting ? "Deleting..." : "Delete"}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </main>

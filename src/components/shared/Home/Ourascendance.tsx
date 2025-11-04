@@ -59,7 +59,7 @@ const OurAscendance: React.FC = () => {
           OUR ASCENDANCE
         </motion.p>
         <motion.div
-          className="mx-auto mt-2 h-0.5 w-24 bg-orange-400"
+          className="mx-auto mt-2 h-0.5 w-24 bg-[#F6BD2F]"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}

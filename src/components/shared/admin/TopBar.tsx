@@ -16,7 +16,7 @@ export default function Topbar() {
         <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         <button
           onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+          className="bg-[#7A3E1B] text-white px-4 py-2 rounded-lg hover:bg-[#7A3E1B] transition-colors"
         >
           Logout
         </button>

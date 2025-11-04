@@ -7,6 +7,7 @@ import Image from "next/image";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { usePathname } from "next/navigation";
 import Logo from "../../../../public/logo.png";
 import { useCreateScheduleMutation } from "@/redux/features/schedule/scheduleApi";
 
@@ -335,6 +336,36 @@ const ScheduleModal = ({
   );
 };
 
+// Active Link Component
+const ActiveLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const pathname = usePathname();
+  
+  const isActive = pathname === href || 
+                  (href !== '/' && pathname.startsWith(href)) ||
+                  (href === '/' && pathname === '/');
+
+  return (
+    <Link
+      href={href}
+      className={`uppercase text-sm font-medium transition relative group ${
+        isActive 
+          ? "text-[#F6BD2F]" 
+          : "text-white hover:text-gray-400"
+      }`}
+    >
+      {children}
+      {/* Underline */}
+      <span
+        className={`absolute -bottom-1 left-0 h-0.5 transition-all duration-300 ${
+          isActive 
+            ? "w-full bg-[#F6BD2F]" 
+            : "w-0 bg-white group-hover:w-full"
+        }`}
+      />
+    </Link>
+  );
+};
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -342,6 +373,7 @@ export default function Navbar() {
   const [isAtTop, setIsAtTop] = useState(true);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const pathname = usePathname();
 
   const handleMenuToggle = useCallback(() => {
     if (audioRef.current) {
@@ -359,6 +391,13 @@ export default function Navbar() {
 
   const handleScheduleClick = () => {
     setIsScheduleModalOpen(true);
+  };
+
+  // Check if a menu item is active (for mobile menu)
+  const isMenuItemActive = (item: string) => {
+    const itemHref = item.toLowerCase() === "home" ? "/" : `/${slugify(item)}`;
+    return pathname === itemHref || 
+           (itemHref !== '/' && pathname.startsWith(itemHref));
   };
 
   // Scroll handler to show/hide navbar
@@ -420,36 +459,21 @@ export default function Navbar() {
 
             {/* Desktop Navigation - Middle Menu Items */}
             <div className="hidden lg:flex items-center gap-8">
-              <Link
-                href="/"
-                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
-              >
+              <ActiveLink href="/">
                 Home
-              </Link>
-              <Link
-                href="/about"
-                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
-              >
+              </ActiveLink>
+              <ActiveLink href="/about">
                 About
-              </Link>
-              <Link
-                href="/residential"
-                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
-              >
+              </ActiveLink>
+              <ActiveLink href="/residential">
                 Residential
-              </Link>
-              <Link
-                href="/commercial"
-                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
-              >
+              </ActiveLink>
+              <ActiveLink href="/commercial">
                 Commercial
-              </Link>
-              <Link
-                href="/properties"
-                className="uppercase text-sm font-medium hover:text-gray-400 transition relative group"
-              >
+              </ActiveLink>
+              <ActiveLink href="/properties">
                 Properties
-              </Link>
+              </ActiveLink>
               <div className="flex items-center gap-3">
                 <PhoneIcon className="text-white hover:text-sky-300 transition" />
                 <a
@@ -489,7 +513,7 @@ export default function Navbar() {
                 {!open ? (
                   <button
                     aria-expanded={open}
-                    aria-controls="jcxbd-menu"
+                    aria-controls="menu"
                     onClick={handleMenuToggle}
                     className="flex flex-col justify-between w-8 h-6 p-0 bg-transparent cursor-pointer focus:outline-none transition-all duration-300"
                   >
@@ -509,7 +533,7 @@ export default function Navbar() {
                 {/* Dropdown Menu */}
                 {open && (
                   <div
-                    id="jcxbd-menu"
+                    id="menu"
                     className="origin-top-right absolute right-0 -mt-15 w-80 p-5 rounded-md shadow-xl bg-[#2D2D2D] text-white ring-1 ring-gray-600 ring-opacity-50 z-50 transition-all duration-300 max-h-screen overflow-y-auto"
                   >
                     {/* Close Button inside menu */}
@@ -527,28 +551,13 @@ export default function Navbar() {
                       <div className="flex flex-col gap-6">
                         {/* Main Menu Items */}
                         <div className="flex flex-col gap-4">
-                          <Link
-                            href="/residential"
-                            onClick={handleCloseMenu}
-                            className="relative text-xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
-                          >
-                            Residential
-                          </Link>
-                          <Link
-                            href="/commercial"
-                            onClick={handleCloseMenu}
-                            className="relative text-xl font-medium text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
-                          >
-                            Commercial
-                          </Link>
-                        </div>
-
-                        {/* Other Menu Items */}
-                        <div className="grid grid-cols-1 gap-3">
                           {menuItems
-                            .filter(
-                              (item) =>
-                                item !== "Residential" && item !== "Commercial"
+                            .filter(item => 
+                              item === "Residential" || 
+                              item === "Commercial" || 
+                              item === "Home" || 
+                              item === "About" || 
+                              item === "Properties"
                             )
                             .map((item) => (
                               <Link
@@ -559,9 +568,52 @@ export default function Navbar() {
                                     : `/${slugify(item)}`
                                 }
                                 onClick={handleCloseMenu}
-                                className="relative text-lg font-normal text-white after:content-[''] after:block after:h-px after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full after:mt-1"
+                                className={`relative text-xl font-medium transition ${
+                                  isMenuItemActive(item)
+                                    ? "text-[#F6BD2F]"
+                                    : "text-white hover:text-gray-300"
+                                }`}
                               >
                                 {item}
+                                {/* Underline for active item */}
+                                {isMenuItemActive(item) && (
+                                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#F6BD2F]" />
+                                )}
+                              </Link>
+                            ))}
+                        </div>
+
+                        {/* Other Menu Items */}
+                        <div className="grid grid-cols-1 gap-3">
+                          {menuItems
+                            .filter(
+                              (item) =>
+                                item !== "Residential" && 
+                                item !== "Commercial" &&
+                                item !== "Home" &&
+                                item !== "About" &&
+                                item !== "Properties"
+                            )
+                            .map((item) => (
+                              <Link
+                                key={item}
+                                href={
+                                  item.toLowerCase() === "home"
+                                    ? "/"
+                                    : `/${slugify(item)}`
+                                }
+                                onClick={handleCloseMenu}
+                                className={`relative text-lg font-normal transition ${
+                                  isMenuItemActive(item)
+                                    ? "text-[#F6BD2F]"
+                                    : "text-white hover:text-gray-300"
+                                }`}
+                              >
+                                {item}
+                                {/* Underline for active item */}
+                                {isMenuItemActive(item) && (
+                                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#F6BD2F]" />
+                                )}
                               </Link>
                             ))}
                         </div>

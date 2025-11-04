@@ -1,69 +1,67 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import { useCreateSliderMutation, useDeleteSliderMutation, useGetAllsliderQuery, useUpdateSliderMutation } from "@/redux/features/slider/sliderApi";
+
 
 interface Slider {
   id: string;
   title: string;
-  Image: string;
   text: string;
+  Image: string;
   status: string;
   createdAt: string;
 }
 
 const SliderPage = () => {
-  const [sliders, setSliders] = useState<Slider[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    text: "",
-    Image: "",
+  const [createSlider, { isLoading: creating }] = useCreateSliderMutation();
+  const [updateSlider, { isLoading: updating }] = useUpdateSliderMutation();
+  const [deleteSlider, { isLoading: deleting }] = useDeleteSliderMutation();
+
+  const { data: slidersData, isLoading, refetch } = useGetAllsliderQuery(undefined, {
+    refetchOnMountOrArgChange: true,
   });
+
+  const sliders: Slider[] = slidersData?.data || slidersData || [];
+
+  const [showForm, setShowForm] = useState(false);
+  const [editingSlider, setEditingSlider] = useState<Slider | null>(null);
+  const [formData, setFormData] = useState({ title: "", text: "", Image: "" });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    fetchSliders();
+    if (!token) router.push("/login");
   }, [router]);
 
-  const fetchSliders = async () => {
-    try {
-      const response = await fetch(
-        "https://job-task-2-backend.vercel.app/api/v1/slider"
-      );
-      const result = await response.json();
-
-      if (result.success) {
-        setSliders(result.data);
-      }
-    } catch (error) {
-      console.error("Error fetching sliders:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // ✅ Image preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImageFile(file);
+      setFormData((prev) => ({ ...prev, Image: URL.createObjectURL(file) }));
+    }
+  };
 
-      const reader = new FileReader();
-      reader.onload = (event: ProgressEvent<FileReader>) => {
-        const result = event.target?.result;
-        if (typeof result === "string") {
-          setFormData((prev) => ({ ...prev, Image: result }));
-        }
-      };
-      reader.readAsDataURL(file);
+  // ✅ Upload image to CPANEL
+  const uploadImageToCPanel = async (file: File): Promise<string> => {
+    const data = new FormData();
+    data.append("image", file);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/v1/upload-image", {
+        method: "POST",
+        body: data,
+      });
+      if (!res.ok) throw new Error("Failed to upload image");
+      const result = await res.json();
+      return result.url;
+    } catch (err) {
+      toast.error("Image upload failed");
+      throw err;
     }
   };
 
@@ -72,44 +70,55 @@ const SliderPage = () => {
     setUploading(true);
 
     try {
-      const sliderData = { ...formData };
+      let imageUrl = formData.Image;
 
-      const response = await fetch(
-        "https://job-task-2-backend.vercel.app/api/v1/slider/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(sliderData),
-        }
-      );
-
-      const result = await response.json();
-
-      if (result.success) {
-        await fetchSliders();
-        resetForm();
-        setShowForm(false);
-        toast.success("Slider added successfully!");
-      } else {
-        toast.error("Error saving slider: " + result.message);
+      if (imageFile) {
+        imageUrl = await uploadImageToCPanel(imageFile);
+      } else if (!editingSlider) {
+        toast.error("Please select an image");
+        setUploading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error saving slider:", error);
-      toast.error("Error saving slider");
+
+      const sliderData = {
+        title: formData.title,
+        text: formData.text,
+        Image: imageUrl,
+      };
+
+      if (editingSlider) {
+        await updateSlider({ id: editingSlider.id, data: sliderData }).unwrap();
+        toast.success("Slider updated successfully!");
+      } else {
+        await createSlider(sliderData).unwrap();
+        toast.success("Slider created successfully!");
+      }
+
+      resetForm();
+      setShowForm(false);
+      refetch();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Something went wrong!");
     } finally {
       setUploading(false);
     }
   };
 
+  const handleDeleteSlider = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this slider?")) return;
+    try {
+      await deleteSlider(id).unwrap();
+      toast.success("Slider deleted successfully!");
+      refetch();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Failed to delete slider");
+    }
+  };
+
   const resetForm = () => {
-    setFormData({
-      title: "",
-      text: "",
-      Image: "",
-    });
+    setFormData({ title: "", text: "", Image: "" });
     setImageFile(null);
+    setEditingSlider(null);
   };
 
   const handleFormToggle = () => {
@@ -117,250 +126,160 @@ const SliderPage = () => {
     if (showForm) resetForm();
   };
 
-  if (loading) {
+  const handleEditSlider = (slider: Slider) => {
+    setEditingSlider(slider);
+    setFormData({ title: slider.title, text: slider.text, Image: slider.Image });
+    setImageFile(null);
+    setShowForm(true);
+  };
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading sliders...</div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 my-24 text-black">
-      {/* Sidebar */}
-      <div className="bg-gray-800 text-white w-full md:w-64 space-y-6 py-4 md:py-7 px-2 md:px-4">
-        <div className="text-white flex items-center justify-center md:justify-start space-x-2 px-4">
-          <span className="text-xl md:text-2xl font-extrabold">
-            Admin Panel
-          </span>
-        </div>
-        <nav className="space-y-1 md:space-y-2">
-          <a
-            href="/admin/dashboard"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
-          >
-            Dashboard
-          </a>
-          <a
-            href="/admin/properties"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
-          >
-            Properties
-          </a>
-          <a
-            href="/admin/slider"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white bg-gray-700 text-sm md:text-base"
-          >
-            Slider ({sliders.length})
-          </a>
-          <a
-            href="/admin/testimonial"
-            className="block py-2 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-sm md:text-base"
-          >
-            Testimonial
-          </a>
-        </nav>
-      </div>
-
-      {/* Main Content */}
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 text-black">
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-6 py-4 space-y-3 sm:space-y-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-              Slider Management
-            </h1>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-              <button
-                onClick={handleFormToggle}
-                className="bg-[#783D1B] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
-              >
-                {showForm ? "Cancel" : "Add New Slider"}
-              </button>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  router.push("/login");
-                }}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm sm:text-base"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </header>
-
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 md:p-6">
-          {/* Add Slider Form */}
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-800">Slider Management</h1>
+            <button
+              onClick={handleFormToggle}
+              className="bg-[#7A3E1B] hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              disabled={uploading || creating || updating}
+            >
+              <span>+</span>
+              <span>{showForm ? "Cancel" : "Add Slider"}</span>
+            </button>
+          </div>
+
+          {/* Form */}
           {showForm && (
             <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
-              <h2 className="text-lg font-semibold mb-4">Add New Slider</h2>
-              <form
-                onSubmit={handleSubmit}
-                className="grid grid-cols-1 gap-3 sm:gap-4"
-              >
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Title
-                  </label>
+              <h2 className="text-lg font-semibold mb-4">
+                {editingSlider ? "Edit Slider" : "Add New Slider"}
+              </h2>
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                   <input
                     type="text"
                     required
                     value={formData.title}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        title: e.target.value,
-                      }))
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter slider title"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Text/Description
-                  </label>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Text/Description *</label>
                   <textarea
                     required
                     value={formData.text}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        text: e.target.value,
-                      }))
-                    }
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                    onChange={(e) => setFormData({ ...formData, text: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter description"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image
-                  </label>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Image {!editingSlider && "*"}</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                    required={!editingSlider}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                   {formData.Image && (
                     <div className="mt-2">
-                      <img
-                        src={formData.Image}
-                        alt="Preview"
-                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
-                      />
+                      <img src={formData.Image} alt="Preview" className="w-24 h-24 object-cover rounded-md border" />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {editingSlider ? "Current Image - Select new to update" : "Preview"}
+                      </p>
                     </div>
                   )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="md:col-span-2 flex justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={handleFormToggle}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 text-sm sm:text-base"
+                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100"
+                    disabled={uploading || creating || updating}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={uploading}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
+                    disabled={uploading || creating || updating}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
                   >
-                    {uploading ? "Saving..." : "Add Slider"}
+                    {uploading || creating || updating && (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    )}
+                    {editingSlider ? "Update Slider" : "Add Slider"}
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          {/* Sliders List - Responsive Table Layout */}
+          {/* Slider Table */}
           <div className="bg-white rounded-lg shadow">
-            <div className="p-3 sm:p-4 md:p-6">
-              <h2 className="text-lg font-semibold mb-4">
-                All Sliders ({sliders.length})
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Image
-                      </th>
-                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Title
-                      </th>
-                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
-                        Text/Description
-                      </th>
-                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
-                        Created At
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {sliders.map((slider) => (
-                      <tr key={slider.id} className="hover:bg-gray-50">
-                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
-                          <img
-                            src={slider.Image}
-                            alt={slider.title}
-                            className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
-                          />
-                        </td>
-                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
-                            {slider.title}
-                          </div>
-                          <div className="text-xs text-gray-500 sm:hidden mt-1 line-clamp-2">
-                            {slider.text}
-                          </div>
-                          <div className="text-xs text-gray-500 md:hidden">
-                            {new Date(slider.createdAt).toLocaleDateString()}
-                          </div>
-                        </td>
-                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-                          <div className="line-clamp-2">{slider.text}</div>
-                        </td>
-                        <td className="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
-                          {new Date(slider.createdAt).toLocaleDateString()}
-                        </td>
+            <div className="p-4 md:p-6">
+              <h2 className="text-lg font-semibold mb-4">All Sliders ({sliders.length})</h2>
+              {!sliders.length ? (
+                <div className="text-center py-8 text-gray-500">No sliders found.</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Text</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile Card View for smaller screens */}
-              {/* <div className="sm:hidden mt-4 space-y-4">
-                {sliders.map((slider) => (
-                  <div
-                    key={slider.id}
-                    className="bg-gray-50 rounded-lg p-4 border border-gray-200"
-                  >
-                    <div className="flex items-start space-x-3">
-                      <img
-                        src={slider.Image}
-                        alt={slider.title}
-                        className="w-16 h-16 object-cover rounded-lg shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium text-gray-900 mb-1">
-                          {slider.title}
-                        </h3>
-                        <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-                          {slider.text}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Created:{" "}
-                          {new Date(slider.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div> */}
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {sliders.map((s) => (
+                        <tr key={s.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2">
+                            <img src={s.Image} alt={s.title} className="w-14 h-14 rounded-md object-cover" />
+                          </td>
+                          <td className="px-4 py-2 font-medium">{s.title}</td>
+                          <td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">{s.text}</td>
+                          <td className="px-4 py-2">
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleEditSlider(s)}
+                                className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                                disabled={deleting}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteSlider(s.id)}
+                                className="text-red-600 hover:text-red-900 text-sm font-medium"
+                                disabled={deleting}
+                              >
+                                {deleting ? "Deleting..." : "Delete"}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </main>
