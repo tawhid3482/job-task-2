@@ -52,7 +52,7 @@ const SliderPage = () => {
     data.append("image", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/v1/upload-image", {
+      const res = await fetch("https://job-task-2-backend.vercel.app/api/v1/upload-image", {
         method: "POST",
         body: data,
       });

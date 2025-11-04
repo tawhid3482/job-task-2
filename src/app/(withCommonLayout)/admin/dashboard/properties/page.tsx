@@ -85,15 +85,18 @@ const PropertiesPage = () => {
     formData.append("image", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/v1/upload-image", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        "https://job-task-2-backend.vercel.app/api/v1/upload-image",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to upload image");
 
       const data = await res.json();
-      return data.url; 
+      return data.url;
     } catch (error) {
       toast.error("Image upload failed");
       throw error;
@@ -127,11 +130,14 @@ const PropertiesPage = () => {
         NumberOfUnits: formData.NumberOfUnits,
         NumberOfParking: formData.NumberOfParking,
         NumberOfFloors: formData.NumberOfFloors,
-        Image: imageUrl, 
+        Image: imageUrl,
       };
 
       if (editingProperty) {
-        await updateProperties({ id: editingProperty.id, data: propertyData }).unwrap();
+        await updateProperties({
+          id: editingProperty.id,
+          data: propertyData,
+        }).unwrap();
         toast.success("Property updated successfully!");
       } else {
         await createProperties(propertyData).unwrap();
@@ -331,10 +337,18 @@ const PropertiesPage = () => {
                 </div>
 
                 {/* Other Fields */}
-                {["Address", "FrontRoad", "LandSize", "ApartmentSize", "NumberOfUnits", "NumberOfParking", "NumberOfFloors"].map((field) => (
+                {[
+                  "Address",
+                  "FrontRoad",
+                  "LandSize",
+                  "ApartmentSize",
+                  "NumberOfUnits",
+                  "NumberOfParking",
+                  "NumberOfFloors",
+                ].map((field) => (
                   <div key={field}>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {field.replace(/([A-Z])/g, ' $1').trim()} *
+                      {field.replace(/([A-Z])/g, " $1").trim()} *
                     </label>
                     <input
                       type="text"
@@ -344,7 +358,9 @@ const PropertiesPage = () => {
                         setFormData({ ...formData, [field]: e.target.value })
                       }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                      placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+                      placeholder={`Enter ${field
+                        .replace(/([A-Z])/g, " $1")
+                        .toLowerCase()}`}
                     />
                   </div>
                 ))}
