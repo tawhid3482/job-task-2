@@ -1,10 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import * as Icons from "react-icons/fa";
+import * as IoIcons from "react-icons/io5";
+import * as MdIcons from "react-icons/md";
+import * as HiIcons from "react-icons/hi";
+import * as FiIcons from "react-icons/fi";
 
 const buttonVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -20,43 +23,63 @@ const buttonVariants = {
   },
 };
 
-interface Project {
+interface FeatureAmenity {
+  icon: string;
+  text: string;
+}
+
+interface Perfection {
   id: string;
   Title: string;
+  description: string;
+  description2: string;
+  description3: string;
+  icon: string;
+  FeaturesAmenities?: FeatureAmenity[];
+  videoUrl: string;
+  galleryImages: string[];
+  Category: string;
   Type: string;
-  Image: string;
-  Orientation: string;
-  Address: string;
-  FrontRoad: string;
-  LandSize: string;
-  ApartmentSize: string;
-  NumberOfUnits: number;
-  NumberOfParking: number;
-  NumberOfFloors: number;
+  Location: string;
+  extraFields?: Record<string, string>;
   status: string;
   createdAt: string;
 }
 
+// Function to render any icon by name
+const renderIcon = (iconName: string, size: number = 16) => {
+  if (!iconName) return null;
+
+  const libraries = [Icons, IoIcons, MdIcons, HiIcons, FiIcons];
+  for (const library of libraries) {
+    const IconComponent = (library as any)[iconName];
+    if (IconComponent) {
+      return <IconComponent size={size} />;
+    }
+  }
+  return null;
+};
+
 const OurPerfections: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [perfections, setPerfections] = useState<Perfection[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4);
 
   // Fetch data from backend
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchPerfections = async () => {
       try {
-        const res = await fetch(
-          "https://job-task-2-backend.vercel.app/api/v1/perfections"
-        );
+        const res = await fetch(`https://job-task-2-backend.vercel.app/api/v1/perfections`);
         const json = await res.json();
-        setProjects(Array.isArray(json.data) ? json.data : []);
+        console.log(json);
+        setPerfections(Array.isArray(json.data) ? json.data : []);
+        console.log("Fetched perfections:", json.data);
       } catch (err) {
-        console.error("Failed to fetch projects:", err);
-        setProjects([]);
+        console.error("Failed to fetch perfections:", err);
+        setPerfections([]);
       }
     };
-    fetchProjects();
+    fetchPerfections();
   }, []);
 
   // Responsive visible count
@@ -72,16 +95,15 @@ const OurPerfections: React.FC = () => {
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
 
-  if (!projects.length)
+  if (!perfections.length)
     return (
       <div className="py-20 flex justify-center items-center">
-        <p className="text-white text-xl">No projects available.</p>
+        <p className="text-white text-xl">No perfections available.</p>
       </div>
     );
 
-  const maxIndex = Math.max(0, projects.length - visibleCount);
-  //  Math.max(0, testimonials.length - visibleCount);
-  const totalSegments = projects.length - visibleCount + 1;
+  const maxIndex = Math.max(0, perfections.length - visibleCount);
+  const totalSegments = perfections.length - visibleCount + 1;
 
   const nextSlide = () =>
     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
@@ -117,68 +139,48 @@ const OurPerfections: React.FC = () => {
             animate={{ x: `-${(100 / visibleCount) * currentIndex}%` }}
             transition={{ type: "tween", duration: 0.5 }}
           >
-            {projects.map((project) => (
+            {perfections.map((perfection) => (
               <Link
-                href={`/properties/${project.id}`}
-                key={project.id}
+                href={`/properties/${perfection.id}`}
+                key={perfection.id}
                 className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group cursor-pointer`}
               >
                 <div className="relative w-full h-full overflow-hidden">
+                  {/* Main Image - using first gallery image or icon */}
                   <img
-                    src={project.Image}
-                    alt={project.Title}
-                    className="w-72 h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    src={
+                      perfection.galleryImages?.[0] ||
+                      perfection.icon ||
+                      "/default-image.jpg"
+                    }
+                    alt={perfection.Title}
+                    className="w-96 h-full md:w-[320] md:h-[620px]  object-cover transition-transform duration-300 group-hover:scale-105"
                   />
+
+                  {/* Hover Overlay with Dynamic Extra Fields */}
                   <motion.div
-                    className="absolute inset-0 bg-black/70 flex flex-col justify-start p-6 opacity-0 group-hover:opacity-100 z-10"
+                    className="absolute inset-0 bg-black/70 flex flex-col justify-start p-6  opacity-0 group-hover:opacity-100 z-10"
                     initial={{ y: 50, opacity: 0 }}
                     whileHover={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Orientation:</span> {project.Orientation}
-                      </div>
-                    </p>
+                    {/* Dynamic Extra Fields */}
+                    {perfection.extraFields &&
+                      Object.entries(perfection.extraFields).map(
+                        ([icon, value], index) => (
+                          <p
+                            key={index}
+                            className="text-sm text-gray-200 mb-2 flex items-center gap-2"
+                          >
+                            <span className="w-1 h-1 border border-white "></span>
 
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Address:</span> {project.Address}
-                      </div>
-                    </p>
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Land Size:</span> {project.LandSize}
-                      </div>
-                    </p>
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Number of Units:</span> {project.ApartmentSize}
-                      </div>
-                    </p>
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Floors Road:</span> {project.NumberOfFloors}
-                      </div>
-                    </p>
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Number of Parking:</span>{" "}
-                        {project.NumberOfParking}
-                      </div>
-                    </p>
-                    <p className="text-sm text-gray-200 mb-1 flex items-baseline gap-2">
-                      <span className="w-1 h-1 bg-white flex items-center justify-center text-xs shrink-0"></span>
-                      <div>
-                        <span>Apartment Size:</span> {project.ApartmentSize}
-                      </div>
-                    </p>
+                            <span className="flex-1">{value}</span>
+                          </p>
+                        )
+                      )}
+
+                
+                 
 
                     {/* Explore Button */}
                     <motion.div
@@ -211,10 +213,34 @@ const OurPerfections: React.FC = () => {
                     </motion.div>
                   </motion.div>
                 </div>
+
+                {/* Bottom Info Card */}
                 <div className="bg-black/80 p-4 text-left">
-                  <p className="text-sm text-gray-300">{project.Type}</p>
-                  <h3 className="text-xl font-bold">{project.Title}</h3>
-                  <p className="text-sm text-gray-300">{project.LandSize}</p>
+                  <p className="text-sm text-gray-300">{perfection.Type}</p>
+                  <h3 className="text-xl font-bold">{perfection.Title}</h3>
+                  <p className="text-sm text-gray-300">{perfection.Category}</p>
+
+                  {/* Show first 2 extra fields in preview */}
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {perfection.extraFields &&
+                      Object.entries(perfection.extraFields)
+                        .slice(0, 2)
+                        .map(([icon, value], index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs"
+                          >
+                            {renderIcon(icon, 12)}
+                            {value.split(":")[0]} {/* Show only field name */}
+                          </span>
+                        ))}
+                    {perfection.extraFields &&
+                      Object.keys(perfection.extraFields).length > 2 && (
+                        <span className="text-xs text-gray-400">
+                          +{Object.keys(perfection.extraFields).length - 2} more
+                        </span>
+                      )}
+                  </div>
                 </div>
               </Link>
             ))}

@@ -12,20 +12,21 @@ import Logo from "../../../../public/logo.png";
 import { useCreateScheduleMutation } from "@/redux/features/schedule/scheduleApi";
 
 const menuItems = [
-  "Residential",
-  "Commercial",
   "Home",
-  "About",
-  "Management-Team",
-  "Properties",
-  "Concerns",
-  "Landowner",
-  "Buyer",
-  "Blogs",
-  "News&Events",
-  "Gallery",
-  "Contact",
+  "About us",
+  "Project",
   "CSR",
+  "Career",
+  "Blogs",
+  "Contact us",
+  // "Management-Team",
+  // "Concerns",
+  // "Landowner",
+  // "Buyer",
+  // "Blogs",
+  // "News&Events",
+  // "Gallery",
+  // "Contact",
 ];
 
 // Utility function
@@ -337,29 +338,32 @@ const ScheduleModal = ({
 };
 
 // Active Link Component
-const ActiveLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+const ActiveLink = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) => {
   const pathname = usePathname();
-  
-  const isActive = pathname === href || 
-                  (href !== '/' && pathname.startsWith(href)) ||
-                  (href === '/' && pathname === '/');
+
+  const isActive =
+    pathname === href ||
+    (href !== "/" && pathname.startsWith(href)) ||
+    (href === "/" && pathname === "/");
 
   return (
     <Link
       href={href}
       className={`uppercase text-sm font-medium transition relative group ${
-        isActive 
-          ? "text-[#F6BD2F]" 
-          : "text-white hover:text-gray-400"
+        isActive ? "text-[#F6BD2F]" : "text-white hover:text-gray-400"
       }`}
     >
       {children}
       {/* Underline */}
       <span
         className={`absolute -bottom-1 left-0 h-0.5 transition-all duration-300 ${
-          isActive 
-            ? "w-full bg-[#F6BD2F]" 
-            : "w-0 bg-white group-hover:w-full"
+          isActive ? "w-full bg-[#F6BD2F]" : "w-0 bg-white group-hover:w-full"
         }`}
       />
     </Link>
@@ -396,8 +400,10 @@ export default function Navbar() {
   // Check if a menu item is active (for mobile menu)
   const isMenuItemActive = (item: string) => {
     const itemHref = item.toLowerCase() === "home" ? "/" : `/${slugify(item)}`;
-    return pathname === itemHref || 
-           (itemHref !== '/' && pathname.startsWith(itemHref));
+    return (
+      pathname === itemHref ||
+      (itemHref !== "/" && pathname.startsWith(itemHref))
+    );
   };
 
   // Scroll handler to show/hide navbar
@@ -444,8 +450,8 @@ export default function Navbar() {
             : "bg-black/70 backdrop-blur-sm"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 ">
-          <div className="flex items-center justify-between h-20">
+        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-12 ">
+          <div className="flex items-center justify-between  h-20">
             {/* Left: Logo */}
             <Link href="/" className="flex items-center">
               <Image
@@ -459,28 +465,21 @@ export default function Navbar() {
 
             {/* Desktop Navigation - Middle Menu Items */}
             <div className="hidden lg:flex items-center gap-8">
-              <ActiveLink href="/">
-                Home
-              </ActiveLink>
-              <ActiveLink href="/about">
-                About
-              </ActiveLink>
-              <ActiveLink href="/residential">
-                Residential
-              </ActiveLink>
-              <ActiveLink href="/commercial">
-                Commercial
-              </ActiveLink>
-              <ActiveLink href="/properties">
-                Properties
-              </ActiveLink>
+              <ActiveLink href="/">Home</ActiveLink>
+              <ActiveLink href="/about">About us</ActiveLink>
+              <ActiveLink href="/properties">Project</ActiveLink>
+
+              <ActiveLink href="/csr">CSR</ActiveLink>
+              <ActiveLink href="/career">Career</ActiveLink>
+              <ActiveLink href="/blogs">Blogs</ActiveLink>
+              <ActiveLink href="/contact">Contact us</ActiveLink>
               <div className="flex items-center gap-3">
                 <PhoneIcon className="text-white hover:text-sky-300 transition" />
                 <a
                   href="tel:09649112235"
                   className="text-sm font-light text-white hover:text-sky-300 transition"
                 >
-                  09649112235
+                 09649-112235
                 </a>
               </div>
             </div>
@@ -492,7 +491,9 @@ export default function Navbar() {
                 className="flex items-center gap-2 px-4 border-2 border-[#F6BE2C] py-2 hover:bg-[#F6BE2C] hover:text-white  rounded-md  transition-colors"
               >
                 <CalendarIcon className="w-4 h-4" />
-                <span className="text-sm font-medium uppercase">Schedule a visit</span>
+                <span className="text-sm font-medium uppercase">
+                  Schedule a visit
+                </span>
               </button>
             </div>
 
@@ -552,12 +553,13 @@ export default function Navbar() {
                         {/* Main Menu Items */}
                         <div className="flex flex-col gap-4">
                           {menuItems
-                            .filter(item => 
-                              item === "Residential" || 
-                              item === "Commercial" || 
-                              item === "Home" || 
-                              item === "About" || 
-                              item === "Properties"
+                            .filter(
+                              (item) =>
+                                item === "Residential" ||
+                                item === "Commercial" ||
+                                item === "Home" ||
+                                item === "About" ||
+                                item === "Properties"
                             )
                             .map((item) => (
                               <Link
@@ -577,7 +579,7 @@ export default function Navbar() {
                                 {item}
                                 {/* Underline for active item */}
                                 {isMenuItemActive(item) && (
-                                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#F6BD2F]" />
+                                  <span className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-[#F6BD2F]" />
                                 )}
                               </Link>
                             ))}
@@ -588,7 +590,7 @@ export default function Navbar() {
                           {menuItems
                             .filter(
                               (item) =>
-                                item !== "Residential" && 
+                                item !== "Residential" &&
                                 item !== "Commercial" &&
                                 item !== "Home" &&
                                 item !== "About" &&
@@ -639,11 +641,8 @@ export default function Navbar() {
                           <h3 className="font-semibold text-white mb-2">
                             Assist Holdings Limited
                           </h3>
-                          <p>
-                            Plot :11,Signature House,10th Floor, Main Road,
-                            Block: D,
-                          </p>
-                          <p>Aftabnagar, Dhaka, Bangladesh</p>
+                          <p>Plot:11(Level-9), Main Road, Block:D,</p>
+                          <p>Aftabnagar, Dhaka-1212</p>
                         </div>
                         <div className="text-xs text-gray-400">
                           <p>

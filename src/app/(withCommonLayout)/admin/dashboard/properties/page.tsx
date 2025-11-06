@@ -2,6 +2,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import * as Icons from "react-icons/fa";
+import * as IoIcons from "react-icons/io5";
+import * as MdIcons from "react-icons/md";
+import * as HiIcons from "react-icons/hi";
+import * as FiIcons from "react-icons/fi";
 import {
   useCreatePropertiesMutation,
   useDeletePropertiesMutation,
@@ -9,77 +14,245 @@ import {
   useUpdatePropertiesMutation,
 } from "@/redux/features/properties/propertiesApi";
 
-interface Property {
+// Dynamic Icon Picker Component (same as before)
+const IconPicker = ({ selectedIcon, onIconSelect }: { selectedIcon: string; onIconSelect: (icon: string) => void }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLibrary, setSelectedLibrary] = useState("fa");
+  const [showPicker, setShowPicker] = useState(false);
+
+  const allIcons = {
+    fa: Object.keys(Icons),
+    io: Object.keys(IoIcons),
+    md: Object.keys(MdIcons),
+    hi: Object.keys(HiIcons),
+    fi: Object.keys(FiIcons),
+  };
+
+  const filteredIcons = allIcons[selectedLibrary as keyof typeof allIcons].filter(iconName =>
+    iconName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const getIconComponent = (iconName: string) => {
+    const libraries = { fa: Icons, io: IoIcons, md: MdIcons, hi: HiIcons, fi: FiIcons };
+    const library = libraries[selectedLibrary as keyof typeof libraries];
+    return (library as any)[iconName];
+  };
+
+  return (
+    <div className="relative">
+      <div 
+        className="border border-gray-300 rounded-md p-3 cursor-pointer bg-white flex items-center justify-between"
+        onClick={() => setShowPicker(!showPicker)}
+      >
+        <div className="flex items-center gap-3">
+          {selectedIcon ? (
+            <>
+              {(() => {
+                const IconComponent = getIconComponent(selectedIcon);
+                return IconComponent ? <IconComponent size={20} /> : null;
+              })()}
+              <span className="text-sm font-medium">{selectedIcon}</span>
+            </>
+          ) : (
+            <span className="text-sm text-gray-500">Select an icon...</span>
+          )}
+        </div>
+        <span className="text-gray-400">⌄</span>
+      </div>
+
+      {showPicker && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-80 overflow-hidden">
+          <div className="p-3 border-b border-gray-200">
+            <div className="flex gap-2 mb-3">
+              {Object.keys(allIcons).map(lib => (
+                <button
+                  key={lib}
+                  type="button"
+                  onClick={() => setSelectedLibrary(lib)}
+                  className={`px-3 py-1 text-xs rounded-full capitalize ${
+                    selectedLibrary === lib 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  {lib}
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              placeholder="Search icons..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+            />
+          </div>
+
+          <div className="overflow-y-auto max-h-60 p-3">
+            {filteredIcons.length === 0 ? (
+              <div className="text-center py-4 text-gray-500 text-sm">
+                No icons found
+              </div>
+            ) : (
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                {filteredIcons.map(iconName => {
+                  const IconComponent = getIconComponent(iconName);
+                  return (
+                    <button
+                      key={iconName}
+                      type="button"
+                      onClick={() => {
+                        onIconSelect(iconName);
+                        setShowPicker(false);
+                        setSearchTerm("");
+                      }}
+                      className={`p-2 border rounded-md flex flex-col items-center justify-center gap-1 hover:bg-gray-50 transition-colors ${
+                        selectedIcon === iconName ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                      }`}
+                    >
+                      {IconComponent && <IconComponent size={20} />}
+                      <span className="text-xs truncate w-full text-center">{iconName}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="p-3 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={() => setShowPicker(false)}
+              className="w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface FeatureAmenity {
+  icon: string;
+  text: string;
+}
+
+interface ExtraField {
+  icon: string;
+  fieldName: string;
+  fieldValue: string;
+}
+
+interface Perfection {
   id: string;
   Title: string;
+  description: string;
+  description2: string;
+  description3: string;
+  icon: string;
+  FeaturesAmenities?: FeatureAmenity[];
+  videoUrl: string;
+  galleryImages: string[];
+  Category: string;
   Type: string;
-  Image: string;
-  Orientation: string;
-  Address: string;
-  FrontRoad: string;
-  LandSize: string;
-  ApartmentSize: string;
-  NumberOfUnits: string;
-  NumberOfParking: string;
-  NumberOfFloors: string;
+  Location: string;
+  extraFields?: Record<string, string>; // Changed to string values only
   status: string;
   createdAt: string;
 }
 
-const PropertiesPage = () => {
-  const [createProperties, { isLoading: creating }] =
-    useCreatePropertiesMutation();
-  const [updateProperties, { isLoading: updating }] =
-    useUpdatePropertiesMutation();
-  const [deleteProperties, { isLoading: deleting }] =
-    useDeletePropertiesMutation();
+const PerfectionsPage = () => {
+  const [createPerfections, { isLoading: creating }] = useCreatePropertiesMutation();
+  const [updatePerfections, { isLoading: updating }] = useUpdatePropertiesMutation();
+  const [deletePerfections, { isLoading: deleting }] = useDeletePropertiesMutation();
 
   const {
-    data: propertiesData,
+    data: perfectionsData,
     isLoading,
     refetch,
   } = useGetAllPropertiesQuery(undefined, { refetchOnMountOrArgChange: true });
 
-  const properties: Property[] = propertiesData?.data || propertiesData || [];
+  const perfections: Perfection[] = perfectionsData?.data || perfectionsData || [];
 
   const [showForm, setShowForm] = useState(false);
-  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [editingPerfection, setEditingPerfection] = useState<Perfection | null>(null);
   const [formData, setFormData] = useState({
     Title: "",
+    description: "",
+    description2: "",
+    description3: "",
+    icon: "",
+    videoUrl: "",
+    Category: "",
     Type: "",
-    Image: "",
-    Orientation: "",
-    Address: "",
-    FrontRoad: "",
-    LandSize: "",
-    ApartmentSize: "",
-    NumberOfUnits: "",
-    NumberOfParking: "",
-    NumberOfFloors: "",
+    Location: "",
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [featuresAmenities, setFeaturesAmenities] = useState<FeatureAmenity[]>([]);
+  const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [iconFile, setIconFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) router.push("/login");
-  }, [router]);
+  // Function to render any icon by name
+  const renderIcon = (iconName: string, size: number = 20) => {
+    if (!iconName) return null;
+    
+    const libraries = [Icons, IoIcons, MdIcons, HiIcons, FiIcons];
+    for (const library of libraries) {
+      const IconComponent = (library as any)[iconName];
+      if (IconComponent) {
+        return <IconComponent size={size} />;
+      }
+    }
+    return null;
+  };
 
-  // ✅ Image Preview
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // ✅ Add new feature amenity
+  const addFeatureAmenity = () => {
+    setFeaturesAmenities([...featuresAmenities, { icon: "", text: "" }]);
+  };
+
+  // ✅ Update feature amenity
+  const updateFeatureAmenity = (index: number, field: "icon" | "text", value: string) => {
+    const updated = [...featuresAmenities];
+    updated[index][field] = value;
+    setFeaturesAmenities(updated);
+  };
+
+  // ✅ Add new extra field
+  const addExtraField = () => {
+    setExtraFields([...extraFields, { icon: "", fieldName: "", fieldValue: "" }]);
+  };
+
+  // ✅ Update extra field
+  const updateExtraField = (index: number, field: "icon" | "fieldName" | "fieldValue", value: string) => {
+    const updated = [...extraFields];
+    updated[index][field] = value;
+    setExtraFields(updated);
+  };
+
+  // ✅ Remove extra field
+  const removeExtraField = (index: number) => {
+    setExtraFields(extraFields.filter((_, i) => i !== index));
+  };
+
+  // ✅ Handle file uploads
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setImageFile(file);
-      // Preview only
-      setFormData((prev) => ({
-        ...prev,
-        Image: URL.createObjectURL(file),
-      }));
+      setIconFile(e.target.files[0]);
     }
   };
 
-  // ✅ Upload image to CPANEL
+  const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setGalleryFiles(Array.from(e.target.files));
+    }
+  };
+
+  // ✅ Upload images to CPANEL
   const uploadImageToCPanel = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
@@ -94,7 +267,6 @@ const PropertiesPage = () => {
       );
 
       if (!res.ok) throw new Error("Failed to upload image");
-
       const data = await res.json();
       return data.url;
     } catch (error) {
@@ -108,40 +280,54 @@ const PropertiesPage = () => {
     setUploading(true);
 
     try {
-      let imageUrl = formData.Image;
+      let iconUrl = formData.icon;
+      let galleryUrls: string[] = [];
 
-      // Upload new image if selected
-      if (imageFile) {
-        imageUrl = await uploadImageToCPanel(imageFile);
-      } else if (!editingProperty) {
-        toast.error("Please select an image");
-        setUploading(false);
-        return;
+      // Upload icon if selected
+      if (iconFile) {
+        iconUrl = await uploadImageToCPanel(iconFile);
       }
 
-      const propertyData = {
+      // Upload gallery images
+      if (galleryFiles.length > 0) {
+        galleryUrls = await Promise.all(
+          galleryFiles.map(file => uploadImageToCPanel(file))
+        );
+      }
+
+      // Convert extraFields to the required format: { "FaBook": "field name: field value" }
+      const extraFieldsObj: Record<string, string> = {};
+      extraFields.forEach(field => {
+        if (field.icon && field.fieldName && field.fieldValue) {
+          extraFieldsObj[field.icon] = `${field.fieldName}: ${field.fieldValue}`;
+        }
+      });
+
+      const perfectionData = {
         Title: formData.Title,
+        description: formData.description,
+        description2: formData.description2,
+        description3: formData.description3,
+        FeaturesAmenities: featuresAmenities.filter(fa => fa.icon && fa.text),
+        videoUrl: formData.videoUrl,
+        galleryImages: galleryUrls,
+        Category: formData.Category,
         Type: formData.Type,
-        Orientation: formData.Orientation,
-        Address: formData.Address,
-        FrontRoad: formData.FrontRoad,
-        LandSize: formData.LandSize,
-        ApartmentSize: formData.ApartmentSize,
-        NumberOfUnits: formData.NumberOfUnits,
-        NumberOfParking: formData.NumberOfParking,
-        NumberOfFloors: formData.NumberOfFloors,
-        Image: imageUrl,
+        Location: formData.Location,
+        extraFields: extraFieldsObj
       };
 
-      if (editingProperty) {
-        await updateProperties({
-          id: editingProperty.id,
-          data: propertyData,
+      console.log("Submitting data:", perfectionData); // For debugging
+
+      if (editingPerfection) {
+        await updatePerfections({
+          id: editingPerfection.id,
+          data: perfectionData,
         }).unwrap();
-        toast.success("Property updated successfully!");
+        toast.success("Perfection updated successfully!");
       } else {
-        await createProperties(propertyData).unwrap();
-        toast.success("Property created successfully!");
+        await createPerfections(perfectionData).unwrap();
+        toast.success("Perfection created successfully!");
       }
 
       resetForm();
@@ -155,34 +341,34 @@ const PropertiesPage = () => {
     }
   };
 
-  // ✅ Delete Property
-  const handleDeleteProperty = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this property?")) return;
+  const handleDeletePerfection = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this perfection?")) return;
     try {
-      await deleteProperties(id).unwrap();
-      toast.success("Property deleted successfully!");
+      await deletePerfections(id).unwrap();
+      toast.success("Perfection deleted successfully!");
       refetch();
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to delete property");
+      toast.error(error?.data?.message || "Failed to delete perfection");
     }
   };
 
   const resetForm = () => {
     setFormData({
       Title: "",
+      description: "",
+      description2: "",
+      description3: "",
+      icon: "",
+      videoUrl: "",
+      Category: "",
       Type: "",
-      Image: "",
-      Orientation: "",
-      Address: "",
-      FrontRoad: "",
-      LandSize: "",
-      ApartmentSize: "",
-      NumberOfUnits: "",
-      NumberOfParking: "",
-      NumberOfFloors: "",
+      Location: "",
     });
-    setImageFile(null);
-    setEditingProperty(null);
+    setFeaturesAmenities([]);
+    setExtraFields([]);
+    setGalleryFiles([]);
+    setIconFile(null);
+    setEditingPerfection(null);
   };
 
   const handleFormToggle = () => {
@@ -190,22 +376,39 @@ const PropertiesPage = () => {
     if (showForm) resetForm();
   };
 
-  const handleEditProperty = (property: Property) => {
-    setEditingProperty(property);
+  const handleEditPerfection = (perfection: Perfection) => {
+    setEditingPerfection(perfection);
     setFormData({
-      Title: property.Title,
-      Type: property.Type,
-      Image: property.Image,
-      Orientation: property.Orientation,
-      Address: property.Address,
-      FrontRoad: property.FrontRoad,
-      LandSize: property.LandSize,
-      ApartmentSize: property.ApartmentSize,
-      NumberOfUnits: property.NumberOfUnits,
-      NumberOfParking: property.NumberOfParking,
-      NumberOfFloors: property.NumberOfFloors,
+      Title: perfection.Title || "",
+      description: perfection.description || "",
+      description2: perfection.description2 || "",
+      description3: perfection.description3 || "",
+      icon: perfection.icon || "",
+      videoUrl: perfection.videoUrl || "",
+      Category: perfection.Category || "",
+      Type: perfection.Type || "",
+      Location: perfection.Location || "",
     });
-    setImageFile(null);
+    setFeaturesAmenities(perfection.FeaturesAmenities || []);
+    
+    // Convert extraFields object back to array for editing
+    if (perfection.extraFields) {
+      const fieldsArray: ExtraField[] = Object.entries(perfection.extraFields).map(([icon, value]) => {
+        // Split the value into fieldName and fieldValue
+        const [fieldName, ...fieldValueParts] = value.split(": ");
+        const fieldValue = fieldValueParts.join(": "); // In case fieldValue contains ": "
+        
+        return {
+          icon,
+          fieldName: fieldName || "",
+          fieldValue: fieldValue || ""
+        };
+      });
+      setExtraFields(fieldsArray);
+    } else {
+      setExtraFields([]);
+    }
+    
     setShowForm(true);
   };
 
@@ -224,7 +427,7 @@ const PropertiesPage = () => {
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-800">
-              Properties Management
+              Perfections Management
             </h1>
             <button
               onClick={handleFormToggle}
@@ -232,140 +435,313 @@ const PropertiesPage = () => {
               disabled={uploading || creating || updating}
             >
               <span>+</span>
-              <span>{showForm ? "Cancel" : "Add Property"}</span>
+              <span>{showForm ? "Cancel" : "Add Perfection"}</span>
             </button>
           </div>
 
-          {/* Form */}
+          {/* Main Form */}
           {showForm && (
             <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
               <h2 className="text-lg font-semibold mb-4">
-                {editingProperty ? "Edit Property" : "Add New Property"}
+                {editingPerfection ? "Edit Perfection" : "Add New Perfection"}
               </h2>
 
-              <form
-                onSubmit={handleSubmit}
-                className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"
-              >
-                {/* Title */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Title *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.Title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, Title: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter property title"
-                  />
-                </div>
-
-                {/* Type */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Type *
-                  </label>
-                  <select
-                    required
-                    value={formData.Type}
-                    onChange={(e) =>
-                      setFormData({ ...formData, Type: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select Type</option>
-                    <option value="Residential">Residential</option>
-                    <option value="Commercial">Commercial</option>
-                  </select>
-                </div>
-
-                {/* Orientation */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Orientation *
-                  </label>
-                  <select
-                    required
-                    value={formData.Orientation}
-                    onChange={(e) =>
-                      setFormData({ ...formData, Orientation: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select Orientation</option>
-                    <option value="North">North</option>
-                    <option value="South">South</option>
-                    <option value="East">East</option>
-                    <option value="West">West</option>
-                    <option value="North-East">North-East</option>
-                    <option value="North-West">North-West</option>
-                    <option value="South-East">South-East</option>
-                    <option value="South-West">South-West</option>
-                  </select>
-                </div>
-
-                {/* Image */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image {!editingProperty && "*"}
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    required={!editingProperty}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                  {formData.Image && (
-                    <div className="mt-2">
-                      <img
-                        src={formData.Image}
-                        alt="Preview"
-                        className="w-24 h-24 object-cover rounded-md border"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">
-                        {editingProperty
-                          ? "Current Image - Select new image to update"
-                          : "Preview"}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Other Fields */}
-                {[
-                  "Address",
-                  "FrontRoad",
-                  "LandSize",
-                  "ApartmentSize",
-                  "NumberOfUnits",
-                  "NumberOfParking",
-                  "NumberOfFloors",
-                ].map((field) => (
-                  <div key={field}>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Basic Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {field.replace(/([A-Z])/g, " $1").trim()} *
+                      Title *
                     </label>
                     <input
                       type="text"
                       required
-                      value={(formData as any)[field]}
-                      onChange={(e) =>
-                        setFormData({ ...formData, [field]: e.target.value })
-                      }
+                      value={formData.Title}
+                      onChange={(e) => setFormData({ ...formData, Title: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                      placeholder={`Enter ${field
-                        .replace(/([A-Z])/g, " $1")
-                        .toLowerCase()}`}
+                      placeholder="Enter title"
                     />
                   </div>
-                ))}
 
-                <div className="md:col-span-2 flex justify-end gap-3 pt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Category *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.Category}
+                      onChange={(e) => setFormData({ ...formData, Category: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter category"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Type *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.Type}
+                      onChange={(e) => setFormData({ ...formData, Type: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter type"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Location *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.Location}
+                      onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter location"
+                    />
+                  </div>
+                </div>
+
+                {/* Descriptions */}
+                <div className="space-y-4">
+                  <h3 className="text-md font-medium text-gray-900">Descriptions</h3>
+                  {["description", "description2", "description3"].map((field) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {field.charAt(0).toUpperCase() + field.slice(1)} *
+                      </label>
+                      <textarea
+                        required
+                        value={formData[field as keyof typeof formData]}
+                        onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                        placeholder={`Enter ${field}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Icon Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Main Icon {!editingPerfection && "*"}
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleIconChange}
+                    required={!editingPerfection}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                  {iconFile && (
+                    <div className="mt-2">
+                      <img
+                        src={URL.createObjectURL(iconFile)}
+                        alt="Icon Preview"
+                        className="w-16 h-16 object-cover rounded-md border"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Video URL */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Video URL
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="https://example.com/video.mp4"
+                  />
+                </div>
+
+                {/* Gallery Images */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Gallery Images
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleGalleryChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                  {galleryFiles.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {galleryFiles.map((file, index) => (
+                        <img
+                          key={index}
+                          src={URL.createObjectURL(file)}
+                          alt={`Gallery ${index + 1}`}
+                          className="w-20 h-20 object-cover rounded-md border"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Features & Amenities */}
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-md font-medium text-gray-900">Features & Amenities</h3>
+                    <button
+                      type="button"
+                      onClick={addFeatureAmenity}
+                      className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                    >
+                      + Add Feature
+                    </button>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {featuresAmenities.map((feature, index) => (
+                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Select Icon *
+                            </label>
+                            <IconPicker
+                              selectedIcon={feature.icon}
+                              onIconSelect={(icon) => updateFeatureAmenity(index, "icon", icon)}
+                            />
+                          </div>
+
+                          <div className="md:col-span-3">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Feature Text *
+                            </label>
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                required
+                                value={feature.text}
+                                onChange={(e) => updateFeatureAmenity(index, "text", e.target.value)}
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                placeholder="Swimming Pool, Free WiFi, etc."
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setFeaturesAmenities(featuresAmenities.filter((_, i) => i !== index))}
+                                className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {featuresAmenities.length === 0 && (
+                    <p className="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
+                      No features added yet. Click "Add Feature" to start.
+                    </p>
+                  )}
+                </div>
+
+                {/* Extra Fields - NEW FORMAT */}
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-md font-medium text-gray-900">Extra Fields</h3>
+                    <button
+                      type="button"
+                      onClick={addExtraField}
+                      className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                    >
+                      + Add Field
+                    </button>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {extraFields.map((field, index) => (
+                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                        <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
+                          {/* Icon Picker */}
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Icon *
+                            </label>
+                            <IconPicker
+                              selectedIcon={field.icon}
+                              onIconSelect={(icon) => updateExtraField(index, "icon", icon)}
+                            />
+                          </div>
+
+                          {/* Field Name */}
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Field Name *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              value={field.fieldName}
+                              onChange={(e) => updateExtraField(index, "fieldName", e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                              placeholder="e.g., Price, Area, Rooms"
+                            />
+                          </div>
+
+                          {/* Field Value */}
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Field Value *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              value={field.fieldValue}
+                              onChange={(e) => updateExtraField(index, "fieldValue", e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                              placeholder="e.g., $500, 1200 sqft, 3"
+                            />
+                          </div>
+
+                          {/* Remove Button */}
+                          <div className="md:col-span-1 flex items-end">
+                            <button
+                              type="button"
+                              onClick={() => removeExtraField(index)}
+                              className="w-full px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Preview how it will be saved */}
+                        {field.icon && field.fieldName && field.fieldValue && (
+                          <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
+                            <p className="text-xs text-blue-700">
+                              <strong>Will be saved as:</strong><br />
+                              Key: <code>{field.icon}</code><br />
+                              Value: <code>{field.fieldName}: {field.fieldValue}</code>
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {extraFields.length === 0 && (
+                    <p className="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
+                      No extra fields added yet. Click "Add Field" to create custom fields.
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={handleFormToggle}
@@ -382,22 +758,22 @@ const PropertiesPage = () => {
                     {(uploading || creating || updating) && (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     )}
-                    {editingProperty ? "Update Property" : "Add Property"}
+                    {editingPerfection ? "Update Perfection" : "Add Perfection"}
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          {/* Property Table */}
+          {/* Perfections Table */}
           <div className="bg-white rounded-lg shadow">
             <div className="p-4 md:p-6">
               <h2 className="text-lg font-semibold mb-4">
-                All Properties ({properties?.length || 0})
+                All Perfections ({perfections?.length || 0})
               </h2>
-              {!properties?.length ? (
+              {!perfections?.length ? (
                 <div className="text-center py-8 text-gray-500">
-                  No properties found.
+                  No perfections found.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -405,16 +781,22 @@ const PropertiesPage = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                          Image
+                          Icon
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Title
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Category
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Type
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                          Address
+                          Location
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Extra Fields
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Status
@@ -425,23 +807,45 @@ const PropertiesPage = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {properties.map((p: Property) => (
+                      {perfections.map((p: Perfection) => (
                         <tr key={p.id} className="hover:bg-gray-50">
                           <td className="px-4 py-2">
-                            <img
-                              src={p.Image}
-                              alt={p.Title}
-                              className="w-14 h-14 rounded-md object-cover"
-                            />
+                            {p.icon ? (
+                              <img
+                                src={p.icon}
+                                alt="Icon"
+                                className="w-10 h-10 rounded-md object-cover"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
+                                <span className="text-xs text-gray-500">No Icon</span>
+                              </div>
+                            )}
                           </td>
                           <td className="px-4 py-2 font-medium">{p.Title}</td>
                           <td className="px-4 py-2">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              {p.Type}
+                              {p.Category}
                             </span>
                           </td>
+                          <td className="px-4 py-2 text-sm">{p.Type}</td>
                           <td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">
-                            {p.Address}
+                            {p.Location}
+                          </td>
+                          <td className="px-4 py-2">
+                            <div className="flex flex-wrap gap-1">
+                              {p.extraFields && Object.entries(p.extraFields).slice(0, 3).map(([icon, value], index) => (
+                                <span key={index} className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-xs">
+                                  {renderIcon(icon, 12)}
+                                  {value}
+                                </span>
+                              ))}
+                              {p.extraFields && Object.keys(p.extraFields).length > 3 && (
+                                <span className="text-xs text-gray-500">
+                                  +{Object.keys(p.extraFields).length - 3} more
+                                </span>
+                              )}
+                            </div>
                           </td>
                           <td className="px-4 py-2">
                             <span
@@ -459,14 +863,14 @@ const PropertiesPage = () => {
                           <td className="px-4 py-2">
                             <div className="flex space-x-2">
                               <button
-                                onClick={() => handleEditProperty(p)}
+                                onClick={() => handleEditPerfection(p)}
                                 className="text-blue-600 hover:text-blue-900 text-sm font-medium"
                                 disabled={deleting}
                               >
                                 Edit
                               </button>
                               <button
-                                onClick={() => handleDeleteProperty(p.id)}
+                                onClick={() => handleDeletePerfection(p.id)}
                                 className="text-red-600 hover:text-red-900 text-sm font-medium"
                                 disabled={deleting}
                               >
@@ -488,4 +892,4 @@ const PropertiesPage = () => {
   );
 };
 
-export default PropertiesPage;
+export default PerfectionsPage;

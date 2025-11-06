@@ -3,17 +3,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  Home,
-  MapPin,
-  Map,
-  Waypoints,
-  Ruler,
-  Layout,
-  Building2,
-  ParkingSquare,
-  Menu,
-} from "lucide-react"; 
+import * as Icons from "react-icons/fa";
+import * as IoIcons from "react-icons/io5";
+import * as MdIcons from "react-icons/md";
+import * as HiIcons from "react-icons/hi";
+import * as FiIcons from "react-icons/fi";
 
 import LandownerBanner from "@/components/shared/Landowner/LandownerBanner";
 import N71LakeCondos from "@/components/shared/Properties/propertiesText";
@@ -28,18 +22,29 @@ interface Project {
   id: string;
   Title: string;
   Type: string;
-  Image: string;
-  Orientation: string;
-  Address: string;
-  FrontRoad: string;
-  LandSize: string;
-  ApartmentSize: string;
-  NumberOfUnits: string;
-  NumberOfParking: string;
-  NumberOfFloors: string;
+  extraFields: Record<string, string>;
+  description: string;
+  description2: string;
+  description3: string;
   status: string;
-  createdAt: string;
+  FeaturesAmenities:any
+  videoUrl: string;
+  galleryImages: string[];
 }
+
+// Function to render any icon by name
+const renderIcon = (iconName: string, size: number = 20) => {
+  if (!iconName) return null;
+
+  const libraries = [Icons, IoIcons, MdIcons, HiIcons, FiIcons];
+  for (const library of libraries) {
+    const IconComponent = (library as any)[iconName];
+    if (IconComponent) {
+      return <IconComponent size={size} />;
+    }
+  }
+  return null;
+};
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -57,6 +62,7 @@ export default function ProjectDetailPage() {
           "https://job-task-2-backend.vercel.app/api/v1/perfections"
         );
         const result = await response.json();
+        console.log(result.data);
 
         if (result.success) {
           const foundProject = result.data.find(
@@ -102,38 +108,19 @@ export default function ProjectDetailPage() {
     );
   }
 
-  interface FeatureItem {
-    icon: React.ElementType;
-    name: string;
-    value: keyof Project;
-    unit?: string;
-  }
-
-  const glanceFeatures: FeatureItem[] = [
-    { icon: Home, name: "Type", value: "Type" },
-    { icon: MapPin, name: "Orientation", value: "Orientation" },
-    { icon: Map, name: "Address", value: "Address" },
-    { icon: Waypoints, name: "Front Road", value: "FrontRoad" },
-    { icon: Ruler, name: "Land Size", value: "LandSize", unit: " Katha" },
-    {
-      icon: Layout,
-      name: "Apartment Size",
-      value: "ApartmentSize",
-      unit: " sft (approx.)",
-    },
-    { icon: Building2, name: "Number of Units", value: "NumberOfUnits" },
-    { icon: ParkingSquare, name: "Number of Parking", value: "NumberOfParking" },
-    { icon: Menu, name: "Number of Floors", value: "NumberOfFloors" },
-  ];
-
   return (
     <div className="min-h-screen bg-white">
       <LandownerBanner
-        img="https://jcxbd.com/wp-content/uploads/2021/09/10-scaled-1.jpg"
+        img="https://i.postimg.cc/2jxr3Zx0/Luxury-Flat-for-Sale-in-Bashundhara-Concord-Seven-Heights-1.jpg"
         title="Properties"
+        text={project.Title}
       />
 
-      <N71LakeCondos />
+      <N71LakeCondos
+        des={project.description}
+        des2={project.description2}
+        des3={project.description3}
+      />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-12 md:my-24">
         {/* Title Section */}
@@ -163,47 +150,88 @@ export default function ProjectDetailPage() {
           <div className="w-full lg:w-1/2 flex justify-center">
             <div className="relative w-full max-w-md lg:max-w-full">
               <img
-                src={project.Image}
+                src={project?.galleryImages?.[0]}
                 alt={project.Title}
                 className="w-full h-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:h-[690px] lg:max-h-none object-cover rounded-lg shadow-lg"
               />
             </div>
           </div>
 
-          {/* Right: Project Info */}
-          <div className="w-full lg:w-1/2">
+          {/* Right: Project Info - Only Extra Fields */}
+          <div className="w-full lg:w-1/3">
             <div className="w-full space-y-4 sm:space-y-6">
-              {glanceFeatures.map((feature) => (
-                <motion.div 
-                  key={feature.name} 
-                  className="flex items-start sm:items-center py-3 sm:py-4 border-b border-gray-200"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+              {/* Dynamic Extra Fields Display */}
+              {project.extraFields &&
+                Object.entries(project.extraFields).map(
+                  ([iconName, fieldValue], index) => {
+                    // Split the value to get field name and value
+                    const [fieldName, ...valueParts] = fieldValue.split(": ");
+                    const fieldValueText = valueParts.join(": ");
+
+                    return (
+                      <motion.div
+                        key={iconName}
+                        className="flex items-start sm:items-center py-2 sm:py-3 border-b border-gray-200"
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.5,
+                          ease: "easeOut",
+                          delay: index * 0.1,
+                        }}
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-center w-full ">
+                          {/* Icon and Field Name */}
+                          <div className="flex items-center gap-2 font-semibold text-[#003C8C] text-sm sm:text-base w-full sm:w-44 lg:w-20 shrink-0 mb-1 sm:mb-0">
+                            <span className="text-[#FBC341]">
+                              {renderIcon(iconName, 30)}
+                            </span>
+                          </div>
+
+                          {/* Field Name */}
+                          <div className="flex items-center w-full">
+                            <span className="font-normal text-[#003C8C] text-sm sm:text-base wrap-break-word">
+                              {fieldName}
+                            </span>
+                         
+                          </div>
+
+                          {/* Field Value */}
+                          <div className="flex items-center w-full">
+                            <span className="font-normal text-gray-700 text-sm sm:text-base wrap-break-word">
+                                 <span className="text-gray-900 hidden sm:inline mr-2">
+                              :
+                            </span>
+                              {fieldValueText}
+                            </span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  }
+                )}
+
+              {/* If no extra fields */}
+              {(!project.extraFields ||
+                Object.keys(project.extraFields).length === 0) && (
+                <motion.div
+                  className="text-center py-8 text-gray-500"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-gray-700 shrink-0 mr-4 sm:mr-6 lg:mr-12" />
-                  <div className="flex flex-col sm:flex-row sm:items-center w-full">
-                    <div className="font-semibold text-[#003C8C] text-sm sm:text-base w-32 sm:w-40 lg:w-48 shrink-0 mb-1 sm:mb-0">
-                      {feature.name}
-                    </div>
-                    <div className="flex items-center space-x-2 sm:ml-4 lg:ml-8">
-                      <span className="text-gray-900 hidden sm:inline">:</span>
-                      <span className="font-normal text-gray-700 text-sm sm:text-base wrap-break-word">
-                        {project[feature.value]}
-                        {feature.unit || ""}
-                      </span>
-                    </div>
-                  </div>
+                  No additional information available
                 </motion.div>
-              ))}
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <FeaturesAmenities />
-      <Video />
+      <Video url= {project.videoUrl} />
       <GalleryPage />
       <Enquiry />
       <Testimonials />
