@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @next/next/no-img-element */
+
 "use client";
 
 import React, { useRef } from "react";
@@ -81,10 +80,10 @@ const Relentlessingoingbeyond: React.FC = () => {
               viewport={{ once: true }}
               variants={fadeUp}
             >
-              JCX Developments Ltd embarked on the Real Estate journey with the
-              commitment to bring contemporary design and develop large-scale
-              Residential, Commercial, and Condominium projects in Bangladesh
-              with Japanese collaboration and experience.
+              Welcome to Assist Holdings Limited, a trusted name in real estate
+              and land share investment. We specialize in helping individuals
+              and organizations secure valuable land assets with transparency,
+              reliability, and long-term growth in mind.
             </motion.p>
 
             <motion.p
@@ -110,14 +109,16 @@ const Relentlessingoingbeyond: React.FC = () => {
               variants={fadeUp}
               transition={{ delay: 0.2, duration: 0.9, ease: easeOut }}
             >
-              Creed Group, founded in 1996, is a real estate investment company
-              with extensive experience in Japan's mature real estate market.
-              Indonesia, Bangladesh, the Philippines, and Myanmar's expanding
-              real estate markets since 2012, with a gross development value of
-              over USD 800 million to date. Creed Group is concentrating its
-              operations in Southeast Asia, with a strategy to work with the
-              best in the industry and bring Japanese quality and knowledge to
-              the region.
+              At Assist Holdings Limited, our mission is simple — to make land
+              ownership accessible and profitable for everyone. We believe that
+              every piece of land holds potential, and our goal is to assist our
+              clients in unlocking that value through smart investments and
+              innovative land-sharing opportunities. With a team of experienced
+              professionals and a deep understanding of the real estate market,
+              we ensure every project we undertake meets the highest standards
+              of quality, legality, and return on investment. From identifying
+              prime land locations to managing share ownership and development,
+              we guide our clients every step of the way.
             </motion.p>
             <motion.p
               className="text-base leading-relaxed mb-6"
@@ -127,38 +128,32 @@ const Relentlessingoingbeyond: React.FC = () => {
               variants={fadeUp}
               transition={{ delay: 0.2, duration: 0.9, ease: easeOut }}
             >
-              The logo defines our philosophy. Beyond bonding explains our
-              allegiance to our clients. The only way we can advance forward is
-              their dreams are brought into reality. We go above and beyond to
-              provide an elegant solution to their requirements and only stop
-              when we achieve to see their smiles.
+              Whether you’re looking to invest, expand, or secure your future
+              through land ownership, Assist Holdings Limited is here to help
+              you build your foundation for success.
+              <br /> Assist Holdings Limited —
+              Better To Be Trusted Than Famous
             </motion.p>
-
-            
           </div>
-
-   
         </div>
 
         {/* Right Section */}
         <div className="lg:w-1/2 grid grid-cols-2 gap-5 relative">
           <motion.div style={{ y: imgMove2 }} className="col-span-1 mt-8">
             <img
-              src="https://jcxbd.com/wp-content/uploads/2024/04/Our-ascendence-4-v2.jpg"
+              src="https://i.postimg.cc/jdNHytPH/La-Speranza-6.jpg"
               alt="Building 1"
-              className="w-full h-[380px] object-cover rounded-lg shadow-md"
+              className="w-full h-full md:h-[480px] object-cover rounded-lg shadow-md"
             />
           </motion.div>
 
           <motion.div style={{ y: imgMove3 }} className="col-span-1">
             <img
-              src="https://jcxbd.com/wp-content/uploads/2024/04/Our-ascendence-3-v2.jpg"
+              src="https://i.postimg.cc/xdFJW4Lq/Concord-Aurora-Heights-5-scaled-1.jpg"
               alt="Building 2"
-              className="w-full h-[450px] object-cover rounded-lg shadow-md"
+              className="w-full h-full md:h-[600px] object-cover rounded-lg shadow-md"
             />
           </motion.div>
-
-        
         </div>
       </div>
     </motion.div>

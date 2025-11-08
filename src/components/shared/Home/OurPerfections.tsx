@@ -133,7 +133,7 @@ const OurPerfections: React.FC = () => {
       </div>
 
       {/* Slider */}
-      <div className="relative max-w-7xl mx-auto px-8">
+      <div className="relative max-w-7xl mx-auto px-3 md:px-8">
         <div className="overflow-hidden">
           <motion.div
             className="flex gap-6"

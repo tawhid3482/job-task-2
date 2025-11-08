@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState } from "react";
@@ -9,7 +8,7 @@ const aboutUsData = [
     title: "MISSION",
     imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Mission.jpg",
     description:
-      "Our mission is to put our customers’ happiness as the first priority.",
+      "At Assist Holdings Limited, our expedition  is to make property ownership accessible, transparent, and rewarding for everyone. We strive to empower individuals and investors through innovative land share opportunities, reliable real estate solutions, and a commitment to sustainable growth that builds communities and secures futures.",
   },
   {
     id: 2,
@@ -23,7 +22,7 @@ const aboutUsData = [
     title: "VISION",
     imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Vision.jpg",
     description:
-      "We envision building apartments that are both luxurious and affordable and hence fulfilling the dreams of our customers.",
+      "Our vision is to become a trusted leader in the real estate and land share industry — transforming the way people invest in land by creating shared opportunities that drive prosperity, confidence, and long-term value across Bangladesh and beyond.",
   },
 ];
 

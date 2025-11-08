@@ -1,5 +1,3 @@
-
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -9,17 +7,17 @@ interface Project {
   id: string;
   Title: string;
   Type: string;
-  Image: string;
-  Orientation: string;
-  Address: string;
-  FrontRoad: string;
-  LandSize: string;
-  ApartmentSize: string;
-  NumberOfUnits: string;
-  NumberOfParking: string;
-  NumberOfFloors: string;
+  Category: string;
+  Location: string;
   status: string;
   createdAt: string;
+  description: string;
+  description2: string;
+  description3: string;
+  galleryImages: string[];
+  extraFields: Record<string, string>;
+  FeaturesAmenities: Array<{ icon: string; text: string }>;
+  videoUrl?: string;
 }
 
 const buttonVariants = {
@@ -37,7 +35,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
         {/* Image Section - Fixed Height */}
         <div className="relative overflow-hidden w-full h-64 sm:h-72 md:h-80 lg:h-[580px]">
           <img
-            src={project.Image}
+            src={project.galleryImages[0]} // Use first gallery image
             alt={project.Title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
@@ -47,54 +45,25 @@ const ProjectCard = ({ project }: { project: Project }) => (
             whileHover={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Orientation:</span> {project.Orientation}
-              </span>
-            </p>
+            {/* Display all extraFields dynamically */}
+            {Object.entries(project.extraFields).map(([key, value]) => (
+              <p key={key} className="text-xs sm:text-sm flex items-start gap-2">
+                <span className="w-1 h-1 border border-white  mt-1 shrink-0"></span>
+                <span>
+                   {value}
+                </span>
+              </p>
+            ))}
 
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Address:</span> {project.Address}
-              </span>
-            </p>
-
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Land Size:</span> {project.LandSize} Katha
-              </span>
-            </p>
-
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Front Road:</span> {project.FrontRoad}
-              </span>
-            </p>
-
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Number of Floors:</span> {project.NumberOfFloors}
-              </span>
-            </p>
-
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Number of Parking:</span> {project.NumberOfParking}
-              </span>
-            </p>
-
-            <p className="text-xs sm:text-sm flex items-start gap-2">
-              <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-              <span>
-                <span className="font-medium">Apartment Size:</span> {project.ApartmentSize} Sq. Ft
-              </span>
-            </p>
+            {/* Display FeaturesAmenities if available */}
+            {project.FeaturesAmenities?.map((feature, index) => (
+              <p key={index} className="text-xs sm:text-sm flex items-start gap-2">
+                <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
+                <span>
+                  <span className="font-medium">Feature:</span> {feature.text}
+                </span>
+              </p>
+            ))}
 
             {/* Explore Button */}
             <motion.div
@@ -126,12 +95,12 @@ const ProjectCard = ({ project }: { project: Project }) => (
 
         {/* Content Section - Fixed Height */}
         <div className="bg-white p-3 sm:p-4 text-left text-black flex flex-col flex-1 min-h-[120px]">
-          <p className="text-xs sm:text-sm text-gray-600 mb-1">{project.Type}</p>
+          <p className="text-xs sm:text-sm text-gray-600 mb-1 capitalize">{project.Type}</p>
           <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 line-clamp-2 flex-1">
             {project.Title}
           </h3>
           <p className="text-xs sm:text-sm text-gray-600 mt-auto">
-            {project.LandSize} Katha
+            {project.Location}
           </p>
         </div>
       </div>
@@ -159,7 +128,7 @@ const ProjectFilter = () => {
           "https://job-task-2-backend.vercel.app/api/v1/perfections"
         );
         const result = await response.json();
-
+        console.log("Backend response:", result);
         if (result.success) {
           setProjects(result.data);
         } else {
@@ -176,39 +145,44 @@ const ProjectFilter = () => {
     fetchProjects();
   }, []);
 
-  // Filter options
-  const categories = ["ALL", "ONGOING", "HANDOVER", "UPCOMING"];
-  const types = ["ALL", "RESIDENTIAL", "COMMERCIAL"];
-  const locations = ["ALL", "GULSHAN", "BASHUNDHARA"];
+  // Dynamic filter options based on actual data
+  const categories = useMemo(() => {
+    const allCategories = ["ALL", ...new Set(projects.map(project => project.Category.toUpperCase()))];
+    return allCategories.filter(cat => cat && cat !== "ALL");
+  }, [projects]);
+
+  const types = useMemo(() => {
+    const allTypes = ["ALL", ...new Set(projects.map(project => project.Type.toUpperCase()))];
+    return allTypes.filter(type => type && type !== "ALL");
+  }, [projects]);
+
+  const locations = useMemo(() => {
+    const allLocations = ["ALL", ...new Set(projects.map(project => project.Location.toUpperCase()))];
+    return allLocations.filter(location => location && location !== "ALL");
+  }, [projects]);
 
   const filteredProjects = useMemo(() => {
     let filtered = projects;
 
-    // Filter by category (status) - যদি ALL না হয়
+    // Filter by category (status) - case insensitive
     if (activeCategory !== "ALL") {
       filtered = filtered.filter(
-        (project) => project.status === activeCategory
+        (project) => project.Category.toUpperCase() === activeCategory
       );
     }
 
-    // Filter by type - যদি ALL না হয়
+    // Filter by type - case insensitive
     if (activeType !== "ALL") {
       filtered = filtered.filter(
         (project) => project.Type.toUpperCase() === activeType
       );
     }
 
-    // Filter by location - যদি ALL না হয়
+    // Filter by location - case insensitive
     if (activeLocation !== "ALL") {
-      filtered = filtered.filter((project) => {
-        const address = project.Address.toLowerCase();
-        if (activeLocation === "GULSHAN") return address.includes("gulshan");
-        if (activeLocation === "BASHUNDHARA")
-          return (
-            address.includes("bashundhara") || address.includes("bosondora")
-          );
-        return true;
-      });
+      filtered = filtered.filter((project) => 
+        project.Location.toUpperCase().includes(activeLocation.toUpperCase())
+      );
     }
 
     return filtered;
@@ -255,8 +229,9 @@ const ProjectFilter = () => {
         {/* Select Category */}
         <div className="relative w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-gray-700">
           <div
-            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${activeCategory !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
-              }`}
+            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${
+              activeCategory !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
+            }`}
             onClick={() => handleDropdownClick("SELECT CATEGORY")}
           >
             <span>SELECT CATEGORY</span>
@@ -286,9 +261,10 @@ const ProjectFilter = () => {
                     onClick={() => handleFilterSelect("CATEGORY", category)}
                     className={`
                       py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
-                      ${activeCategory === category
-                        ? "bg-[#783D1B] font-semibold"
-                        : "hover:bg-gray-800"
+                      ${
+                        activeCategory === category
+                          ? "bg-[#783D1B] font-semibold"
+                          : "hover:bg-gray-800"
                       }
                     `}
                   >
@@ -303,8 +279,9 @@ const ProjectFilter = () => {
         {/* Select Type */}
         <div className="relative w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-gray-700">
           <div
-            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${activeType !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
-              }`}
+            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${
+              activeType !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
+            }`}
             onClick={() => handleDropdownClick("SELECT TYPE")}
           >
             <span>SELECT TYPE</span>
@@ -334,9 +311,10 @@ const ProjectFilter = () => {
                     onClick={() => handleFilterSelect("TYPE", type)}
                     className={`
                       py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
-                      ${activeType === type
-                        ? "bg-[#783D1B] font-semibold"
-                        : "hover:bg-gray-800"
+                      ${
+                        activeType === type
+                          ? "bg-[#783D1B] font-semibold"
+                          : "hover:bg-gray-800"
                       }
                     `}
                   >
@@ -351,8 +329,9 @@ const ProjectFilter = () => {
         {/* Select Location */}
         <div className="relative w-full sm:w-1/3">
           <div
-            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${activeLocation !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
-              }`}
+            className={`flex items-center justify-between sm:justify-center px-4 sm:px-0 py-3 sm:py-4 cursor-pointer text-base sm:text-lg ${
+              activeLocation !== "ALL" ? "bg-gray-800" : "hover:bg-gray-900"
+            }`}
             onClick={() => handleDropdownClick("SELECT LOCATION")}
           >
             <span>SELECT LOCATION</span>
@@ -382,9 +361,10 @@ const ProjectFilter = () => {
                     onClick={() => handleFilterSelect("LOCATION", location)}
                     className={`
                       py-3 px-4 sm:px-6 text-sm text-left transition duration-200 cursor-pointer
-                      ${activeLocation === location
-                        ? "bg-[#783D1B] font-semibold"
-                        : "hover:bg-gray-800"
+                      ${
+                        activeLocation === location
+                          ? "bg-[#783D1B] font-semibold"
+                          : "hover:bg-gray-800"
                       }
                     `}
                   >
