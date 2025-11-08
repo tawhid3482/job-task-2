@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import Link from "next/link";
@@ -13,12 +13,12 @@ import { useCreateScheduleMutation } from "@/redux/features/schedule/scheduleApi
 
 const menuItems = [
   "Home",
-  "About us",
-  "Project",
+  "About",
+  "Properties",
   "CSR",
   "Career",
   "Blogs",
-  "Contact us",
+  "Contact",
   // "Management-Team",
   // "Concerns",
   // "Landowner",
