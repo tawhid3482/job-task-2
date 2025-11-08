@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
@@ -17,7 +16,7 @@ const Map: React.FC = () => {
           href={MAP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative block w-full h-screen md:h-[600px] cursor-pointer overflow-hidden shadow-2xl"
+          className="relative block w-full h-72 md:h-[600px] cursor-pointer overflow-hidden shadow-2xl"
           initial="restMap" 
           whileHover="hoverMap" 
         >

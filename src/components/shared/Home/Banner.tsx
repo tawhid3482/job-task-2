@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -180,7 +179,7 @@ const Banner: React.FC = () => {
       })}
 
       {/* Text */}
-      <div className="absolute top-96 md:top-[450px] inset-0 z-20 flex flex-col px-6 md:px-16">
+      <div className="absolute top-96 md:top-[420px] inset-0 z-20 flex flex-col px-6 md:px-16 ">
         <BannerText key={currentSlideIndex} data={currentSlide} direction={direction} />
       </div>
 

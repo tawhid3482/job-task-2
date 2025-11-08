@@ -44,13 +44,13 @@ const HeroBanner: React.FC = () => {
       
       {/* 2. Image Background (Next.js Image) */}
       <Image
-        src="https://jcxbd.com/wp-content/uploads/2024/05/cta.jpg" // Replace with your local image path if possible
+        src="https://i.postimg.cc/2jLcXpnZ/1723884127Ih-DHF.jpg" // Replace with your local image path if possible
         alt="Luxury interior with glass railings and modern lighting"
         layout="fill"
         objectFit="cover"
         quality={100}
         priority
-        className="brightness-75" // Slightly dim the image for better text readability
+        className="brightness-50" // Slightly dim the image for better text readability
         unoptimized // Remove this line if using a local image in /public
       />
 

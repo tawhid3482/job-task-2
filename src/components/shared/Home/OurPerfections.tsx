@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
@@ -146,7 +147,7 @@ const OurPerfections: React.FC = () => {
                 className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group cursor-pointer`}
               >
                 <div className="relative w-full h-full overflow-hidden">
-                  {/* Main Image - using first gallery image or icon */}
+                
                   <img
                     src={
                       perfection.galleryImages?.[0] ||
@@ -154,7 +155,7 @@ const OurPerfections: React.FC = () => {
                       "/default-image.jpg"
                     }
                     alt={perfection.Title}
-                    className="w-96 h-full md:w-[320] md:h-[620px]  object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-96 h-96 md:w-[320px] md:h-[620px]  object-cover transition-transform duration-300 group-hover:scale-105"
                   />
 
                   {/* Hover Overlay with Dynamic Extra Fields */}

@@ -116,7 +116,7 @@ const OurAscendance: React.FC = () => {
               of the way. .
             </motion.p>
             <motion.p
-              className="text-base leading-relaxed mb-6"
+              className="text-base leading-relaxed"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -130,27 +130,13 @@ const OurAscendance: React.FC = () => {
               Better To Be Trusted Than famous .
             </motion.p>
 
-            <motion.a
-              href="#"
-              className="inline-flex items-center text-blue-800 hover:text-blue-600 transition-colors duration-300 font-semibold text-lg group"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              transition={{ delay: 0.4, duration: 0.9, ease: easeOut }}
-            >
-              READ MORE
-              <ArrowRight
-                className="ml-2 group-hover:translate-x-1 transition-transform duration-300"
-                size={20}
-              />
-            </motion.a>
+           
           </div>
 
           {/* Bottom Image */}
-          <motion.div style={{ y: imgMove1 }} className="w-full mt-10">
+          <motion.div style={{ y: imgMove1 }} className="w-full mt-2">
             <img
-              src="https://jcxbd.com/wp-content/uploads/2022/11/Our-ascendence-1.jpg"
+              src="https://i.postimg.cc/J41r5QBq/Concord-Malancha-22-scaled-1.jpg"
               alt="Assist-holdings-limited Developments"
               className="w-full h-[400px] object-cover rounded-lg shadow-lg"
             />
@@ -161,7 +147,7 @@ const OurAscendance: React.FC = () => {
         <div className="lg:w-1/2 grid grid-cols-2 gap-5 relative">
           <motion.div style={{ y: imgMove2 }} className="col-span-1 mt-8">
             <img
-              src="https://jcxbd.com/wp-content/uploads/2024/04/Our-ascendence-4-v2.jpg"
+              src="https://i.postimg.cc/jdNHytPH/La-Speranza-6.jpg"
               alt="Building 1"
               className="w-full h-[380px] object-cover rounded-lg shadow-md"
             />
@@ -169,7 +155,7 @@ const OurAscendance: React.FC = () => {
 
           <motion.div style={{ y: imgMove3 }} className="col-span-1">
             <img
-              src="https://jcxbd.com/wp-content/uploads/2024/04/Our-ascendence-3-v2.jpg"
+              src="https://i.postimg.cc/xdFJW4Lq/Concord-Aurora-Heights-5-scaled-1.jpg"
               alt="Building 2"
               className="w-full h-[450px] object-cover rounded-lg shadow-md"
             />
@@ -177,7 +163,7 @@ const OurAscendance: React.FC = () => {
 
           <motion.div style={{ y: imgMove1 }} className="col-span-2">
             <img
-              src="https://jcxbd.com/wp-content/uploads/2024/04/Our-ascendence-2-v2.jpg"
+              src="https://i.postimg.cc/BQGL9DPh/Concord-Fresh-Meadows-Affordable-Luxury-Living-in-Bashundhara-7.jpg"
               alt="Modern Architecture"
               className="w-full h-[420px] object-cover rounded-lg shadow-lg"
             />

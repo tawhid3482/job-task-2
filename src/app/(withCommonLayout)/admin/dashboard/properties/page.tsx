@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -15,7 +16,13 @@ import {
 } from "@/redux/features/properties/propertiesApi";
 
 // Dynamic Icon Picker Component (same as before)
-const IconPicker = ({ selectedIcon, onIconSelect }: { selectedIcon: string; onIconSelect: (icon: string) => void }) => {
+const IconPicker = ({
+  selectedIcon,
+  onIconSelect,
+}: {
+  selectedIcon: string;
+  onIconSelect: (icon: string) => void;
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLibrary, setSelectedLibrary] = useState("fa");
   const [showPicker, setShowPicker] = useState(false);
@@ -28,19 +35,27 @@ const IconPicker = ({ selectedIcon, onIconSelect }: { selectedIcon: string; onIc
     fi: Object.keys(FiIcons),
   };
 
-  const filteredIcons = allIcons[selectedLibrary as keyof typeof allIcons].filter(iconName =>
+  const filteredIcons = allIcons[
+    selectedLibrary as keyof typeof allIcons
+  ].filter((iconName) =>
     iconName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getIconComponent = (iconName: string) => {
-    const libraries = { fa: Icons, io: IoIcons, md: MdIcons, hi: HiIcons, fi: FiIcons };
+    const libraries = {
+      fa: Icons,
+      io: IoIcons,
+      md: MdIcons,
+      hi: HiIcons,
+      fi: FiIcons,
+    };
     const library = libraries[selectedLibrary as keyof typeof libraries];
     return (library as any)[iconName];
   };
 
   return (
     <div className="relative">
-      <div 
+      <div
         className="border border-gray-300 rounded-md p-3 cursor-pointer bg-white flex items-center justify-between"
         onClick={() => setShowPicker(!showPicker)}
       >
@@ -64,15 +79,15 @@ const IconPicker = ({ selectedIcon, onIconSelect }: { selectedIcon: string; onIc
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-80 overflow-hidden">
           <div className="p-3 border-b border-gray-200">
             <div className="flex gap-2 mb-3">
-              {Object.keys(allIcons).map(lib => (
+              {Object.keys(allIcons).map((lib) => (
                 <button
                   key={lib}
                   type="button"
                   onClick={() => setSelectedLibrary(lib)}
                   className={`px-3 py-1 text-xs rounded-full capitalize ${
-                    selectedLibrary === lib 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    selectedLibrary === lib
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   {lib}
@@ -95,7 +110,7 @@ const IconPicker = ({ selectedIcon, onIconSelect }: { selectedIcon: string; onIc
               </div>
             ) : (
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                {filteredIcons.map(iconName => {
+                {filteredIcons.map((iconName) => {
                   const IconComponent = getIconComponent(iconName);
                   return (
                     <button
@@ -107,11 +122,15 @@ const IconPicker = ({ selectedIcon, onIconSelect }: { selectedIcon: string; onIc
                         setSearchTerm("");
                       }}
                       className={`p-2 border rounded-md flex flex-col items-center justify-center gap-1 hover:bg-gray-50 transition-colors ${
-                        selectedIcon === iconName ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                        selectedIcon === iconName
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-200"
                       }`}
                     >
                       {IconComponent && <IconComponent size={20} />}
-                      <span className="text-xs truncate w-full text-center">{iconName}</span>
+                      <span className="text-xs truncate w-full text-center">
+                        {iconName}
+                      </span>
                     </button>
                   );
                 })}
@@ -164,9 +183,12 @@ interface Perfection {
 }
 
 const PerfectionsPage = () => {
-  const [createPerfections, { isLoading: creating }] = useCreatePropertiesMutation();
-  const [updatePerfections, { isLoading: updating }] = useUpdatePropertiesMutation();
-  const [deletePerfections, { isLoading: deleting }] = useDeletePropertiesMutation();
+  const [createPerfections, { isLoading: creating }] =
+    useCreatePropertiesMutation();
+  const [updatePerfections, { isLoading: updating }] =
+    useUpdatePropertiesMutation();
+  const [deletePerfections, { isLoading: deleting }] =
+    useDeletePropertiesMutation();
 
   const {
     data: perfectionsData,
@@ -174,10 +196,13 @@ const PerfectionsPage = () => {
     refetch,
   } = useGetAllPropertiesQuery(undefined, { refetchOnMountOrArgChange: true });
 
-  const perfections: Perfection[] = perfectionsData?.data || perfectionsData || [];
+  const perfections: Perfection[] =
+    perfectionsData?.data || perfectionsData || [];
 
   const [showForm, setShowForm] = useState(false);
-  const [editingPerfection, setEditingPerfection] = useState<Perfection | null>(null);
+  const [editingPerfection, setEditingPerfection] = useState<Perfection | null>(
+    null
+  );
   const [formData, setFormData] = useState({
     Title: "",
     description: "",
@@ -189,7 +214,9 @@ const PerfectionsPage = () => {
     Type: "",
     Location: "",
   });
-  const [featuresAmenities, setFeaturesAmenities] = useState<FeatureAmenity[]>([]);
+  const [featuresAmenities, setFeaturesAmenities] = useState<FeatureAmenity[]>(
+    []
+  );
   const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [iconFile, setIconFile] = useState<File | null>(null);
@@ -199,7 +226,7 @@ const PerfectionsPage = () => {
   // Function to render any icon by name
   const renderIcon = (iconName: string, size: number = 20) => {
     if (!iconName) return null;
-    
+
     const libraries = [Icons, IoIcons, MdIcons, HiIcons, FiIcons];
     for (const library of libraries) {
       const IconComponent = (library as any)[iconName];
@@ -216,7 +243,11 @@ const PerfectionsPage = () => {
   };
 
   // ✅ Update feature amenity
-  const updateFeatureAmenity = (index: number, field: "icon" | "text", value: string) => {
+  const updateFeatureAmenity = (
+    index: number,
+    field: "icon" | "text",
+    value: string
+  ) => {
     const updated = [...featuresAmenities];
     updated[index][field] = value;
     setFeaturesAmenities(updated);
@@ -224,11 +255,18 @@ const PerfectionsPage = () => {
 
   // ✅ Add new extra field
   const addExtraField = () => {
-    setExtraFields([...extraFields, { icon: "", fieldName: "", fieldValue: "" }]);
+    setExtraFields([
+      ...extraFields,
+      { icon: "", fieldName: "", fieldValue: "" },
+    ]);
   };
 
   // ✅ Update extra field
-  const updateExtraField = (index: number, field: "icon" | "fieldName" | "fieldValue", value: string) => {
+  const updateExtraField = (
+    index: number,
+    field: "icon" | "fieldName" | "fieldValue",
+    value: string
+  ) => {
     const updated = [...extraFields];
     updated[index][field] = value;
     setExtraFields(updated);
@@ -291,15 +329,17 @@ const PerfectionsPage = () => {
       // Upload gallery images
       if (galleryFiles.length > 0) {
         galleryUrls = await Promise.all(
-          galleryFiles.map(file => uploadImageToCPanel(file))
+          galleryFiles.map((file) => uploadImageToCPanel(file))
         );
       }
 
       // Convert extraFields to the required format: { "FaBook": "field name: field value" }
       const extraFieldsObj: Record<string, string> = {};
-      extraFields.forEach(field => {
+      extraFields.forEach((field) => {
         if (field.icon && field.fieldName && field.fieldValue) {
-          extraFieldsObj[field.icon] = `${field.fieldName}: ${field.fieldValue}`;
+          extraFieldsObj[
+            field.icon
+          ] = `${field.fieldName}: ${field.fieldValue}`;
         }
       });
 
@@ -308,13 +348,13 @@ const PerfectionsPage = () => {
         description: formData.description,
         description2: formData.description2,
         description3: formData.description3,
-        FeaturesAmenities: featuresAmenities.filter(fa => fa.icon && fa.text),
+        FeaturesAmenities: featuresAmenities.filter((fa) => fa.icon && fa.text),
         videoUrl: formData.videoUrl,
         galleryImages: galleryUrls,
         Category: formData.Category,
         Type: formData.Type,
         Location: formData.Location,
-        extraFields: extraFieldsObj
+        extraFields: extraFieldsObj,
       };
 
       console.log("Submitting data:", perfectionData); // For debugging
@@ -390,25 +430,27 @@ const PerfectionsPage = () => {
       Location: perfection.Location || "",
     });
     setFeaturesAmenities(perfection.FeaturesAmenities || []);
-    
+
     // Convert extraFields object back to array for editing
     if (perfection.extraFields) {
-      const fieldsArray: ExtraField[] = Object.entries(perfection.extraFields).map(([icon, value]) => {
+      const fieldsArray: ExtraField[] = Object.entries(
+        perfection.extraFields
+      ).map(([icon, value]) => {
         // Split the value into fieldName and fieldValue
         const [fieldName, ...fieldValueParts] = value.split(": ");
         const fieldValue = fieldValueParts.join(": "); // In case fieldValue contains ": "
-        
+
         return {
           icon,
           fieldName: fieldName || "",
-          fieldValue: fieldValue || ""
+          fieldValue: fieldValue || "",
         };
       });
       setExtraFields(fieldsArray);
     } else {
       setExtraFields([]);
     }
-    
+
     setShowForm(true);
   };
 
@@ -457,7 +499,9 @@ const PerfectionsPage = () => {
                       type="text"
                       required
                       value={formData.Title}
-                      onChange={(e) => setFormData({ ...formData, Title: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, Title: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter title"
                     />
@@ -471,7 +515,9 @@ const PerfectionsPage = () => {
                       type="text"
                       required
                       value={formData.Category}
-                      onChange={(e) => setFormData({ ...formData, Category: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, Category: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter category"
                     />
@@ -485,7 +531,9 @@ const PerfectionsPage = () => {
                       type="text"
                       required
                       value={formData.Type}
-                      onChange={(e) => setFormData({ ...formData, Type: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, Type: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter type"
                     />
@@ -499,7 +547,9 @@ const PerfectionsPage = () => {
                       type="text"
                       required
                       value={formData.Location}
-                      onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, Location: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter location"
                     />
@@ -508,22 +558,31 @@ const PerfectionsPage = () => {
 
                 {/* Descriptions */}
                 <div className="space-y-4">
-                  <h3 className="text-md font-medium text-gray-900">Descriptions</h3>
-                  {["description", "description2", "description3"].map((field) => (
-                    <div key={field}>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {field.charAt(0).toUpperCase() + field.slice(1)} *
-                      </label>
-                      <textarea
-                        required
-                        value={formData[field as keyof typeof formData]}
-                        onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                        rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                        placeholder={`Enter ${field}`}
-                      />
-                    </div>
-                  ))}
+                  <h3 className="text-md font-medium text-gray-900">
+                    Descriptions
+                  </h3>
+                  {["description", "description2", "description3"].map(
+                    (field) => (
+                      <div key={field}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          {field.charAt(0).toUpperCase() + field.slice(1)} *
+                        </label>
+                        <textarea
+                          required
+                          value={formData[field as keyof typeof formData]}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              [field]: e.target.value,
+                            })
+                          }
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                          placeholder={`Enter ${field}`}
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
 
                 {/* Icon Upload */}
@@ -557,7 +616,9 @@ const PerfectionsPage = () => {
                   <input
                     type="url"
                     value={formData.videoUrl}
-                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, videoUrl: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     placeholder="https://example.com/video.mp4"
                   />
@@ -592,7 +653,9 @@ const PerfectionsPage = () => {
                 {/* Features & Amenities */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-md font-medium text-gray-900">Features & Amenities</h3>
+                    <h3 className="text-md font-medium text-gray-900">
+                      Features & Amenities
+                    </h3>
                     <button
                       type="button"
                       onClick={addFeatureAmenity}
@@ -601,10 +664,13 @@ const PerfectionsPage = () => {
                       + Add Feature
                     </button>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {featuresAmenities.map((feature, index) => (
-                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                      <div
+                        key={index}
+                        className="border rounded-lg p-4 bg-gray-50"
+                      >
                         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                           <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -612,7 +678,9 @@ const PerfectionsPage = () => {
                             </label>
                             <IconPicker
                               selectedIcon={feature.icon}
-                              onIconSelect={(icon) => updateFeatureAmenity(index, "icon", icon)}
+                              onIconSelect={(icon) =>
+                                updateFeatureAmenity(index, "icon", icon)
+                              }
                             />
                           </div>
 
@@ -625,13 +693,25 @@ const PerfectionsPage = () => {
                                 type="text"
                                 required
                                 value={feature.text}
-                                onChange={(e) => updateFeatureAmenity(index, "text", e.target.value)}
+                                onChange={(e) =>
+                                  updateFeatureAmenity(
+                                    index,
+                                    "text",
+                                    e.target.value
+                                  )
+                                }
                                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                                 placeholder="Swimming Pool, Free WiFi, etc."
                               />
                               <button
                                 type="button"
-                                onClick={() => setFeaturesAmenities(featuresAmenities.filter((_, i) => i !== index))}
+                                onClick={() =>
+                                  setFeaturesAmenities(
+                                    featuresAmenities.filter(
+                                      (_, i) => i !== index
+                                    )
+                                  )
+                                }
                                 className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                               >
                                 ×
@@ -653,7 +733,9 @@ const PerfectionsPage = () => {
                 {/* Extra Fields - NEW FORMAT */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-md font-medium text-gray-900">Extra Fields</h3>
+                    <h3 className="text-md font-medium text-gray-900">
+                      Extra Fields
+                    </h3>
                     <button
                       type="button"
                       onClick={addExtraField}
@@ -662,10 +744,13 @@ const PerfectionsPage = () => {
                       + Add Field
                     </button>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {extraFields.map((field, index) => (
-                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                      <div
+                        key={index}
+                        className="border rounded-lg p-4 bg-gray-50"
+                      >
                         <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
                           {/* Icon Picker */}
                           <div className="md:col-span-2">
@@ -674,7 +759,9 @@ const PerfectionsPage = () => {
                             </label>
                             <IconPicker
                               selectedIcon={field.icon}
-                              onIconSelect={(icon) => updateExtraField(index, "icon", icon)}
+                              onIconSelect={(icon) =>
+                                updateExtraField(index, "icon", icon)
+                              }
                             />
                           </div>
 
@@ -687,7 +774,13 @@ const PerfectionsPage = () => {
                               type="text"
                               required
                               value={field.fieldName}
-                              onChange={(e) => updateExtraField(index, "fieldName", e.target.value)}
+                              onChange={(e) =>
+                                updateExtraField(
+                                  index,
+                                  "fieldName",
+                                  e.target.value
+                                )
+                              }
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                               placeholder="e.g., Price, Area, Rooms"
                             />
@@ -702,7 +795,13 @@ const PerfectionsPage = () => {
                               type="text"
                               required
                               value={field.fieldValue}
-                              onChange={(e) => updateExtraField(index, "fieldValue", e.target.value)}
+                              onChange={(e) =>
+                                updateExtraField(
+                                  index,
+                                  "fieldValue",
+                                  e.target.value
+                                )
+                              }
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                               placeholder="e.g., $500, 1200 sqft, 3"
                             />
@@ -724,9 +823,14 @@ const PerfectionsPage = () => {
                         {field.icon && field.fieldName && field.fieldValue && (
                           <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
                             <p className="text-xs text-blue-700">
-                              <strong>Will be saved as:</strong><br />
-                              Key: <code>{field.icon}</code><br />
-                              Value: <code>{field.fieldName}: {field.fieldValue}</code>
+                              <strong>Will be saved as:</strong>
+                              <br />
+                              Key: <code>{field.icon}</code>
+                              <br />
+                              Value:{" "}
+                              <code>
+                                {field.fieldName}: {field.fieldValue}
+                              </code>
                             </p>
                           </div>
                         )}
@@ -736,7 +840,8 @@ const PerfectionsPage = () => {
 
                   {extraFields.length === 0 && (
                     <p className="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
-                      No extra fields added yet. Click "Add Field" to create custom fields.
+                      No extra fields added yet. Click "Add Field" to create
+                      custom fields.
                     </p>
                   )}
                 </div>
@@ -781,7 +886,7 @@ const PerfectionsPage = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                          Icon
+                          Image
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Title
@@ -795,9 +900,9 @@ const PerfectionsPage = () => {
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Location
                         </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        {/* <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Extra Fields
-                        </th>
+                        </th> */}
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Status
                         </th>
@@ -810,15 +915,17 @@ const PerfectionsPage = () => {
                       {perfections.map((p: Perfection) => (
                         <tr key={p.id} className="hover:bg-gray-50">
                           <td className="px-4 py-2">
-                            {p.icon ? (
+                            {p.galleryImages?.[0] ? (
                               <img
-                                src={p.icon}
-                                alt="Icon"
+                                src={p.galleryImages[0]}
+                                alt="Image"
                                 className="w-10 h-10 rounded-md object-cover"
                               />
                             ) : (
                               <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
-                                <span className="text-xs text-gray-500">No Icon</span>
+                                <span className="text-xs text-gray-500">
+                                  No Icon
+                                </span>
                               </div>
                             )}
                           </td>
@@ -832,7 +939,7 @@ const PerfectionsPage = () => {
                           <td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">
                             {p.Location}
                           </td>
-                          <td className="px-4 py-2">
+                          {/* <td className="px-4 py-2">
                             <div className="flex flex-wrap gap-1">
                               {p.extraFields && Object.entries(p.extraFields).slice(0, 3).map(([icon, value], index) => (
                                 <span key={index} className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-xs">
@@ -846,7 +953,7 @@ const PerfectionsPage = () => {
                                 </span>
                               )}
                             </div>
-                          </td>
+                          </td> */}
                           <td className="px-4 py-2">
                             <span
                               className={`px-2 py-1 text-xs rounded-full ${
