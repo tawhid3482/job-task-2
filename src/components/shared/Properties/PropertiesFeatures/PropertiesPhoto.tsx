@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function GalleryPage() {
-  const images = [
-    "https://picsum.photos/600/400?random=1",
-    "https://picsum.photos/600/400?random=2",
-    "https://picsum.photos/600/400?random=3",
-    "https://picsum.photos/600/400?random=4",
-    "https://picsum.photos/600/400?random=5",
-    "https://picsum.photos/600/400?random=6",
-  ];
+export default function GalleryPage({images}:any) {
+  // const images = [
+  //   "https://picsum.photos/600/400?random=1",
+  //   "https://picsum.photos/600/400?random=2",
+  //   "https://picsum.photos/600/400?random=3",
+  //   "https://picsum.photos/600/400?random=4",
+  //   "https://picsum.photos/600/400?random=5",
+  //   "https://picsum.photos/600/400?random=6",
+  // ];
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -40,7 +40,7 @@ export default function GalleryPage() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {images.map((img, idx) => (
+        {images.map((img:any, idx:any) => (
           <div
             key={idx}
             className="cursor-pointer overflow-hidden"

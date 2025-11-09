@@ -10,7 +10,7 @@ const Video: React.FC<VideoProps> = ({ url }) => {
   console.log(url);
 
   const ROOFTOP_IMAGE =
-    "https://jcxbd.com/wp-content/uploads/2025/03/Scene-81-scaled.jpg";
+    "https://www.videoconverterfactory.com/tips/imgs-sns/send-a-video-by-email.png";
 
   return (
     <div className="bg-gray-100 py-16">

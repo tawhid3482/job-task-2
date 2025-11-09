@@ -103,7 +103,7 @@ const BlogCard: React.FC<{ blog: Blog }> = ({ blog }) => {
       </h3>
 
       {/* Read More Link with Animated Arrow */}
-      <a href={`/blog/${blog.id}`} className="flex items-center text-sm font-medium mt-auto group">
+      <a href={`/blogs/${blog.id}`} className="flex items-center text-sm font-medium mt-auto group">
         <span className="mr-2 tracking-wider text-gray-700 hover:text-blue-600 transition-colors duration-300">
           READ MORE
         </span>

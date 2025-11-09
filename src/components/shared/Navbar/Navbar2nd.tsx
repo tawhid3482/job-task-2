@@ -16,7 +16,7 @@ const menuItems = [
   "About",
   "Properties",
   "CSR",
-  "Career",
+  // "Career",
   "Blogs",
   "Contact",
   // "Management-Team",
@@ -470,7 +470,7 @@ export default function Navbar() {
               <ActiveLink href="/properties">Project</ActiveLink>
 
               <ActiveLink href="/csr">CSR</ActiveLink>
-              <ActiveLink href="/career">Career</ActiveLink>
+              {/* <ActiveLink href="/career">Career</ActiveLink> */}
               <ActiveLink href="/blogs">Blogs</ActiveLink>
               <ActiveLink href="/contact">Contact us</ActiveLink>
               <div className="flex items-center gap-3">

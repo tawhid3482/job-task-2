@@ -5,6 +5,7 @@ import React from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { useCreateEnquiryMutation } from "@/redux/features/enquiry/enquiryApi";
 
 // --- Types ---
 interface FormInputs {
@@ -44,10 +45,11 @@ const FormField: React.FC<{
       type={type}
       placeholder={placeholder}
       {...register(name, { required })}
-      className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${error
-        ? "border-red-500 focus:border-red-500"
-        : "border-gray-300 focus:border-blue-500"
-        }`}
+      className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${
+        error
+          ? "border-red-500 focus:border-red-500"
+          : "border-gray-300 focus:border-blue-500"
+      }`}
     />
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
   </div>
@@ -56,6 +58,8 @@ const FormField: React.FC<{
 // --- Main Component ---
 const Enquiry: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [createEnquiry, { isLoading }] = useCreateEnquiryMutation();
+
   const {
     register,
     handleSubmit,
@@ -65,7 +69,7 @@ const Enquiry: React.FC = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
-      // Convert landSize to number and ensure message length >= 10
+      // Client-side validation
       if (data.message.length < 10) {
         toast.error("Message must be at least 10 characters long");
         return;
@@ -83,34 +87,61 @@ const Enquiry: React.FC = () => {
         email: data.email,
       };
 
-      const response = await fetch(
-        "https://job-task-2-backend.vercel.app/api/v1/enquiry/create",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to submit enquiry");
-      }
+      // Using RTK Query mutation
+      const response = await createEnquiry(payload).unwrap();
 
       toast.success("Enquiry submitted successfully!");
       setIsSubmitted(true);
       reset();
     } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Something went wrong");
+      console.error("Submission error:", err);
+
+      // Handle different error formats
+      if (err?.data?.message) {
+        // Backend validation error
+        toast.error(err.data.message);
+      } else if (err?.data?.errorMessages) {
+        // Multiple error messages from backend
+        err.data.errorMessages.forEach((error: any) => {
+          toast.error(error.message);
+        });
+      } else if (err?.status === 400) {
+        toast.error("Validation failed. Please check your inputs.");
+      } else if (err?.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error(err?.message || "Something went wrong");
+      }
     }
   };
-
 
   if (isSubmitted) {
     return (
       <>
-        <Toaster />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: "#22c55e",
+                secondary: "#fff",
+              },
+            },
+            error: {
+              duration: 4000,
+              iconTheme: {
+                primary: "#ef4444",
+                secondary: "#fff",
+              },
+            },
+          }}
+        />
         <AnimatePresence>
           <motion.div
             key="success"
@@ -141,19 +172,42 @@ const Enquiry: React.FC = () => {
 
   return (
     <>
-      <Toaster />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#fff",
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#fff",
+            },
+          },
+        }}
+      />
       <div className="min-h-screen flex justify-center p-5 md:py-28 bg-white">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-7xl">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-[35px] font-light  tracking-widest text-gray-800">
+            <h1 className="text-[35px] font-light tracking-widest text-gray-800">
               ENQUIRY
             </h1>
             <div className="w-12 h-0.5 bg-orange-400 mx-auto mt-2"></div>
           </div>
 
           {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
             <FormField
               name="firstName"
               placeholder="First Name"
@@ -171,7 +225,7 @@ const Enquiry: React.FC = () => {
             <FormField
               name="phoneLandowner"
               placeholder="Phone Number (Landowner)"
-              type="tel"
+              type="text"
               register={register}
               required="Phone Number (Landowner) is required"
               error={errors.phoneLandowner?.message}
@@ -179,7 +233,7 @@ const Enquiry: React.FC = () => {
             <FormField
               name="phoneDifferent"
               placeholder="Phone Number (If Different)"
-              type="tel"
+              type="text"
               register={register}
             />
             <FormField
@@ -214,13 +268,16 @@ const Enquiry: React.FC = () => {
           {/* Message Field */}
           <div className="w-full mt-4 mb-12">
             <textarea
-              placeholder="Message"
-              {...register("message", { required: "Message is required" })}
+              placeholder="Message (Minimum 10 characters)"
+              {...register("message", {
+                required: "Message is required"
+              })}
               rows={3}
-              className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${errors.message
-                ? "border-red-500 focus:border-red-500"
-                : "border-gray-300 focus:border-blue-500"
-                }`}
+              className={`w-full border-b py-2 transition duration-200 bg-transparent text-black focus:outline-none ${
+                errors.message
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-blue-500"
+              }`}
             />
             {errors.message && (
               <p className="text-red-500 text-sm mt-1">
@@ -233,9 +290,14 @@ const Enquiry: React.FC = () => {
           <div className="flex justify-center mt-12">
             <button
               type="submit"
-              className="border border-blue-500 text-blue-500 px-8 py-3 tracking-widest hover:bg-blue-500 hover:text-white transition duration-300"
+              disabled={isLoading}
+              className={`border border-[#FBC342] px-8 py-3 tracking-widest transition duration-300 ${
+                isLoading
+                  ? "bg-gray-400 border-gray-400 text-white cursor-not-allowed"
+                  : "text-[#FBC342] hover:bg-blue-500 hover:text-white"
+              }`}
             >
-              SUBMIT
+              {isLoading ? "SUBMITTING..." : "SUBMIT"}
             </button>
           </div>
         </form>

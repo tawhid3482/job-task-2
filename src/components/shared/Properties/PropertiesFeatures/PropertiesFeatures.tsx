@@ -1,44 +1,61 @@
 import React from 'react';
-import { Leaf, Waves, House, Dumbbell, Car, Shirt } from "lucide-react";
 import { motion } from "framer-motion";
+import * as FaIcons from 'react-icons/fa';
+import * as MdIcons from 'react-icons/md';
+import * as IoIcons from 'react-icons/io';
+import * as RiIcons from 'react-icons/ri';
 
 interface Amenity {
-  icon: React.ElementType;
-  name: string;
-  description: string;
+  icon: string;
+  text: string;
 }
-
-const amenitiesData: Amenity[] = [
-  { icon: Leaf, name: "Green Space", description: "Lush communal green areas" },
-  { icon: Waves, name: "Swimming Pool", description: "Relaxing infinity pool access" },
-  { icon: House, name: "Child Play Area", description: "Safe and fun dedicated zone" },
-  { icon: Dumbbell, name: "Gymnasium", description: "State-of-the-art fitness center" },
-  { icon: Car, name: "Specious Car Parking", description: "Ample, secure parking spaces" },
-  { icon: Shirt, name: "Central Laundry", description: "Convenient shared laundry facility" },
-  { icon: Leaf, name: "Green Space", description: "Lush communal green areas" },
-  { icon: Waves, name: "Swimming Pool", description: "Relaxing infinity pool access" },
-  { icon: House, name: "Child Play Area", description: "Safe and fun dedicated zone" },
-  { icon: Dumbbell, name: "Gymnasium", description: "State-of-the-art fitness center" }
-];
 
 interface AmenityCardProps {
-  icon: React.ElementType;
-  name: string;
+  icon: string;
+  text: string;
 }
 
-const AmenityCard: React.FC<AmenityCardProps> = ({ icon: Icon, name }) => (
-  <div className="flex flex-col items-center text-center p-4">
-    <Icon className="w-10 h-10 md:w-16 md:h-16 text-[#214187] mb-3" strokeWidth={1.5} />
+// Function to dynamically get the icon component
+const getIconComponent = (iconName: string): React.ElementType => {
+  // Check different icon libraries; cast modules to a string-keyed record so we can index by iconName
+  const iconLibraries: Array<Record<string, React.ElementType>> = [
+    FaIcons as unknown as Record<string, React.ElementType>,
+    MdIcons as unknown as Record<string, React.ElementType>,
+    IoIcons as unknown as Record<string, React.ElementType>,
+    RiIcons as unknown as Record<string, React.ElementType>,
+  ];
+  
+  for (const library of iconLibraries) {
+    if (iconName in library) {
+      return library[iconName] as React.ElementType;
+    }
+  }
+  
+  // Fallback icon if not found
+  console.warn(`Icon ${iconName} not found, using fallback`);
+  return FaIcons.FaQuestion;
+};
 
-    <p className="text-gray-900 font-medium leading-snug">
-      {name.split(' ').map((word, index) => (
-        <span key={index} className="block">{word}</span>
-      ))}
-    </p>
-  </div>
-);
+const AmenityCard: React.FC<AmenityCardProps> = ({ icon, text }) => {
+  const IconComponent = getIconComponent(icon);
+  
+  return (
+    <div className="flex flex-col items-center text-center p-4">
+      <IconComponent className="w-10 h-10 md:w-16 md:h-16 text-[#214187] mb-3" />
+      <p className="text-gray-900 font-medium leading-snug">
+        {text.split(' ').map((word, index) => (
+          <span key={index} className="block">{word}</span>
+        ))}
+      </p>
+    </div>
+  );
+};
 
-const FeaturesAmenities: React.FC = () => {
+interface FeaturesAmenitiesProps {
+  features: Amenity[];
+}
+
+const FeaturesAmenities: React.FC<FeaturesAmenitiesProps> = ({ features }) => {
   return (
     <div className="bg-[#F2F2F2] py-16 md:py-28 font-sans">
       <div className="max-w-7xl mx-auto px-4">
@@ -64,11 +81,11 @@ const FeaturesAmenities: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-y-12 md:gap-y-20">
-          {amenitiesData.map((amenity) => (
+          {features.map((amenity, index) => (
             <AmenityCard
-              key={amenity.name}
+              key={index}
               icon={amenity.icon}
-              name={amenity.name}
+              text={amenity.text}
             />
           ))}
         </div>

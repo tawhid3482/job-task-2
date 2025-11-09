@@ -62,7 +62,7 @@ export default function ProjectDetailPage() {
           "https://job-task-2-backend.vercel.app/api/v1/perfections"
         );
         const result = await response.json();
-        console.log(result.data);
+        // console.log(result.data);
 
         if (result.success) {
           const foundProject = result.data.find(
@@ -230,9 +230,10 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      <FeaturesAmenities />
+      {/* @ts-ignore */}
+      <FeaturesAmenities  features={project.FeaturesAmenities} />
       <Video url= {project.videoUrl} />
-      <GalleryPage />
+      <GalleryPage images ={project.galleryImages} />
       <Enquiry />
       <Testimonials />
       <OurAwardsandRecognition />

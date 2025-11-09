@@ -9,7 +9,7 @@ const Blogs = () => {
     <div>
       <LandownerBanner
         img={
-          "https://jcxbd.com/wp-content/uploads/2024/11/Page-Banners-News-v2.webp"
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFCMAi7IM8iI8AJEspf7un_x1Cjmm6c937-A&s"
         }
         title="blogs"
         // text="find your nest"
