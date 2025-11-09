@@ -11,8 +11,8 @@ export default function Topbar() {
   };
 
   return (
-    <header className="bg-white shadow-sm">
-      <div className="flex justify-between items-center px-6 py-4">
+    <header className="bg-white shadow-sm ">
+      <div className="flex justify-between items-center px-6 py-4 ">
         <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         <button
           onClick={handleLogout}

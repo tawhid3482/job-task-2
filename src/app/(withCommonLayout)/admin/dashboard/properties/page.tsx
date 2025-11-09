@@ -14,6 +14,7 @@ import {
   useGetAllPropertiesQuery,
   useUpdatePropertiesMutation,
 } from "@/redux/features/properties/propertiesApi";
+import { isLoggedIn } from "@/services/auth.services";
 
 // Dynamic Icon Picker Component (same as before)
 const IconPicker = ({
@@ -183,6 +184,13 @@ interface Perfection {
 }
 
 const PerfectionsPage = () => {
+  
+  // ✅ Authentication check add করো এখানে
+
+  // যদি logged in না হয়, তাহলে nothing show করবে
+  if (!isLoggedIn()) {
+    return null;
+  }
   const [createPerfections, { isLoading: creating }] =
     useCreatePropertiesMutation();
   const [updatePerfections, { isLoading: updating }] =
@@ -195,6 +203,8 @@ const PerfectionsPage = () => {
     isLoading,
     refetch,
   } = useGetAllPropertiesQuery(undefined, { refetchOnMountOrArgChange: true });
+
+
 
   const perfections: Perfection[] =
     perfectionsData?.data || perfectionsData || [];
@@ -222,7 +232,11 @@ const PerfectionsPage = () => {
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
-
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.push("/login");
+    }
+  }, [router]);
   // Function to render any icon by name
   const renderIcon = (iconName: string, size: number = 20) => {
     if (!iconName) return null;
@@ -297,7 +311,7 @@ const PerfectionsPage = () => {
 
     try {
       const res = await fetch(
-        "https://job-task-2-backend.vercel.app/api/v1/upload-image",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`,
         {
           method: "POST",
           body: formData,
@@ -357,7 +371,7 @@ const PerfectionsPage = () => {
         extraFields: extraFieldsObj,
       };
 
-      console.log("Submitting data:", perfectionData); // For debugging
+      // console.log("Submitting data:", perfectionData); // For debugging
 
       if (editingPerfection) {
         console.log(editingPerfection.id);
@@ -416,43 +430,43 @@ const PerfectionsPage = () => {
     if (showForm) resetForm();
   };
 
-  const handleEditPerfection = (perfection: Perfection) => {
-    setEditingPerfection(perfection);
-    setFormData({
-      Title: perfection.Title || "",
-      description: perfection.description || "",
-      description2: perfection.description2 || "",
-      description3: perfection.description3 || "",
-      icon: perfection.icon || "",
-      videoUrl: perfection.videoUrl || "",
-      Category: perfection.Category || "",
-      Type: perfection.Type || "",
-      Location: perfection.Location || "",
-    });
-    setFeaturesAmenities(perfection.FeaturesAmenities || []);
+  // const handleEditPerfection = (perfection: Perfection) => {
+  //   setEditingPerfection(perfection);
+  //   setFormData({
+  //     Title: perfection.Title || "",
+  //     description: perfection.description || "",
+  //     description2: perfection.description2 || "",
+  //     description3: perfection.description3 || "",
+  //     icon: perfection.icon || "",
+  //     videoUrl: perfection.videoUrl || "",
+  //     Category: perfection.Category || "",
+  //     Type: perfection.Type || "",
+  //     Location: perfection.Location || "",
+  //   });
+  //   setFeaturesAmenities(perfection.FeaturesAmenities || []);
 
-    // Convert extraFields object back to array for editing
-    if (perfection.extraFields) {
-      const fieldsArray: ExtraField[] = Object.entries(
-        perfection.extraFields
-      ).map(([icon, value]) => {
-        // Split the value into fieldName and fieldValue
-        const [fieldName, ...fieldValueParts] = value.split(": ");
-        const fieldValue = fieldValueParts.join(": "); // In case fieldValue contains ": "
+  //   // Convert extraFields object back to array for editing
+  //   if (perfection.extraFields) {
+  //     const fieldsArray: ExtraField[] = Object.entries(
+  //       perfection.extraFields
+  //     ).map(([icon, value]) => {
+  //       // Split the value into fieldName and fieldValue
+  //       const [fieldName, ...fieldValueParts] = value.split(": ");
+  //       const fieldValue = fieldValueParts.join(": "); // In case fieldValue contains ": "
 
-        return {
-          icon,
-          fieldName: fieldName || "",
-          fieldValue: fieldValue || "",
-        };
-      });
-      setExtraFields(fieldsArray);
-    } else {
-      setExtraFields([]);
-    }
+  //       return {
+  //         icon,
+  //         fieldName: fieldName || "",
+  //         fieldValue: fieldValue || "",
+  //       };
+  //     });
+  //     setExtraFields(fieldsArray);
+  //   } else {
+  //     setExtraFields([]);
+  //   }
 
-    setShowForm(true);
-  };
+  //   setShowForm(true);
+  // };
 
   if (isLoading) {
     return (

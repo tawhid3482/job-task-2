@@ -42,12 +42,12 @@ const TestimonialsPage = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) router.push("/login");
-  }, [router]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) router.push("/login");
+  // }, [router]);
 
   // ✅ Image Preview - Properties এর মতোই
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,7 @@ const TestimonialsPage = () => {
     formData.append("image", file);
 
     try {
-      const res = await fetch("https://job-task-2-backend.vercel.app/api/v1/upload-image", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`, {
         method: "POST",
         body: formData,
       });
@@ -155,16 +155,16 @@ const TestimonialsPage = () => {
     if (showForm) resetForm();
   };
 
-  const handleEditTestimonial = (testimonial: Testimonial) => {
-    setEditingTestimonial(testimonial);
-    setFormData({
-      content: testimonial.content,
-      name: testimonial.name,
-      Image: testimonial.Image,
-    });
-    setImageFile(null);
-    setShowForm(true);
-  };
+  // const handleEditTestimonial = (testimonial: Testimonial) => {
+  //   setEditingTestimonial(testimonial);
+  //   setFormData({
+  //     content: testimonial.content,
+  //     name: testimonial.name,
+  //     Image: testimonial.Image,
+  //   });
+  //   setImageFile(null);
+  //   setShowForm(true);
+  // };
 
   if (isLoading) {
     return (

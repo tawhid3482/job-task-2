@@ -1,22 +1,29 @@
 "use client";
 
-import { isLoggedIn } from "@/services/auth.services";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+// import { isLoggedIn } from "@/services/auth.services";
+// import { useRouter } from "next/navigation";
+// import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
-  const router = useRouter();
+  // const router = useRouter();
+  // const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      router.push("/login");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   setIsClient(true);
+    
+  //   if (!isLoggedIn()) {
+  //     router.push("/login");
+  //   }
+  // }, [router]);
 
-  if (!isLoggedIn()) {
-    router.push("/login");
-    return null;
-  }
+  // if (!isClient || !isLoggedIn()) {
+  //   return (
+  //     <div className="flex justify-center items-center min-h-screen">
+  //       <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full"></div>
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center bg-white px-10 py-14 rounded-3xl shadow-md border border-gray-100">
@@ -24,7 +31,7 @@ export default function DashboardPage() {
           Welcome to Your Dashboard 🎉
         </h1>
         <p className="text-gray-500 text-lg max-w-md mx-auto">
-          You’re successfully logged in. Explore and manage your content easily
+          You're successfully logged in. Explore and manage your content easily
           from here.
         </p>
       </div>

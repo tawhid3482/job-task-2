@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/services/auth.services";
 import Sidebar from "@/components/shared/admin/Sidebar";
@@ -12,20 +12,27 @@ interface Props {
 
 export default function DashboardLayout({ children }: Props) {
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true); // Mark that we're on client side
+    
     if (!isLoggedIn()) {
       router.push("/login");
     }
   }, [router]);
 
-  // If not logged in, don't render anything (will redirect)
-  if (!isLoggedIn()) {
-    return null;
+  // Don't render anything during SSR or if not logged in
+  if (!isClient || !isLoggedIn()) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 my-24">
+    <div className="flex h-screen bg-gray-100 mt-20">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Topbar />

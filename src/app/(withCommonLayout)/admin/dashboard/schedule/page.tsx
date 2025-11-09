@@ -33,12 +33,12 @@ const SchedulePage = () => {
   const Schedules: Schedule[] = SchedulesData?.data || SchedulesData || [];
   console.log("Schedules Data:", Schedules);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) router.push("/login");
-  }, [router]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) router.push("/login");
+  // }, [router]);
 
   const handleDeleteSchedule = async (id: string) => {
     try {

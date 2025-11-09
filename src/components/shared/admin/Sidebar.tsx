@@ -11,6 +11,7 @@ export default function Sidebar() {
     { href: "/admin/dashboard/slider", label: "Slider" },
     { href: "/admin/dashboard/testimonial", label: "Testimonial" },
     { href: "/admin/dashboard/schedule", label: "Schedule" },
+    { href: "/admin/dashboard/blog", label: "Blog" },
   ];
 
   return (

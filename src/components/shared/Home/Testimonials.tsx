@@ -36,7 +36,7 @@ const Testimonials: React.FC = () => {
     const fetchTestimonials = async () => {
       try {
         const res = await fetch(
-          "https://job-task-2-backend.vercel.app/api/v1/testimonial"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/testimonial`
         );
         const json = await res.json();
         setTestimonials(Array.isArray(json.data) ? json.data : []);

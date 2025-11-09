@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { jwtDecode } from "jwt-decode";
 
-const authKey = "token"; // LocalStorage key name
+const authKey = "token";
 
 // 🔹 LocalStorage Helpers
 export const setToLocalStorage = (key: string, value: string) => {
@@ -54,6 +54,7 @@ export const getUserInfo = () => {
 // 🔹 Check if user is logged in
 export const isLoggedIn = () => {
   const authToken = getFromLocalStorage(authKey);
+  console.log("Auth Token from localStorage:", authToken); // Debug log
   return !!authToken;
 };
 
