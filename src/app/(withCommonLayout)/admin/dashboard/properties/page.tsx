@@ -360,6 +360,7 @@ const PerfectionsPage = () => {
       console.log("Submitting data:", perfectionData); // For debugging
 
       if (editingPerfection) {
+        console.log(editingPerfection.id);
         await updatePerfections({
           id: editingPerfection.id,
           data: perfectionData,
@@ -382,7 +383,6 @@ const PerfectionsPage = () => {
   };
 
   const handleDeletePerfection = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this perfection?")) return;
     try {
       await deletePerfections(id).unwrap();
       toast.success("Perfection deleted successfully!");
@@ -588,7 +588,7 @@ const PerfectionsPage = () => {
                 {/* Icon Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Main Icon {!editingPerfection && "*"}
+                    Main Image {!editingPerfection && "*"}
                   </label>
                   <input
                     type="file"
@@ -969,16 +969,16 @@ const PerfectionsPage = () => {
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex space-x-2">
-                              <button
+                              {/* <button
                                 onClick={() => handleEditPerfection(p)}
-                                className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                                className="text-blue-600 hover:text-blue-900 text-sm font-medium cursor-pointer"
                                 disabled={deleting}
                               >
                                 Edit
-                              </button>
+                              </button> */}
                               <button
                                 onClick={() => handleDeletePerfection(p.id)}
-                                className="text-red-600 hover:text-red-900 text-sm font-medium"
+                                className="text-red-600 hover:text-red-900 text-sm font-medium cursor-pointer"
                                 disabled={deleting}
                               >
                                 {deleting ? "Deleting..." : "Delete"}

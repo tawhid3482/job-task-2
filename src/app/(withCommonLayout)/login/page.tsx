@@ -30,7 +30,7 @@ const LoginPage = () => {
 
       if (result.success) {
         // Save token to localStorage
-        console.log(result.data)
+        // console.log(result.data)
         localStorage.setItem('token', result.data.token);
         
         // Redirect to admin dashboard

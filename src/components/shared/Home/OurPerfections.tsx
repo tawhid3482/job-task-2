@@ -9,6 +9,7 @@ import * as IoIcons from "react-icons/io5";
 import * as MdIcons from "react-icons/md";
 import * as HiIcons from "react-icons/hi";
 import * as FiIcons from "react-icons/fi";
+// import { div } from "framer-motion/client";
 
 const buttonVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -133,7 +134,7 @@ const OurPerfections: React.FC = () => {
       </div>
 
       {/* Slider */}
-      <div className="relative max-w-7xl mx-auto px-3 md:px-8">
+      <div className="relative max-w-[1420px] mx-auto px-3 md:px-8">
         <div className="overflow-hidden">
           <motion.div
             className="flex gap-6"

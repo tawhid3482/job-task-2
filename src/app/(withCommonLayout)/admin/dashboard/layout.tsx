@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/services/auth.services";
 import Sidebar from "@/components/shared/admin/Sidebar";
@@ -13,11 +13,16 @@ interface Props {
 export default function DashboardLayout({ children }: Props) {
   const router = useRouter();
 
-  // // Login check - uncomment when ready
-  // if (!isLoggedIn()) {
-  //   router.push("/signin");
-  //   return null;
-  // }
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.push("/login");
+    }
+  }, [router]);
+
+  // If not logged in, don't render anything (will redirect)
+  if (!isLoggedIn()) {
+    return null;
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 my-24">

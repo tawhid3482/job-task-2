@@ -355,13 +355,13 @@ const TestimonialsPage = () => {
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex space-x-2">
-                              <button
+                              {/* <button
                                 onClick={() => handleEditTestimonial(t)}
                                 className="text-blue-600 hover:text-blue-900 text-sm font-medium"
                                 disabled={deleting}
                               >
                                 Edit
-                              </button>
+                              </button> */}
                               <button
                                 onClick={() => handleDeleteTestimonial(t.id)}
                                 className="text-red-600 hover:text-red-900 text-sm font-medium"

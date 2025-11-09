@@ -33,9 +33,10 @@ const sliderApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.slider],
     }),
 
+
     deleteSlider: builder.mutation({
       query: (id: string) => ({
-        url: `/opinion/delete/${id}`,
+        url: `/slider/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.slider],

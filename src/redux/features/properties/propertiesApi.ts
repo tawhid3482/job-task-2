@@ -21,16 +21,17 @@ const propertiesApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.properties],
     }),
+    
     updateProperties: builder.mutation({
-      query: ({ propertyId, data }) => {
-        console.log("Updating:", propertyId);
+      query: ({ id, data }) => {
+        console.log("Updating:", id);
         return {
-          url: `/perfections/update/${propertyId}`,
+          url: `/perfections/update/${id}`,
           method: "PATCH",
-          data,
+          data: data,
         };
       },
-      invalidatesTags: [tagTypes.slider],
+      invalidatesTags: [tagTypes.properties],
     }),
 
     deleteProperties: builder.mutation({
@@ -38,7 +39,7 @@ const propertiesApi = baseApi.injectEndpoints({
         url: `/perfections/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.slider],
+      invalidatesTags: [tagTypes.properties],
     }),
   }),
 });

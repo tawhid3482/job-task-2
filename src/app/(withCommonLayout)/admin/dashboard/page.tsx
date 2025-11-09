@@ -1,32 +1,32 @@
 "use client";
 
-export default function DashboardPage() {
-  return (
-    <div>
-      
-      {/* Dashboard Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-        {/* Stats Cards */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700">Total Users</h3>
-          <p className="text-3xl font-bold text-blue-600">1,234</p>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700">Revenue</h3>
-          <p className="text-3xl font-bold text-green-600">$12,345</p>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700">Orders</h3>
-          <p className="text-3xl font-bold text-purple-600">567</p>
-        </div>
-      </div>
+import { isLoggedIn } from "@/services/auth.services";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-      {/* Additional Content */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
-        <p>Your dashboard content goes here...</p>
+export default function DashboardPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.push("/login");
+    }
+  }, [router]);
+
+  if (!isLoggedIn()) {
+    router.push("/login");
+    return null;
+  }
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center bg-white px-10 py-14 rounded-3xl shadow-md border border-gray-100">
+        <h1 className="text-4xl font-bold text-gray-800 mb-3">
+          Welcome to Your Dashboard 🎉
+        </h1>
+        <p className="text-gray-500 text-lg max-w-md mx-auto">
+          You’re successfully logged in. Explore and manage your content easily
+          from here.
+        </p>
       </div>
     </div>
   );
