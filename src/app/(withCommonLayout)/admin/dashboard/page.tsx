@@ -1,28 +1,7 @@
 "use client";
 
-// import { isLoggedIn } from "@/services/auth.services";
-// import { useRouter } from "next/navigation";
-// import { useEffect, useState } from "react";
-
 export default function DashboardPage() {
-  // const router = useRouter();
-  // const [isClient, setIsClient] = useState(false);
 
-  // useEffect(() => {
-  //   setIsClient(true);
-    
-  //   if (!isLoggedIn()) {
-  //     router.push("/login");
-  //   }
-  // }, [router]);
-
-  // if (!isClient || !isLoggedIn()) {
-  //   return (
-  //     <div className="flex justify-center items-center min-h-screen">
-  //       <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full"></div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
