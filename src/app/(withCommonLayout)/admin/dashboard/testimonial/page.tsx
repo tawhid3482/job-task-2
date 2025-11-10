@@ -30,7 +30,6 @@ const TestimonialsPage = () => {
   });
   
   const testimonials: Testimonial[] = testimonialsData || [];
-  console.log("Fetched Testimonials Data:", testimonials);
 
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] =
@@ -42,14 +41,8 @@ const TestimonialsPage = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  // const router = useRouter();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) router.push("/login");
-  // }, [router]);
 
-  // ✅ Image Preview - Properties এর মতোই
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -62,7 +55,6 @@ const TestimonialsPage = () => {
     }
   };
 
-  // ✅ Upload image to CPANEL - Properties এর মতোই
   const uploadImageToCPanel = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
@@ -83,7 +75,6 @@ const TestimonialsPage = () => {
     }
   };
 
-  // ✅ Add / Update Testimonial - Properties এর মতোই Logic
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploading(true);
@@ -128,7 +119,6 @@ const TestimonialsPage = () => {
     }
   };
 
-  // ✅ Delete Testimonial - Properties এর মতোই
   const handleDeleteTestimonial = async (id: string) => {
     if (!confirm("Are you sure you want to delete this testimonial?")) return;
     try {
@@ -155,16 +145,7 @@ const TestimonialsPage = () => {
     if (showForm) resetForm();
   };
 
-  // const handleEditTestimonial = (testimonial: Testimonial) => {
-  //   setEditingTestimonial(testimonial);
-  //   setFormData({
-  //     content: testimonial.content,
-  //     name: testimonial.name,
-  //     Image: testimonial.Image,
-  //   });
-  //   setImageFile(null);
-  //   setShowForm(true);
-  // };
+
 
   if (isLoading) {
     return (
@@ -178,7 +159,6 @@ const TestimonialsPage = () => {
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 text-black">
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 md:p-6">
-          {/* Header - Properties এর মতোই */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-800">
               Testimonials Management
@@ -193,7 +173,6 @@ const TestimonialsPage = () => {
             </button>
           </div>
 
-          {/* Form - Properties এর মতোই Design */}
           {showForm && (
             <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
               <h2 className="text-lg font-semibold mb-4">
@@ -240,7 +219,6 @@ const TestimonialsPage = () => {
                   />
                 </div>
 
-                {/* Image - Properties এর মতোই */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Image {!editingTestimonial && "*"}
@@ -294,7 +272,6 @@ const TestimonialsPage = () => {
             </div>
           )}
 
-          {/* Testimonials Table - Properties এর মতোই Design */}
           <div className="bg-white rounded-lg shadow">
             <div className="p-4 md:p-6">
               <h2 className="text-lg font-semibold mb-4">

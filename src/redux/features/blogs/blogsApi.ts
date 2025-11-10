@@ -21,18 +21,6 @@ const BlogsApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.blogs],
     }),
-    
-    // updateBlogs: builder.mutation({
-    //   query: ({ id, data }) => {
-    //     console.log("Updating:", id);
-    //     return {
-    //       url: `/blogs/update/${id}`,
-    //       method: "PATCH",
-    //       data: data,
-    //     };
-    //   },
-    //   invalidatesTags: [tagTypes.blogs],
-    // }),
 
     deleteBlogs: builder.mutation({
       query: (id: string) => ({

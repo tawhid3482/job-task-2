@@ -73,9 +73,7 @@ const OurPerfections: React.FC = () => {
       try {
         const res = await fetch(`https://job-task-2-backend.vercel.app/api/v1/perfections`);
         const json = await res.json();
-        console.log(json);
         setPerfections(Array.isArray(json.data) ? json.data : []);
-        console.log("Fetched perfections:", json.data);
       } catch (err) {
         console.error("Failed to fetch perfections:", err);
         setPerfections([]);

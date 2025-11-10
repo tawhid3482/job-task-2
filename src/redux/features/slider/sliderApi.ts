@@ -23,7 +23,6 @@ const sliderApi = baseApi.injectEndpoints({
     }),
     updateSlider: builder.mutation({
       query: ({ sliderId, data }) => {
-        console.log("Updating:", sliderId);
         return {
           url: `/slider/update/${sliderId}`,
           method: "PATCH",

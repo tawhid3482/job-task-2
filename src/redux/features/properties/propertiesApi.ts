@@ -24,7 +24,6 @@ const propertiesApi = baseApi.injectEndpoints({
     
     updateProperties: builder.mutation({
       query: ({ id, data }) => {
-        console.log("Updating:", id);
         return {
           url: `/perfections/update/${id}`,
           method: "PATCH",

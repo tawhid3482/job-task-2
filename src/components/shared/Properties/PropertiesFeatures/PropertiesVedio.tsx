@@ -15,7 +15,6 @@ const VideoModalTrigger: React.FC<VideoModalTriggerProps> = ({
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
-    console.log(thumbnailUrl)
 
     return (
         <>

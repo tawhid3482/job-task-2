@@ -19,9 +19,9 @@ const panelVariants: Variants = {
   animate: (i: number): TargetAndTransition => ({
     y: "-100%",
     transition: {
-      duration: 0.35, // ⏱ একটু দ্রুত
+      duration: 0.35, 
       ease: [0.45, 0, 0.55, 1] as any,
-      delay: (NUM_PANELS - 1 - i) * 0.05, // ⚡ delay অর্ধেক কমানো হয়েছে
+      delay: (NUM_PANELS - 1 - i) * 0.05, 
     },
   }),
 
@@ -30,7 +30,7 @@ const panelVariants: Variants = {
     transition: {
       duration: 0.35,
       ease: [0.45, 0, 0.55, 1] as any,
-      delay: i * 0.05, // ⚡ exit একইভাবে দ্রুত
+      delay: i * 0.05, 
     },
   }),
 };

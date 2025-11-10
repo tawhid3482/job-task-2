@@ -116,7 +116,6 @@ const ScheduleModal = ({
 
     try {
       const result = await createSchedule(formData).unwrap();
-      console.log(result);
       if (result.success) {
         toast.success("Schedule created successfully!", {
           position: "top-right",

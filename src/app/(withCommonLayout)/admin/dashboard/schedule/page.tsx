@@ -1,6 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import {
   useDeleteScheduleMutation,
@@ -31,14 +29,8 @@ const SchedulePage = () => {
 
   // Use the actual data structure from your backend
   const Schedules: Schedule[] = SchedulesData?.data || SchedulesData || [];
-  console.log("Schedules Data:", Schedules);
 
-  // const router = useRouter();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) router.push("/login");
-  // }, [router]);
 
   const handleDeleteSchedule = async (id: string) => {
     try {

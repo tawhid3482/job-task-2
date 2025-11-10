@@ -62,7 +62,6 @@ export default function ProjectDetailPage() {
           "https://job-task-2-backend.vercel.app/api/v1/perfections"
         );
         const result = await response.json();
-        // console.log(result.data);
 
         if (result.success) {
           const foundProject = result.data.find(

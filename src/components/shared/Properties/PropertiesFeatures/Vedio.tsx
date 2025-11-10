@@ -7,7 +7,6 @@ interface VideoProps {
 }
 
 const Video: React.FC<VideoProps> = ({ url }) => {
-  console.log(url);
 
   const ROOFTOP_IMAGE =
     "https://www.videoconverterfactory.com/tips/imgs-sns/send-a-video-by-email.png";

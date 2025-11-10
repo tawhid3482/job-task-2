@@ -23,7 +23,6 @@ const testimonialApi = baseApi.injectEndpoints({
     }),
     updateTestimonial: builder.mutation({
       query: ({ testimonialId, data }) => {
-        console.log("Updating opinionId:", testimonialId);
         return {
           url: `/testimonial/update/${testimonialId}`,
           method: "PATCH",

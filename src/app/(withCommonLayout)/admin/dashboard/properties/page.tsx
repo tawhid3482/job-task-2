@@ -185,9 +185,7 @@ interface Perfection {
 
 const PerfectionsPage = () => {
   
-  // ✅ Authentication check add করো এখানে
 
-  // যদি logged in না হয়, তাহলে nothing show করবে
   if (!isLoggedIn()) {
     return null;
   }
@@ -371,10 +369,8 @@ const PerfectionsPage = () => {
         extraFields: extraFieldsObj,
       };
 
-      // console.log("Submitting data:", perfectionData); // For debugging
 
       if (editingPerfection) {
-        console.log(editingPerfection.id);
         await updatePerfections({
           id: editingPerfection.id,
           data: perfectionData,

@@ -7,7 +7,6 @@ const BACKGROUND_IMAGE_URL =
 const PropertiesBanner = () => {
   const { data } = useGetAllPropertiesQuery(null);
 
-  console.log(data);
 
   return (
     <div>

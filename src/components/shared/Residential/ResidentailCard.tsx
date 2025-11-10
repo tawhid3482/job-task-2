@@ -128,7 +128,6 @@ const ProjectFilter = () => {
           "https://job-task-2-backend.vercel.app/api/v1/perfections"
         );
         const result = await response.json();
-        console.log("Backend response:", result);
         if (result.success) {
           setProjects(result.data);
         } else {
