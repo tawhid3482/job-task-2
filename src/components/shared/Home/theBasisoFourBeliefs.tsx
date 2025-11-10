@@ -1,8 +1,15 @@
-'use client';
+"use client";
 
-import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform } from 'framer-motion';
-import Image from 'next/image';
+import React, { useRef, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useVelocity,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import Image from "next/image";
 
 interface Belief {
   id: string;
@@ -12,39 +19,43 @@ interface Belief {
 
 const beliefs: Belief[] = [
   {
-    id: 'trust',
-    title: 'TRUST',
+    id: "trust",
+    title: "TRUST",
     description:
-      'Trustworthiness is one of our most prized values. Ensuring a culture that naturalizes the sense of reliability among the people involved enhances productivity, respect and helps strengthen the bond between the clients and us.',
+      "Trustworthiness is one of our most prized values. Ensuring a culture that naturalizes the sense of reliability among the people involved enhances productivity, respect and helps strengthen the bond between the clients and us.",
   },
   {
-    id: 'closeness',
-    title: 'CLOSENESS',
+    id: "closeness",
+    title: "CLOSENESS",
     description:
-      'Maintaining long-term, rewarding relationships with our clients is one of the principal things we transgress. Their happiness is our advancement towards success, and we make it happen by paying attention to the tiniest details.',
+      "Maintaining long-term, rewarding relationships with our clients is one of the principal things we transgress. Their happiness is our advancement towards success, and we make it happen by paying attention to the tiniest details.",
   },
   {
-    id: 'uniqueness',
-    title: 'UNIQUENESS',
+    id: "uniqueness",
+    title: "UNIQUENESS",
     description:
-      'We celebrate individuality and strategic differentiation. Our unique perspectives and creative problem-solving methods are what allow us to deliver distinctive value.',
+      "We celebrate individuality and strategic differentiation. Our unique perspectives and creative problem-solving methods are what allow us to deliver distinctive value.",
   },
   {
-    id: 'integrity',
-    title: 'INTEGRITY',
+    id: "integrity",
+    title: "INTEGRITY",
     description:
-      'We uphold uncompromising honesty and strong moral principles in all our dealings. Our commitment to integrity ensures transparency and accountability in every decision we make.',
+      "We uphold uncompromising honesty and strong moral principles in all our dealings. Our commitment to integrity ensures transparency and accountability in every decision we make.",
   },
 ];
 
 const BeliefsSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState(beliefs[0].id);
-  const activeContent = beliefs.find(b => b.id === activeTab);
+  const activeContent = beliefs.find((b) => b.id === activeTab);
   const ref = useRef<HTMLDivElement>(null);
 
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, { damping: 80, stiffness: 80, mass: 4 });
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 80,
+    stiffness: 80,
+    mass: 4,
+  });
   const moveY = useTransform(smoothVelocity, [-1000, 1000], [20, -20]); // small translate for text
 
   return (
@@ -62,19 +73,19 @@ const BeliefsSection: React.FC = () => {
         <div className="w-full lg:w-1/2 p-8 lg:p-12 relative bg-[#1a1a1a] min-h-[350px] lg:mr-[-100px] z-10 shadow-xl">
           <div className="flex relative mb-10 pb-1">
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-700 z-0" />
-            {beliefs.map(item => (
+            {beliefs.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className="relative uppercase tracking-widest cursor-pointer text-sm font-light transition-colors duration-300 mr-8 pb-1 z-10"
-                style={{ color: activeTab === item.id ? 'white' : 'gray' }}
+                style={{ color: activeTab === item.id ? "white" : "gray" }}
               >
                 {item.title}
                 {activeTab === item.id && (
                   <motion.div
                     layoutId="tab-underline"
                     className="absolute left-0 right-0 bottom-0 h-0.5 bg-white"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
               </button>
@@ -83,7 +94,7 @@ const BeliefsSection: React.FC = () => {
 
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeContent ? activeContent.id : 'empty'}
+              key={activeContent ? activeContent.id : "empty"}
               style={{ y: moveY }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -104,12 +115,10 @@ const BeliefsSection: React.FC = () => {
         {/* Image */}
         <div className="w-full lg:w-1/2 flex justify-center items-center mt-[-100px] lg:mt-0 z-0">
           <div className="relative w-full max-w-xl lg:h-[450px] aspect-4/3 lg:aspect-auto">
-            <Image
-              src="https://i.postimg.cc/TPfrB3Nd/pexels-fauxels-3184292-2.jpg"
-              alt="Hands connecting two jigsaw puzzle pieces, symbolizing partnership and trust."
-              fill
-              style={{ objectFit: 'cover' }}
-              className="shadow-2xl"
+            <img
+              src="https://i.postimg.cc/J41r5QBq/Concord-Malancha-22-scaled-1.jpg"
+              alt="Assist-holdings-limited Developments"
+              className=" object-cover  shadow-2xl h-[480px]"
             />
           </div>
         </div>
