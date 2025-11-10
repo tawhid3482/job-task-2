@@ -1,13 +1,11 @@
-import ProtectedRoute from "@/components/ProtectedRoute";
-import AdminDashboard from "@/components/shared/admin/Admin";
+// import ProtectedRoute from "@/components/ProtectedRoute";
 
-const AdminDashboardContent = () => {
+// const AdminDashboardContent = () => {
 
-  return (
-    <ProtectedRoute>
-      <AdminDashboard />
-    </ProtectedRoute>
-  );
-};
+//   return (
+//     <ProtectedRoute>
+//     </ProtectedRoute>
+//   );
+// };
 
-export default AdminDashboardContent;
+// export default AdminDashboardContent;
