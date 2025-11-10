@@ -71,7 +71,7 @@ const OurPerfections: React.FC = () => {
   useEffect(() => {
     const fetchPerfections = async () => {
       try {
-        const res = await fetch(`https://job-task-2-backend.vercel.app/api/v1/perfections`);
+        const res = await fetch(`https://assistholdingltd.vercel.app/api/v1/perfections`);
         const json = await res.json();
         setPerfections(Array.isArray(json.data) ? json.data : []);
       } catch (err) {

@@ -93,7 +93,7 @@ const Banner: React.FC = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const res = await fetch("https://job-task-2-backend.vercel.app/api/v1/slider");
+        const res = await fetch("https://assistholdingltd.vercel.app/api/v1/slider");
         const json = await res.json();
         if (json.success && json.data) {
           const mapped: BannerSlide[] = json.data.map((item: BackendSlide) => ({

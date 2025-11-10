@@ -125,7 +125,7 @@ const ProjectFilter = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://job-task-2-backend.vercel.app/api/v1/perfections"
+          "https://assistholdingltd.vercel.app/api/v1/perfections"
         );
         const result = await response.json();
         if (result.success) {

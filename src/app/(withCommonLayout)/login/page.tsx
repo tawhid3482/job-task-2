@@ -15,7 +15,7 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const response = await fetch('https://job-task-2-backend.vercel.app/api/v1/auth/login', {
+      const response = await fetch('https://assistholdingltd.vercel.app/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
