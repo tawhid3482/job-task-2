@@ -1,12 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "jcxbd.com",
-        port: "",          
-        pathname: "/**",    // allow all paths
+        hostname: "**", 
+      },
+      {
+        protocol: "http",
+        hostname: "**", 
       },
     ],
   },

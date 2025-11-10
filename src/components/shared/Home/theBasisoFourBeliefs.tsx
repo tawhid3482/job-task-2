@@ -105,7 +105,7 @@ const BeliefsSection: React.FC = () => {
         <div className="w-full lg:w-1/2 flex justify-center items-center mt-[-100px] lg:mt-0 z-0">
           <div className="relative w-full max-w-xl lg:h-[450px] aspect-4/3 lg:aspect-auto">
             <Image
-              src="https://jcxbd.com/wp-content/uploads/2024/04/Right-Choice-v4.jpg"
+              src="https://i.postimg.cc/TPfrB3Nd/pexels-fauxels-3184292-2.jpg"
               alt="Hands connecting two jigsaw puzzle pieces, symbolizing partnership and trust."
               fill
               style={{ objectFit: 'cover' }}
