@@ -125,7 +125,7 @@ const ProjectFilter = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://assistholdingltd.vercel.app/api/v1/perfections"
+          "http://160.25.7.224:5008/api/v1/perfections"
         );
         const result = await response.json();
         if (result.success) {
