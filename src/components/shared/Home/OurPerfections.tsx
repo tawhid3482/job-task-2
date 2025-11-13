@@ -71,7 +71,7 @@ const OurPerfections: React.FC = () => {
   useEffect(() => {
     const fetchPerfections = async () => {
       try {
-        const res = await fetch(`http://160.25.7.224:5008/api/v1/perfections`);
+        const res = await fetch(`https://assistholdingsltd.com/api/api/v1/perfections`);
         const json = await res.json();
         setPerfections(Array.isArray(json.data) ? json.data : []);
       } catch (err) {
