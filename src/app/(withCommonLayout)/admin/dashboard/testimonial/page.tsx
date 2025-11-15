@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useCreateTestimonialMutation, useDeleteTestimonialMutation, useGetAllTestimonialQuery, useUpdateTestimonialMutation } from "@/redux/features/testimonial/testimonialApi";
 
@@ -121,7 +120,6 @@ const TestimonialsPage = () => {
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
-      console.log(id)
       await deleteTestimonial(id).unwrap();
       toast.success("Testimonial deleted successfully!");
       refetch();

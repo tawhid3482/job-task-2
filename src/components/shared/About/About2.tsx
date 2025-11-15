@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -25,75 +24,159 @@ const About2: React.FC = () => {
   };
 
   return (
-    <div className="bg-black text-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse md:gap-10 items-stretch">
-        <motion.div
-          className="lg:w-1/2 pr-0 lg:pr-16 flex flex-col justify-between"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-        >
-          {/* Main Content Paragraphs */}
-          <motion.div className=" space-y-6 text-base" variants={fadeUp}>
-            <p>
-              Mr. Md. Iqbal Hossain Chowdhury comes of a reputed Muslim family
-              of Lakshipur. He has graduated from Dhaka College followed by an
-              MBA from South East University. He is the Director in the Board of
-              Directors of Bengal Commercial Bank Limited representing B. Dash
-              Japan Co. Ltd. Mr. Chowdhury is well known as one of the
-              established Real Estate business personalities of the country. He
-              is the Managing Director of renowned Assist-holdings-limited Development Ltd and JCX
-              Trading Ltd. He has played a great role in the industry by earning
-              FDI (Foreign Direct Investment) through joint venture business
-              enterprise with Japanese CREED Group, which is the ever first of
-              its kind.
-            </p>
-          </motion.div>
-          <motion.div className="mt-2 space-y-6 text-base" variants={fadeUp}>
-            <p>
-              Mr. Md. Iqbal Hossain Chowdhury is successfully running a business
-              Conglomerate with diversified interests in Energy, Auto Mobiles,
-              Tourism and Hospitality sector. He is also Director of Bengal Life
-              Insurance Company Ltd, Moonlight Shipping, Napier Homes Ltd and
-              JAPASTY Co. Ltd. Mr. Md. Iqbal Hossain Chowdhury is also the
-              Director of one the most popular restaurants in Dhaka named The
-              Rio-Lounge and Brew Splash. Mr. Chowdhury is involved in many
-              social activities and widely acclaimed for his philanthropic
-              contributions to the society. He is Director of Federation of
-              Bangladesh Chambers of Commerce and Industry (FBCCI). He is also
-              the Vice Chairman of Bashundhara Kings Football Team, Member of
-              SAARC Chamber of Commerce and Industry (SCCI), Member of Japan
-              Bangladesh Chamber of Commerce and Industry (JBCCI).
-            </p>
-          </motion.div>
-
-          {/* Quote Section */}
+    <div className="">
+      <div className="bg-black text-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse md:gap-10 items-stretch">
           <motion.div
-            className="mt-12 lg:mt-24 pl-4"
+            className="lg:w-1/2 pr-0 lg:pr-16 flex flex-col  gap-5"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.4 }}
             variants={fadeUp}
           >
-            <p className="text-lg  ">
-              Md. Iqbal Hossain Chowdhury
-            </p>
-              <p className="text-sm"> Managing Director</p>
-          </motion.div>
-        </motion.div>
+            {/* Main Content Paragraphs */}
+            <motion.div className=" text-base" variants={fadeUp}>
+              <p>
+                Chairman’s Message : At Assist Holdings Limited, we believe that
+                real estate is more than land and buildings — it’s about
+                building dreams, securing futures, and creating lasting
+                value.From our very beginning, our goal has been to offer
+                reliable, transparent, and innovative property solutions that
+                empower people and strengthen communities. Our success is built
+                on integrity, professionalism, and a deep commitment to our
+                clients. As we move forward, we remain focused on expanding our
+                services, improving customer experience, and contributing to the
+                sustainable growth of our nation’s real estate sector.Together,
+                we are not just developing properties — we are developing trust.
+                <br />
+                <br />
+                Chairman, Assist Holdings Limited
+              </p>
+            </motion.div>
 
-        {/* ==================== Right Image Section ==================== */}
-        <motion.div
-          className="lg:w-1/2 mt-12 lg:mt-0 relative"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          variants={imageFadeIn}
-        >
-          <img
-            src="https://jcxbd.com/wp-content/uploads/2021/11/JCX-MD.webp" 
-            alt="Green Living and Rooftop Garden"
-            className="w-full  object-cover shadow-2xl"
-          />
-        </motion.div>
+            {/* Quote Section */}
+            <motion.div className="" variants={fadeUp}>
+              <p className="text-lg  ">Engr.Ruhul Amin</p>
+              <p className="text-sm">Chairman</p>
+            </motion.div>
+          </motion.div>
+
+          {/* ==================== Right Image Section ==================== */}
+          <motion.div
+            className="lg:w-1/2 mt-12 lg:mt-0 relative"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            variants={imageFadeIn}
+          >
+            <img
+              src="https://i.postimg.cc/k4pCYWyj/Md-Ruhul-Amin.jpg"
+              alt="Green Living and Rooftop Garden"
+              className="w-full  object-cover shadow-2xl"
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="bg-black text-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row md:gap-10 items-stretch">
+          <motion.div
+            className="lg:w-1/2 pr-0 lg:pr-16 flex flex-col  gap-5"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.4 }}
+            variants={fadeUp}
+          >
+            {/* Main Content Paragraphs */}
+            <motion.div className=" text-base" variants={fadeUp}>
+              <p>
+                At Assist Holdings Limited, our mission is to make land
+                ownership simple, secure, and profitable. We have built our
+                reputation on trust, quality, and commitment — values that
+                continue to guide us as we expand our footprint in the real
+                estate market. Our focus remains on transparency, client
+                satisfaction, and sustainable development. We are continuously
+                improving our services, technology, and processes to meet the
+                evolving needs of our valued clients and investors. We look
+                forward to welcoming you to our growing family of satisfied
+                landowners and investors.
+                <br />
+                <br />
+                Managing Director, Assist Holdings Limited
+              </p>
+            </motion.div>
+
+            {/* Quote Section */}
+            <motion.div className="" variants={fadeUp}>
+              <p className="text-lg  ">Mohammed Tohidur Rahman </p>
+              <p className="text-sm">Managing Director</p>
+            </motion.div>
+          </motion.div>
+
+          {/* ==================== Right Image Section ==================== */}
+          <motion.div
+            className="lg:w-1/2 mt-12 lg:mt-0 relative"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            variants={imageFadeIn}
+          >
+            <img
+              src="https://i.postimg.cc/wxL4GhFM/481247081-2995625383945511-6279249194017499974-n.jpg"
+              alt="Green Living and Rooftop Garden"
+              className="w-full  object-cover shadow-2xl"
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="bg-black text-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse md:gap-10 items-stretch">
+          <motion.div
+            className="lg:w-1/2 pr-0 lg:pr-16 flex flex-col  gap-5"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.4 }}
+            variants={fadeUp}
+          >
+            {/* Main Content Paragraphs */}
+            <motion.div className=" text-base" variants={fadeUp}>
+              <p>
+                Welcome to Assist Holdings Limited. Our company was founded on a
+                vision to redefine real estate by combining modern development
+                strategies with genuine care for our clients. Every project we
+                undertake reflects our promise — to deliver quality,
+                transparency, and long-term value. As CEO, I take pride in
+                leading a team that is passionate about creating opportunities
+                for investment and home ownership. We are dedicated to providing
+                exceptional service and ensuring every client finds not just
+                property, but peace of mind. Together, let’s build a future
+                where every investment grows with confidence.
+              </p>
+            </motion.div>
+
+            {/* Quote Section */}
+            <motion.div className="" variants={fadeUp}>
+              <p className="text-lg  ">Ziaur Rahman </p>
+              <p className="text-sm">Director & CEO</p>
+            </motion.div>
+          </motion.div>
+
+          {/* ==================== Right Image Section ==================== */}
+          <motion.div
+            className="lg:w-1/2 mt-12 lg:mt-0 relative"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            variants={imageFadeIn}
+          >
+            <img
+              src="https://i.postimg.cc/HLb7gsKD/Whats-App-Image-2025-11-08-at-11-10-17-7478152d.jpg"
+              alt="Green Living and Rooftop Garden"
+              className="w-full  object-cover shadow-2xl"
+            />
+          </motion.div>
+        </div>
       </div>
     </div>
   );
