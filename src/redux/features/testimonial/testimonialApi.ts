@@ -34,7 +34,7 @@ const testimonialApi = baseApi.injectEndpoints({
 
     deleteTestimonial: builder.mutation({
       query: (id: string) => ({
-        url: `/opinion/delete/${id}`,
+        url: `/testimonial/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.testimonial],

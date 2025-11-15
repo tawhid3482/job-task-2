@@ -120,8 +120,8 @@ const TestimonialsPage = () => {
   };
 
   const handleDeleteTestimonial = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this testimonial?")) return;
     try {
+      console.log(id)
       await deleteTestimonial(id).unwrap();
       toast.success("Testimonial deleted successfully!");
       refetch();
