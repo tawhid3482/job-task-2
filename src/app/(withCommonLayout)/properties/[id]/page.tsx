@@ -22,6 +22,7 @@ interface Project {
   id: string;
   Title: string;
   Type: string;
+  coverImage:string;
   extraFields: Record<string, string>;
   description: string;
   description2: string;
@@ -110,7 +111,7 @@ export default function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <LandownerBanner
-        img="https://i.postimg.cc/2jxr3Zx0/Luxury-Flat-for-Sale-in-Bashundhara-Concord-Seven-Heights-1.jpg"
+        img={project?.coverImage || "https://i.postimg.cc/2jxr3Zx0/Luxury-Flat-for-Sale-in-Bashundhara-Concord-Seven-Heights-1.jpg"}
         title="Properties"
         text={project.Title}
       />
@@ -151,7 +152,7 @@ export default function ProjectDetailPage() {
               <img
                 src={project?.galleryImages?.[0]}
                 alt={project.Title}
-                className="w-full h-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:h-[690px] lg:max-h-none object-cover rounded-lg shadow-lg"
+                className="w-full h-full object-cover rounded-lg shadow-lg"
               />
             </div>
           </div>

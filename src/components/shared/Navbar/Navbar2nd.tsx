@@ -15,7 +15,8 @@ const menuItems = [
   "Home",
   "About",
   "Properties",
-  "CSR",
+  "Gallery",
+  // "CSR",
   // "Career",
   "Blogs",
   "Contact",
@@ -25,7 +26,6 @@ const menuItems = [
   // "Buyer",
   // "Blogs",
   // "News&Events",
-  // "Gallery",
   // "Contact",
 ];
 
@@ -468,7 +468,7 @@ export default function Navbar() {
               <ActiveLink href="/about">About us</ActiveLink>
               <ActiveLink href="/properties">Project</ActiveLink>
 
-              <ActiveLink href="/csr">CSR</ActiveLink>
+              <ActiveLink href="/gallery">Gallery</ActiveLink>
               {/* <ActiveLink href="/career">Career</ActiveLink> */}
               <ActiveLink href="/blogs">Blogs</ActiveLink>
               <ActiveLink href="/contact">Contact us</ActiveLink>

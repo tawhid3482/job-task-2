@@ -1,15 +1,322 @@
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// "use client";
+// import React, { useState, useEffect } from "react";
+// import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+// import { motion } from "framer-motion";
+// import Link from "next/link";
+// import * as Icons from "react-icons/fa";
+// import * as IoIcons from "react-icons/io5";
+// import * as MdIcons from "react-icons/md";
+// import * as HiIcons from "react-icons/hi";
+// import * as FiIcons from "react-icons/fi";
+// // import { div } from "framer-motion/client";
+
+// const buttonVariants = {
+//   hidden: { opacity: 0, y: 30 },
+//   visible: {
+//     opacity: 1,
+//     y: 0,
+//     transition: {
+//       type: "spring" as const,
+//       stiffness: 100,
+//       damping: 10,
+//       delay: 1.5,
+//     },
+//   },
+// };
+
+// interface FeatureAmenity {
+//   icon: string;
+//   text: string;
+// }
+
+// interface Perfection {
+//   id: string;
+//   Title: string;
+//   description: string;
+//   description2: string;
+//   description3: string;
+//   icon: string;
+//   FeaturesAmenities?: FeatureAmenity[];
+//   videoUrl: string;
+//   galleryImages: string[];
+//   Category: string;
+//   Type: string;
+//   Location: string;
+//   extraFields?: Record<string, string>;
+//   status: string;
+//   createdAt: string;
+// }
+
+// // Function to render any icon by name
+// const renderIcon = (iconName: string, size: number = 16) => {
+//   if (!iconName) return null;
+
+//   const libraries = [Icons, IoIcons, MdIcons, HiIcons, FiIcons];
+//   for (const library of libraries) {
+//     const IconComponent = (library as any)[iconName];
+//     if (IconComponent) {
+//       return <IconComponent size={size} />;
+//     }
+//   }
+//   return null;
+// };
+
+// const OurPerfections: React.FC = () => {
+//   const [perfections, setPerfections] = useState<Perfection[]>([]);
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [visibleCount, setVisibleCount] = useState(4);
+
+//   // Fetch data from backend
+//   useEffect(() => {
+//     const fetchPerfections = async () => {
+//       try {
+//         const res = await fetch(`https://assistholdingsltd.com/api/api/v1/perfections`);
+//         const json = await res.json();
+//         setPerfections(Array.isArray(json.data) ? json.data : []);
+//       } catch (err) {
+//         console.error("Failed to fetch perfections:", err);
+//         setPerfections([]);
+//       }
+//     };
+//     fetchPerfections();
+//   }, []);
+
+//   // Responsive visible count
+// useEffect(() => {
+//   const updateVisibleCount = () => {
+//     const width = window.innerWidth;
+
+//     if (width >= 1600) {
+//       setVisibleCount(4);     // XL and above
+//     } else if (width >= 1024) {
+//       setVisibleCount(3);     // LG
+//     } else if (width >= 640) {
+//       setVisibleCount(2);     // MD
+//     } else {
+//       setVisibleCount(1);     // SM
+//     }
+//   };
+
+//   updateVisibleCount();
+//   window.addEventListener("resize", updateVisibleCount);
+//   return () => window.removeEventListener("resize", updateVisibleCount);
+// }, []);
+
+//   if (!perfections.length)
+//     return (
+//       <div className="py-20 flex justify-center items-center">
+//         <p className="text-white text-xl">No perfections available.</p>
+//       </div>
+//     );
+
+//   const maxIndex = Math.max(0, perfections.length - visibleCount);
+//   const totalSegments = perfections.length - visibleCount + 1;
+
+//   const nextSlide = () =>
+//     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+//   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
+
+//   return (
+//     <div className="bg-black text-white py-8">
+//       <div className="text-center mb-20">
+//         <motion.p
+//           className="text-3xl font-light uppercase tracking-widest"
+//           initial={{ opacity: 0, y: 50 }}
+//           whileInView={{ opacity: 1, y: 0 }}
+//           viewport={{ once: true }}
+//           transition={{ duration: 0.8, ease: "easeOut" }}
+//         >
+//           OUR PERFECTIONS
+//         </motion.p>
+//         <motion.div
+//           className="mx-auto mt-2 h-1 w-14 bg-[#F6BD2F]"
+//           initial={{ scaleX: 0 }}
+//           whileInView={{ scaleX: 1 }}
+//           viewport={{ once: true }}
+//           transition={{ duration: 0.8, ease: "easeOut" }}
+//           style={{ transformOrigin: "left" }}
+//         />
+//       </div>
+
+//       {/* Slider */}
+//       <div className="relative md:w-full lg:max-w-[1450px] 2xl:max-w-[1700px] mx-auto px-2">
+//         <div className="overflow-hidden">
+//           <motion.div
+//             className="flex gap-6"
+//             animate={{ x: `-${(100 / visibleCount) * currentIndex}%` }}
+//             transition={{ type: "tween", duration: 0.5 }}
+//           >
+//             {perfections.map((perfection) => (
+//               <Link
+//                 href={`/properties/${perfection.id}`}
+//                 key={perfection.id}
+//                 className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group cursor-pointer`}
+//               >
+//                 <div className="relative w-full h-full overflow-hidden">
+                
+//                   <img
+//                     src={
+//                       perfection.galleryImages?.[0] ||
+//                       perfection.icon ||
+//                       "/default-image.jpg"
+//                     }
+//                     alt={perfection.Title}
+//                     className="w-96 h-96 md:w-[400px] md:h-[620px]  object-cover transition-transform duration-300 group-hover:scale-105"
+//                   />
+
+//                   {/* Hover Overlay with Dynamic Extra Fields */}
+//                   <motion.div
+//                     className="absolute inset-0 bg-black/70 flex flex-col justify-start p-6  opacity-0 group-hover:opacity-100 z-10"
+//                     initial={{ y: 50, opacity: 0 }}
+//                     whileHover={{ y: 0, opacity: 1 }}
+//                     transition={{ duration: 0.5 }}
+//                   >
+//                     {/* Dynamic Extra Fields */}
+//                     {perfection.extraFields &&
+//                       Object.entries(perfection.extraFields).map(
+//                         ([icon, value], index) => (
+//                           <p
+//                             key={index}
+//                             className="text-sm text-gray-200 mb-2 flex items-center gap-2"
+//                           >
+//                             <span className="w-1 h-1 border border-white "></span>
+
+//                             <span className="flex-1">{value}</span>
+//                           </p>
+//                         )
+//                       )}
+
+                
+                 
+
+//                     {/* Explore Button */}
+//                     <motion.div
+//                       variants={buttonVariants}
+//                       initial="hidden"
+//                       animate="visible"
+//                       className="relative flex flex-col items-start mt-16 my-2"
+//                     >
+//                       <motion.div
+//                         className="w-20 h-px bg-white"
+//                         initial={{ scaleX: 0 }}
+//                         animate={{ scaleX: 1 }}
+//                         transition={{ duration: 0.8, delay: 1.6 }}
+//                         style={{ originX: 0.5 }}
+//                       />
+//                       <motion.span
+//                         className="uppercase tracking-widest text-sm font-light hover:text-gray-300 transition-colors duration-300 my-2"
+//                         whileHover={{ scale: 0.95 }}
+//                         whileTap={{ scale: 0.9 }}
+//                       >
+//                         EXPLORE
+//                       </motion.span>
+//                       <motion.div
+//                         className="w-20 h-px bg-white"
+//                         initial={{ scaleX: 0 }}
+//                         animate={{ scaleX: 1 }}
+//                         transition={{ duration: 0.8, delay: 1.6 }}
+//                         style={{ originX: 0.5 }}
+//                       />
+//                     </motion.div>
+//                   </motion.div>
+//                 </div>
+
+//                 {/* Bottom Info Card */}
+//                 <div className="bg-black/80 p-4 text-left">
+//                   <p className="text-sm text-gray-300">{perfection.Type}</p>
+//                   <h3 className="text-xl font-bold">{perfection.Title}</h3>
+//                   <p className="text-sm text-gray-300">{perfection.Category}</p>
+
+//                   {/* Show first 2 extra fields in preview */}
+//                   <div className="mt-2 flex flex-wrap gap-1">
+//                     {perfection.extraFields &&
+//                       Object.entries(perfection.extraFields)
+//                         .slice(0, 2)
+//                         .map(([icon, value], index) => (
+//                           <span
+//                             key={index}
+//                             className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs"
+//                           >
+//                             {renderIcon(icon, 12)}
+//                             {value.split(":")[0]} {/* Show only field name */}
+//                           </span>
+//                         ))}
+//                     {perfection.extraFields &&
+//                       Object.keys(perfection.extraFields).length > 2 && (
+//                         <span className="text-xs text-gray-400">
+//                           +{Object.keys(perfection.extraFields).length - 2} more
+//                         </span>
+//                       )}
+//                   </div>
+//                 </div>
+//               </Link>
+//             ))}
+//           </motion.div>
+//         </div>
+
+//         {/* Navigation */}
+//         <div className="flex items-center mt-20">
+//           <button
+//             onClick={prevSlide}
+//             disabled={currentIndex === 0}
+//             className={`p-2 mr-4 ${
+//               currentIndex === 0
+//                 ? "text-gray-500"
+//                 : "text-white hover:text-red-600"
+//             } transition duration-200`}
+//           >
+//             <FaArrowLeftLong className="text-4xl" />
+//           </button>
+//           <button
+//             onClick={nextSlide}
+//             disabled={currentIndex === maxIndex}
+//             className={`p-2 mr-6 ${
+//               currentIndex === maxIndex
+//                 ? "text-gray-500"
+//                 : "text-white hover:text-red-600"
+//             } transition duration-200`}
+//           >
+//             <FaArrowRightLong className="text-4xl" />
+//           </button>
+
+//           {/* Segment Progress */}
+//           <div className="hidden md:flex flex-1 h-px bg-gray-400 rounded overflow-hidden relative">
+//             <motion.div
+//               className="absolute top-0 left-0 h-full bg-gray-200"
+//               animate={{
+//                 x: `${(currentIndex / (totalSegments - 1)) * 100}%`,
+//                 width: `${100 / totalSegments}%`,
+//               }}
+//               transition={{
+//                 type: "tween",
+//                 duration: 0.5,
+//                 ease: "easeOut",
+//               }}
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default OurPerfections;
+
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import Link from "next/link";
+
 import * as Icons from "react-icons/fa";
 import * as IoIcons from "react-icons/io5";
 import * as MdIcons from "react-icons/md";
 import * as HiIcons from "react-icons/hi";
 import * as FiIcons from "react-icons/fi";
-// import { div } from "framer-motion/client";
 
 const buttonVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -48,16 +355,14 @@ interface Perfection {
   createdAt: string;
 }
 
-// Function to render any icon by name
+// Render icons dynamically
 const renderIcon = (iconName: string, size: number = 16) => {
   if (!iconName) return null;
-
   const libraries = [Icons, IoIcons, MdIcons, HiIcons, FiIcons];
+
   for (const library of libraries) {
     const IconComponent = (library as any)[iconName];
-    if (IconComponent) {
-      return <IconComponent size={size} />;
-    }
+    if (IconComponent) return <IconComponent size={size} />;
   }
   return null;
 };
@@ -67,7 +372,7 @@ const OurPerfections: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4);
 
-  // Fetch data from backend
+  // Fetch data
   useEffect(() => {
     const fetchPerfections = async () => {
       try {
@@ -82,16 +387,20 @@ const OurPerfections: React.FC = () => {
     fetchPerfections();
   }, []);
 
-  // Responsive visible count
+  // Breakpoints
   useEffect(() => {
     const updateVisibleCount = () => {
       const width = window.innerWidth;
-      if (width < 640) setVisibleCount(1);
-      else if (width < 1024) setVisibleCount(2);
-      else setVisibleCount(4);
+
+      if (width >= 1500) setVisibleCount(4);
+      else if (width >= 1024) setVisibleCount(3);
+      else if (width >= 640) setVisibleCount(2);
+      else setVisibleCount(1);
     };
+
     updateVisibleCount();
     window.addEventListener("resize", updateVisibleCount);
+
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
 
@@ -105,34 +414,33 @@ const OurPerfections: React.FC = () => {
   const maxIndex = Math.max(0, perfections.length - visibleCount);
   const totalSegments = perfections.length - visibleCount + 1;
 
-  const nextSlide = () =>
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  const nextSlide = () => setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
 
   return (
-    <div className="bg-black text-white py-8 md:py-24">
+    <div className="bg-black text-white py-8">
+      {/* Header */}
       <div className="text-center mb-20">
         <motion.p
           className="text-3xl font-light uppercase tracking-widest"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8 }}
         >
           OUR PERFECTIONS
         </motion.p>
+
         <motion.div
           className="mx-auto mt-2 h-1 w-14 bg-[#F6BD2F]"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8 }}
           style={{ transformOrigin: "left" }}
         />
       </div>
 
       {/* Slider */}
-      <div className="relative max-w-[1420px] mx-auto px-3 md:px-8">
+      <div className="relative md:w-[1400px] lg:max-w-[1600px] 2xl:max-w-[1900px] mx-auto px-2">
         <div className="overflow-hidden">
           <motion.div
             className="flex gap-6"
@@ -143,10 +451,10 @@ const OurPerfections: React.FC = () => {
               <Link
                 href={`/properties/${perfection.id}`}
                 key={perfection.id}
-                className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group cursor-pointer`}
+                className="shrink-0 overflow-hidden group cursor-pointer"
+                style={{ width: `${100 / visibleCount}%` }} // FIXED WIDTH
               >
                 <div className="relative w-full h-full overflow-hidden">
-                
                   <img
                     src={
                       perfection.galleryImages?.[0] ||
@@ -154,86 +462,68 @@ const OurPerfections: React.FC = () => {
                       "/default-image.jpg"
                     }
                     alt={perfection.Title}
-                    className="w-96 h-96 md:w-[320px] md:h-[620px]  object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-[400px] md:h-[620px] object-cover transition-transform duration-300 group-hover:scale-105"
                   />
 
-                  {/* Hover Overlay with Dynamic Extra Fields */}
+                  {/* Hover overlay */}
                   <motion.div
-                    className="absolute inset-0 bg-black/70 flex flex-col justify-start p-6  opacity-0 group-hover:opacity-100 z-10"
+                    className="absolute inset-0 bg-black/70 flex flex-col p-6 opacity-0 group-hover:opacity-100 z-10"
                     initial={{ y: 50, opacity: 0 }}
                     whileHover={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    {/* Dynamic Extra Fields */}
                     {perfection.extraFields &&
-                      Object.entries(perfection.extraFields).map(
-                        ([icon, value], index) => (
-                          <p
-                            key={index}
-                            className="text-sm text-gray-200 mb-2 flex items-center gap-2"
-                          >
-                            <span className="w-1 h-1 border border-white "></span>
+                      Object.entries(perfection.extraFields).map(([icon, value], index) => (
+                        <p key={index} className="text-sm text-gray-200 mb-2 flex items-center gap-2">
+                          <span className="w-1 h-1 border border-white"></span>
+                          <span>{value}</span>
+                        </p>
+                      ))}
 
-                            <span className="flex-1">{value}</span>
-                          </p>
-                        )
-                      )}
-
-                
-                 
-
-                    {/* Explore Button */}
+                    {/* Explore button */}
                     <motion.div
                       variants={buttonVariants}
                       initial="hidden"
                       animate="visible"
-                      className="relative flex flex-col items-start mt-16 my-2"
+                      className="mt-16"
                     >
                       <motion.div
                         className="w-20 h-px bg-white"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
-                        transition={{ duration: 0.8, delay: 1.6 }}
-                        style={{ originX: 0.5 }}
+                        transition={{ duration: 0.8 }}
                       />
-                      <motion.span
-                        className="uppercase tracking-widest text-sm font-light hover:text-gray-300 transition-colors duration-300 my-2"
-                        whileHover={{ scale: 0.95 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
+                      <motion.span className="uppercase tracking-widest text-sm font-light my-2 block">
                         EXPLORE
                       </motion.span>
                       <motion.div
                         className="w-20 h-px bg-white"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
-                        transition={{ duration: 0.8, delay: 1.6 }}
-                        style={{ originX: 0.5 }}
+                        transition={{ duration: 0.8 }}
                       />
                     </motion.div>
                   </motion.div>
                 </div>
 
-                {/* Bottom Info Card */}
-                <div className="bg-black/80 p-4 text-left">
+                {/* Bottom Info */}
+                <div className="bg-black/80 p-4">
                   <p className="text-sm text-gray-300">{perfection.Type}</p>
                   <h3 className="text-xl font-bold">{perfection.Title}</h3>
                   <p className="text-sm text-gray-300">{perfection.Category}</p>
 
-                  {/* Show first 2 extra fields in preview */}
+                  {/* Preview extra fields */}
                   <div className="mt-2 flex flex-wrap gap-1">
                     {perfection.extraFields &&
                       Object.entries(perfection.extraFields)
                         .slice(0, 2)
                         .map(([icon, value], index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs"
-                          >
+                          <span key={index} className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs">
                             {renderIcon(icon, 12)}
-                            {value.split(":")[0]} {/* Show only field name */}
+                            {value.split(":")[0]}
                           </span>
                         ))}
+
                     {perfection.extraFields &&
                       Object.keys(perfection.extraFields).length > 2 && (
                         <span className="text-xs text-gray-400">
@@ -253,26 +543,23 @@ const OurPerfections: React.FC = () => {
             onClick={prevSlide}
             disabled={currentIndex === 0}
             className={`p-2 mr-4 ${
-              currentIndex === 0
-                ? "text-gray-500"
-                : "text-white hover:text-red-600"
-            } transition duration-200`}
+              currentIndex === 0 ? "text-gray-500" : "text-white hover:text-red-600"
+            }`}
           >
             <FaArrowLeftLong className="text-4xl" />
           </button>
+
           <button
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
             className={`p-2 mr-6 ${
-              currentIndex === maxIndex
-                ? "text-gray-500"
-                : "text-white hover:text-red-600"
-            } transition duration-200`}
+              currentIndex === maxIndex ? "text-gray-500" : "text-white hover:text-red-600"
+            }`}
           >
             <FaArrowRightLong className="text-4xl" />
           </button>
 
-          {/* Segment Progress */}
+          {/* Progress Bar */}
           <div className="hidden md:flex flex-1 h-px bg-gray-400 rounded overflow-hidden relative">
             <motion.div
               className="absolute top-0 left-0 h-full bg-gray-200"
@@ -280,11 +567,7 @@ const OurPerfections: React.FC = () => {
                 x: `${(currentIndex / (totalSegments - 1)) * 100}%`,
                 width: `${100 / totalSegments}%`,
               }}
-              transition={{
-                type: "tween",
-                duration: 0.5,
-                ease: "easeOut",
-              }}
+              transition={{ duration: 0.5 }}
             />
           </div>
         </div>
