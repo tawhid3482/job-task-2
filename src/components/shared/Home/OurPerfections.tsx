@@ -387,15 +387,15 @@ const OurPerfections: React.FC = () => {
     fetchPerfections();
   }, []);
 
-  // Breakpoints
+  // FIXED BREAKPOINTS (phone=1, tablet=2, laptop=3, large=4)
   useEffect(() => {
     const updateVisibleCount = () => {
       const width = window.innerWidth;
 
-      if (width >= 1500) setVisibleCount(4);
-      else if (width >= 1024) setVisibleCount(3);
-      else if (width >= 640) setVisibleCount(2);
-      else setVisibleCount(1);
+      if (width >= 1536) setVisibleCount(4);        // 2XL screen
+      else if (width >= 1050) setVisibleCount(3);   // Laptop
+      else if (width >= 640) setVisibleCount(2);    // Tablet
+      else setVisibleCount(1);                      // Phone
     };
 
     updateVisibleCount();
@@ -440,7 +440,7 @@ const OurPerfections: React.FC = () => {
       </div>
 
       {/* Slider */}
-      <div className="relative md:w-[1400px] lg:max-w-[1600px] 2xl:max-w-[1900px] mx-auto px-2">
+      <div className="relative w-full mx-auto px-2">
         <div className="overflow-hidden">
           <motion.div
             className="flex gap-6"
@@ -452,7 +452,7 @@ const OurPerfections: React.FC = () => {
                 href={`/properties/${perfection.id}`}
                 key={perfection.id}
                 className="shrink-0 overflow-hidden group cursor-pointer"
-                style={{ width: `${100 / visibleCount}%` }} // FIXED WIDTH
+                style={{ width: `${100 / visibleCount}%` }}
               >
                 <div className="relative w-full h-full overflow-hidden">
                   <img
@@ -462,7 +462,7 @@ const OurPerfections: React.FC = () => {
                       "/default-image.jpg"
                     }
                     alt={perfection.Title}
-                    className="w-full h-[400px] md:h-[620px] object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full md:h-[620px] object-cover transition-transform duration-300 group-hover:scale-105"
                   />
 
                   {/* Hover overlay */}
@@ -480,7 +480,6 @@ const OurPerfections: React.FC = () => {
                         </p>
                       ))}
 
-                    {/* Explore button */}
                     <motion.div
                       variants={buttonVariants}
                       initial="hidden"
@@ -512,13 +511,15 @@ const OurPerfections: React.FC = () => {
                   <h3 className="text-xl font-bold">{perfection.Title}</h3>
                   <p className="text-sm text-gray-300">{perfection.Category}</p>
 
-                  {/* Preview extra fields */}
                   <div className="mt-2 flex flex-wrap gap-1">
                     {perfection.extraFields &&
                       Object.entries(perfection.extraFields)
                         .slice(0, 2)
                         .map(([icon, value], index) => (
-                          <span key={index} className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs">
+                          <span
+                            key={index}
+                            className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs"
+                          >
                             {renderIcon(icon, 12)}
                             {value.split(":")[0]}
                           </span>
@@ -577,3 +578,4 @@ const OurPerfections: React.FC = () => {
 };
 
 export default OurPerfections;
+
