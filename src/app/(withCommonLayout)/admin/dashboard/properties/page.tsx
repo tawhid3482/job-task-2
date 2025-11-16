@@ -16,7 +16,7 @@ import {
 } from "@/redux/features/properties/propertiesApi";
 import { isLoggedIn } from "@/services/auth.services";
 
-// Dynamic Icon Picker Component (same as before)
+// Dynamic Icon Picker Component
 const IconPicker = ({
   selectedIcon,
   onIconSelect,
@@ -62,7 +62,7 @@ const IconPicker = ({
       >
         <div className="flex items-center gap-3">
           {selectedIcon ? (
-            <>
+            <>b
               {(() => {
                 const IconComponent = getIconComponent(selectedIcon);
                 return IconComponent ? <IconComponent size={20} /> : null;
@@ -171,24 +171,30 @@ interface Perfection {
   description: string;
   description2: string;
   description3: string;
-  icon: string;
   FeaturesAmenities?: FeatureAmenity[];
   videoUrl: string;
-  galleryImages: string[];
+  galleryImages: string[]; 
   Category: string;
   Type: string;
   Location: string;
-  extraFields?: Record<string, string>; // Changed to string values only
+  extraFields?: Record<string, string>;
   status: string;
   createdAt: string;
 }
 
 const PerfectionsPage = () => {
+  const router = useRouter();
   
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.push("/login");
+    }
+  }, [router]);
 
   if (!isLoggedIn()) {
     return null;
   }
+
   const [createPerfections, { isLoading: creating }] =
     useCreatePropertiesMutation();
   const [updatePerfections, { isLoading: updating }] =
@@ -202,8 +208,6 @@ const PerfectionsPage = () => {
     refetch,
   } = useGetAllPropertiesQuery(undefined, { refetchOnMountOrArgChange: true });
 
-
-
   const perfections: Perfection[] =
     perfectionsData?.data || perfectionsData || [];
 
@@ -216,7 +220,6 @@ const PerfectionsPage = () => {
     description: "",
     description2: "",
     description3: "",
-    icon: "",
     videoUrl: "",
     Category: "",
     Type: "",
@@ -226,15 +229,10 @@ const PerfectionsPage = () => {
     []
   );
   const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
+  const [mainImageFile, setMainImageFile] = useState<File | null>(null);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
-  const [iconFile, setIconFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const router = useRouter();
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      router.push("/login");
-    }
-  }, [router]);
+
   // Function to render any icon by name
   const renderIcon = (iconName: string, size: number = 20) => {
     if (!iconName) return null;
@@ -290,9 +288,9 @@ const PerfectionsPage = () => {
   };
 
   // ✅ Handle file uploads
-  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setIconFile(e.target.files[0]);
+      setMainImageFile(e.target.files[0]);
     }
   };
 
@@ -330,28 +328,27 @@ const PerfectionsPage = () => {
     setUploading(true);
 
     try {
-      let iconUrl = formData.icon;
       let galleryUrls: string[] = [];
 
-      // Upload icon if selected
-      if (iconFile) {
-        iconUrl = await uploadImageToCPanel(iconFile);
+      // Upload main image first (if selected)
+      if (mainImageFile) {
+        const mainImageUrl = await uploadImageToCPanel(mainImageFile);
+        galleryUrls.push(mainImageUrl); // ✅ Main image will be at index 0
       }
 
-      // Upload gallery images
+      // Upload additional gallery images
       if (galleryFiles.length > 0) {
-        galleryUrls = await Promise.all(
+        const additionalGalleryUrls = await Promise.all(
           galleryFiles.map((file) => uploadImageToCPanel(file))
         );
+        galleryUrls = [...galleryUrls, ...additionalGalleryUrls]; // ✅ Additional images after main image
       }
 
-      // Convert extraFields to the required format: { "FaBook": "field name: field value" }
+      // Convert extraFields to the required format
       const extraFieldsObj: Record<string, string> = {};
       extraFields.forEach((field) => {
         if (field.icon && field.fieldName && field.fieldValue) {
-          extraFieldsObj[
-            field.icon
-          ] = `${field.fieldName}: ${field.fieldValue}`;
+          extraFieldsObj[field.icon] = `${field.fieldName}: ${field.fieldValue}`;
         }
       });
 
@@ -362,13 +359,12 @@ const PerfectionsPage = () => {
         description3: formData.description3,
         FeaturesAmenities: featuresAmenities.filter((fa) => fa.icon && fa.text),
         videoUrl: formData.videoUrl,
-        galleryImages: galleryUrls,
+        galleryImages: galleryUrls, // ✅ Main image at index 0, then gallery images
         Category: formData.Category,
         Type: formData.Type,
         Location: formData.Location,
         extraFields: extraFieldsObj,
       };
-
 
       if (editingPerfection) {
         await updatePerfections({
@@ -408,7 +404,6 @@ const PerfectionsPage = () => {
       description: "",
       description2: "",
       description3: "",
-      icon: "",
       videoUrl: "",
       Category: "",
       Type: "",
@@ -416,8 +411,8 @@ const PerfectionsPage = () => {
     });
     setFeaturesAmenities([]);
     setExtraFields([]);
+    setMainImageFile(null);
     setGalleryFiles([]);
-    setIconFile(null);
     setEditingPerfection(null);
   };
 
@@ -426,43 +421,40 @@ const PerfectionsPage = () => {
     if (showForm) resetForm();
   };
 
-  // const handleEditPerfection = (perfection: Perfection) => {
-  //   setEditingPerfection(perfection);
-  //   setFormData({
-  //     Title: perfection.Title || "",
-  //     description: perfection.description || "",
-  //     description2: perfection.description2 || "",
-  //     description3: perfection.description3 || "",
-  //     icon: perfection.icon || "",
-  //     videoUrl: perfection.videoUrl || "",
-  //     Category: perfection.Category || "",
-  //     Type: perfection.Type || "",
-  //     Location: perfection.Location || "",
-  //   });
-  //   setFeaturesAmenities(perfection.FeaturesAmenities || []);
+  const handleEditPerfection = (perfection: Perfection) => {
+    setEditingPerfection(perfection);
+    setFormData({
+      Title: perfection.Title || "",
+      description: perfection.description || "",
+      description2: perfection.description2 || "",
+      description3: perfection.description3 || "",
+      videoUrl: perfection.videoUrl || "",
+      Category: perfection.Category || "",
+      Type: perfection.Type || "",
+      Location: perfection.Location || "",
+    });
+    setFeaturesAmenities(perfection.FeaturesAmenities || []);
 
-  //   // Convert extraFields object back to array for editing
-  //   if (perfection.extraFields) {
-  //     const fieldsArray: ExtraField[] = Object.entries(
-  //       perfection.extraFields
-  //     ).map(([icon, value]) => {
-  //       // Split the value into fieldName and fieldValue
-  //       const [fieldName, ...fieldValueParts] = value.split(": ");
-  //       const fieldValue = fieldValueParts.join(": "); // In case fieldValue contains ": "
+    // Convert extraFields object back to array for editing
+    if (perfection.extraFields) {
+      const fieldsArray: ExtraField[] = Object.entries(
+        perfection.extraFields
+      ).map(([icon, value]) => {
+        const [fieldName, ...fieldValueParts] = value.split(": ");
+        const fieldValue = fieldValueParts.join(": ");
+        return {
+          icon,
+          fieldName: fieldName || "",
+          fieldValue: fieldValue || "",
+        };
+      });
+      setExtraFields(fieldsArray);
+    } else {
+      setExtraFields([]);
+    }
 
-  //       return {
-  //         icon,
-  //         fieldName: fieldName || "",
-  //         fieldValue: fieldValue || "",
-  //       };
-  //     });
-  //     setExtraFields(fieldsArray);
-  //   } else {
-  //     setExtraFields([]);
-  //   }
-
-  //   setShowForm(true);
-  // };
+    setShowForm(true);
+  };
 
   if (isLoading) {
     return (
@@ -595,25 +587,31 @@ const PerfectionsPage = () => {
                   )}
                 </div>
 
-                {/* Icon Upload */}
+                {/* Main Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Main Image {!editingPerfection && "*"}
+                    Main Image (Featured) {!editingPerfection && "*"}
                   </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    This will be the first image in gallery (index 0) and used as featured image
+                  </p>
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleIconChange}
+                    onChange={handleMainImageChange}
                     required={!editingPerfection}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
-                  {iconFile && (
+                  {mainImageFile && (
                     <div className="mt-2">
                       <img
-                        src={URL.createObjectURL(iconFile)}
-                        alt="Icon Preview"
+                        src={URL.createObjectURL(mainImageFile)}
+                        alt="Main Image Preview"
                         className="w-16 h-16 object-cover rounded-md border"
                       />
+                      <p className="text-xs text-green-600 mt-1">
+                        ✓ This will be saved as the first gallery image (index 0)
+                      </p>
                     </div>
                   )}
                 </div>
@@ -634,11 +632,14 @@ const PerfectionsPage = () => {
                   />
                 </div>
 
-                {/* Gallery Images */}
+                {/* Additional Gallery Images */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Gallery Images
+                    Additional Gallery Images
                   </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    These will be added after the main image in the gallery
+                  </p>
                   <input
                     type="file"
                     accept="image/*"
@@ -647,15 +648,24 @@ const PerfectionsPage = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                   {galleryFiles.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {galleryFiles.map((file, index) => (
-                        <img
-                          key={index}
-                          src={URL.createObjectURL(file)}
-                          alt={`Gallery ${index + 1}`}
-                          className="w-20 h-20 object-cover rounded-md border"
-                        />
-                      ))}
+                    <div className="mt-2">
+                      <div className="flex flex-wrap gap-2">
+                        {galleryFiles.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Gallery ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-md border"
+                            />
+                            <span className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+                              #{index + 2}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-blue-600 mt-1">
+                        These will be saved as gallery images from index 1 onwards
+                      </p>
                     </div>
                   )}
                 </div>
@@ -896,7 +906,7 @@ const PerfectionsPage = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                          Image
+                          Main Image
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Title
@@ -910,9 +920,9 @@ const PerfectionsPage = () => {
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Location
                         </th>
-                        {/* <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                          Extra Fields
-                        </th> */}
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Gallery Images
+                        </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Status
                         </th>
@@ -925,16 +935,16 @@ const PerfectionsPage = () => {
                       {perfections.map((p: Perfection) => (
                         <tr key={p.id} className="hover:bg-gray-50">
                           <td className="px-4 py-2">
-                            {p.galleryImages?.[0] ? (
+                            {p.galleryImages?.[0] ? ( // ✅ Show first gallery image as main image
                               <img
                                 src={p.galleryImages[0]}
-                                alt="Image"
+                                alt="Main"
                                 className="w-10 h-10 rounded-md object-cover"
                               />
                             ) : (
                               <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
                                 <span className="text-xs text-gray-500">
-                                  No Icon
+                                  No Image
                                 </span>
                               </div>
                             )}
@@ -949,21 +959,18 @@ const PerfectionsPage = () => {
                           <td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">
                             {p.Location}
                           </td>
-                          {/* <td className="px-4 py-2">
-                            <div className="flex flex-wrap gap-1">
-                              {p.extraFields && Object.entries(p.extraFields).slice(0, 3).map(([icon, value], index) => (
-                                <span key={index} className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-xs">
-                                  {renderIcon(icon, 12)}
-                                  {value}
-                                </span>
-                              ))}
-                              {p.extraFields && Object.keys(p.extraFields).length > 3 && (
-                                <span className="text-xs text-gray-500">
-                                  +{Object.keys(p.extraFields).length - 3} more
+                          <td className="px-4 py-2">
+                            <div className="flex items-center gap-1">
+                              <span className="text-xs text-gray-600">
+                                {p.galleryImages?.length || 0} images
+                              </span>
+                              {p.galleryImages && p.galleryImages.length > 1 && (
+                                <span className="text-xs text-green-600">
+                                  (+{p.galleryImages.length - 1})
                                 </span>
                               )}
                             </div>
-                          </td> */}
+                          </td>
                           <td className="px-4 py-2">
                             <span
                               className={`px-2 py-1 text-xs rounded-full ${
@@ -979,13 +986,13 @@ const PerfectionsPage = () => {
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex space-x-2">
-                              {/* <button
+                              <button
                                 onClick={() => handleEditPerfection(p)}
                                 className="text-blue-600 hover:text-blue-900 text-sm font-medium cursor-pointer"
                                 disabled={deleting}
                               >
                                 Edit
-                              </button> */}
+                              </button>
                               <button
                                 onClick={() => handleDeletePerfection(p.id)}
                                 className="text-red-600 hover:text-red-900 text-sm font-medium cursor-pointer"

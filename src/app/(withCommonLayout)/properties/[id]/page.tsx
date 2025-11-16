@@ -233,7 +233,7 @@ export default function ProjectDetailPage() {
       {/* @ts-ignore */}
       <FeaturesAmenities  features={project.FeaturesAmenities} />
       <Video url= {project.videoUrl} />
-      <GalleryPage images ={project.galleryImages} />
+      <GalleryPage  images ={project.galleryImages} />
       <Enquiry />
       <Testimonials />
       <OurAwardsandRecognition />

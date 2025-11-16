@@ -4,14 +4,6 @@ import { X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function GalleryPage({images}:any) {
-  // const images = [
-  //   "https://picsum.photos/600/400?random=1",
-  //   "https://picsum.photos/600/400?random=2",
-  //   "https://picsum.photos/600/400?random=3",
-  //   "https://picsum.photos/600/400?random=4",
-  //   "https://picsum.photos/600/400?random=5",
-  //   "https://picsum.photos/600/400?random=6",
-  // ];
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -39,21 +31,26 @@ export default function GalleryPage({images}:any) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {images.map((img:any, idx:any) => (
-          <div
-            key={idx}
-            className="cursor-pointer overflow-hidden"
-            onClick={() => setSelectedImage(img)}
-          >
-            <img
-              src={img}
-              alt={`Gallery ${idx}`}
-              className="w-full md:h-[573px] object-cover transform hover:scale-105 transition duration-300"
-            />
-          </div>
-        ))}
+   <div>
+  
+  {/* Remaining Images */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+    {images.slice(1).map((img: any, idx: number) => (
+      <div
+        key={idx}
+        className="cursor-pointer overflow-hidden rounded-lg"
+        onClick={() => setSelectedImage(img)}
+      >
+        <img
+          src={img}
+          alt={`Gallery ${idx}`}
+          className="w-full h-full object-cover hover:scale-105 transition duration-300"
+        />
       </div>
+    ))}
+  </div>
+</div>
+
 
       {/* Modal */}
      {selectedImage && (
