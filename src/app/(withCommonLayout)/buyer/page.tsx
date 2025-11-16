@@ -21,7 +21,7 @@ const Buyer = () => {
       <Enquiry />
       <BuyerContact />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

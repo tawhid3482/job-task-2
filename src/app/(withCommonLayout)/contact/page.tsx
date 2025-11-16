@@ -18,7 +18,7 @@ const Contact = () => {
       <ContactInfo></ContactInfo>
       <Enquiry />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

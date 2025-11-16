@@ -56,14 +56,14 @@ const ProjectCard = ({ project }: { project: Project }) => (
             ))}
 
             {/* Display FeaturesAmenities if available */}
-            {project.FeaturesAmenities?.map((feature, index) => (
+            {/* {project.FeaturesAmenities?.map((feature, index) => (
               <p key={index} className="text-xs sm:text-sm flex items-start gap-2">
                 <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
                 <span>
                   <span className="font-medium">Feature:</span> {feature.text}
                 </span>
               </p>
-            ))}
+            ))} */}
 
             {/* Explore Button */}
             <motion.div

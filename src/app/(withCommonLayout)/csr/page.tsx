@@ -20,7 +20,7 @@ const CSR = () => {
 
       <CSRFeature />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

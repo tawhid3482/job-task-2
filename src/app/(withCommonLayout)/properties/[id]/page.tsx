@@ -111,7 +111,7 @@ export default function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <LandownerBanner
-        img={project?.coverImage || "https://i.postimg.cc/2jxr3Zx0/Luxury-Flat-for-Sale-in-Bashundhara-Concord-Seven-Heights-1.jpg"}
+        img={project?.galleryImages[1] || "https://i.postimg.cc/2jxr3Zx0/Luxury-Flat-for-Sale-in-Bashundhara-Concord-Seven-Heights-1.jpg"}
         title="Properties"
         text={project.Title}
       />
@@ -236,7 +236,7 @@ export default function ProjectDetailPage() {
       <GalleryPage  images ={project.galleryImages} />
       <Enquiry />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 }

@@ -10,7 +10,7 @@ const ConcernsPage = () => {
       <Concerns />
       <Ourconcerns />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

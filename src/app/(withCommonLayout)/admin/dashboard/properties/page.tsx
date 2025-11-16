@@ -62,7 +62,7 @@ const IconPicker = ({
       >
         <div className="flex items-center gap-3">
           {selectedIcon ? (
-            <>b
+            <>
               {(() => {
                 const IconComponent = getIconComponent(selectedIcon);
                 return IconComponent ? <IconComponent size={20} /> : null;
@@ -173,7 +173,7 @@ interface Perfection {
   description3: string;
   FeaturesAmenities?: FeatureAmenity[];
   videoUrl: string;
-  galleryImages: string[]; 
+  galleryImages: string[]; // Main Image: index 0, Cover Image: index 1, Others: index 2+
   Category: string;
   Type: string;
   Location: string;
@@ -230,6 +230,7 @@ const PerfectionsPage = () => {
   );
   const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
 
@@ -294,6 +295,12 @@ const PerfectionsPage = () => {
     }
   };
 
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setCoverImageFile(e.target.files[0]);
+    }
+  };
+
   const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setGalleryFiles(Array.from(e.target.files));
@@ -330,18 +337,24 @@ const PerfectionsPage = () => {
     try {
       let galleryUrls: string[] = [];
 
-      // Upload main image first (if selected)
+      // Upload main image first (index 0)
       if (mainImageFile) {
         const mainImageUrl = await uploadImageToCPanel(mainImageFile);
-        galleryUrls.push(mainImageUrl); // ✅ Main image will be at index 0
+        galleryUrls.push(mainImageUrl); // ✅ Main image at index 0
       }
 
-      // Upload additional gallery images
+      // Upload cover image second (index 1)
+      if (coverImageFile) {
+        const coverImageUrl = await uploadImageToCPanel(coverImageFile);
+        galleryUrls.push(coverImageUrl); // ✅ Cover image at index 1
+      }
+
+      // Upload additional gallery images (index 2+)
       if (galleryFiles.length > 0) {
         const additionalGalleryUrls = await Promise.all(
           galleryFiles.map((file) => uploadImageToCPanel(file))
         );
-        galleryUrls = [...galleryUrls, ...additionalGalleryUrls]; // ✅ Additional images after main image
+        galleryUrls = [...galleryUrls, ...additionalGalleryUrls]; // ✅ Additional images from index 2
       }
 
       // Convert extraFields to the required format
@@ -359,7 +372,7 @@ const PerfectionsPage = () => {
         description3: formData.description3,
         FeaturesAmenities: featuresAmenities.filter((fa) => fa.icon && fa.text),
         videoUrl: formData.videoUrl,
-        galleryImages: galleryUrls, // ✅ Main image at index 0, then gallery images
+        galleryImages: galleryUrls, // ✅ Main: index 0, Cover: index 1, Others: index 2+
         Category: formData.Category,
         Type: formData.Type,
         Location: formData.Location,
@@ -412,6 +425,7 @@ const PerfectionsPage = () => {
     setFeaturesAmenities([]);
     setExtraFields([]);
     setMainImageFile(null);
+    setCoverImageFile(null);
     setGalleryFiles([]);
     setEditingPerfection(null);
   };
@@ -590,10 +604,10 @@ const PerfectionsPage = () => {
                 {/* Main Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Main Image (Featured) {!editingPerfection && "*"}
+                    Main Image {!editingPerfection && "*"}
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
-                    This will be the first image in gallery (index 0) and used as featured image
+                    This will be the first image in gallery (index 0)
                   </p>
                   <input
                     type="file"
@@ -610,7 +624,36 @@ const PerfectionsPage = () => {
                         className="w-16 h-16 object-cover rounded-md border"
                       />
                       <p className="text-xs text-green-600 mt-1">
-                        ✓ This will be saved as the first gallery image (index 0)
+                        ✓ This will be saved as gallery image at index 0
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Cover Image Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Cover Image {!editingPerfection && "*"}
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    This will be the second image in gallery (index 1)
+                  </p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverImageChange}
+                    required={!editingPerfection}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                  {coverImageFile && (
+                    <div className="mt-2">
+                      <img
+                        src={URL.createObjectURL(coverImageFile)}
+                        alt="Cover Image Preview"
+                        className="w-16 h-16 object-cover rounded-md border"
+                      />
+                      <p className="text-xs text-green-600 mt-1">
+                        ✓ This will be saved as gallery image at index 1
                       </p>
                     </div>
                   )}
@@ -638,7 +681,7 @@ const PerfectionsPage = () => {
                     Additional Gallery Images
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
-                    These will be added after the main image in the gallery
+                    These will be added after main and cover images (from index 2)
                   </p>
                   <input
                     type="file"
@@ -664,7 +707,7 @@ const PerfectionsPage = () => {
                         ))}
                       </div>
                       <p className="text-xs text-blue-600 mt-1">
-                        These will be saved as gallery images from index 1 onwards
+                        These will be saved as gallery images from index 2 onwards
                       </p>
                     </div>
                   )}
@@ -750,7 +793,7 @@ const PerfectionsPage = () => {
                   )}
                 </div>
 
-                {/* Extra Fields - NEW FORMAT */}
+                {/* Extra Fields */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-md font-medium text-gray-900">
@@ -909,6 +952,9 @@ const PerfectionsPage = () => {
                           Main Image
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Cover Image
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Title
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
@@ -935,7 +981,7 @@ const PerfectionsPage = () => {
                       {perfections.map((p: Perfection) => (
                         <tr key={p.id} className="hover:bg-gray-50">
                           <td className="px-4 py-2">
-                            {p.galleryImages?.[0] ? ( // ✅ Show first gallery image as main image
+                            {p.galleryImages?.[0] ? ( // ✅ Main Image at index 0
                               <img
                                 src={p.galleryImages[0]}
                                 alt="Main"
@@ -944,7 +990,22 @@ const PerfectionsPage = () => {
                             ) : (
                               <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
                                 <span className="text-xs text-gray-500">
-                                  No Image
+                                  No Main
+                                </span>
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-4 py-2">
+                            {p.galleryImages?.[1] ? ( // ✅ Cover Image at index 1
+                              <img
+                                src={p.galleryImages[1]}
+                                alt="Cover"
+                                className="w-10 h-10 rounded-md object-cover"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
+                                <span className="text-xs text-gray-500">
+                                  No Cover
                                 </span>
                               </div>
                             )}
@@ -964,9 +1025,9 @@ const PerfectionsPage = () => {
                               <span className="text-xs text-gray-600">
                                 {p.galleryImages?.length || 0} images
                               </span>
-                              {p.galleryImages && p.galleryImages.length > 1 && (
+                              {p.galleryImages && p.galleryImages.length > 2 && (
                                 <span className="text-xs text-green-600">
-                                  (+{p.galleryImages.length - 1})
+                                  (+{p.galleryImages.length - 2})
                                 </span>
                               )}
                             </div>

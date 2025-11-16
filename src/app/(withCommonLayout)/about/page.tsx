@@ -16,7 +16,7 @@ const AboutPage = () => {
             <GreenLivingSection/>
             <About2/>
             <Testimonials/>
-            <OurAwardsandRecognition/>
+            {/* <OurAwardsandRecognition/> */}
         </div>
     );
 };

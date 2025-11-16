@@ -20,7 +20,7 @@ const Landowners = () => {
       <Enquiry />
       <Dream></Dream>
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

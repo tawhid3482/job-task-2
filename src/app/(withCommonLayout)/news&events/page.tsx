@@ -17,7 +17,7 @@ const News = () => {
       ></LandownerBanner>
       <NewsCards />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

@@ -19,7 +19,7 @@ const Gallery = () => {
       <GalleryPhoto />
       <GalleryVedio />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

@@ -10,7 +10,7 @@ const Residentials = () => {
       <Residential />
       <ResidentialCard />
       <Testimonials/>
-      <OurAwardsandRecognition/>
+      {/* <OurAwardsandRecognition/> */}
     </>
   );
 };

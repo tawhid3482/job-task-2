@@ -18,7 +18,7 @@ export default function Home() {
       <Heaven />
       <MapSection />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
       <FixedSocialSidebar />
     </div>
   );

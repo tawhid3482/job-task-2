@@ -35,7 +35,7 @@ export default function GalleryPage({images}:any) {
   
   {/* Remaining Images */}
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-    {images.slice(1).map((img: any, idx: number) => (
+    {images.slice(2).map((img: any, idx: number) => (
       <div
         key={idx}
         className="cursor-pointer overflow-hidden rounded-lg"

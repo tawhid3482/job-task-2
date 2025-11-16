@@ -16,7 +16,7 @@ const Blogs = () => {
       ></LandownerBanner>
       <BlogsCard></BlogsCard>
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };

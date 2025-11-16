@@ -11,7 +11,7 @@ const Properties = () => {
       <PropertiesBanner />
       <ResidentialCard />
       <Testimonials />
-      <OurAwardsandRecognition />
+      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 };
