@@ -121,7 +121,7 @@ const Footer: React.FC = () => {
       </div>
 
       <motion.a
-        href="https://wa.me/8801711-181453"
+        href="https://wa.me/8801711181453"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed left-4 bottom-4 md:left-8 md:bottom-8 z-50 w-14 h-14 bg-[#783D1B] rounded-full flex items-center justify-center shadow-lg"
