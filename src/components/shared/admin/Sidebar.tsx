@@ -13,7 +13,8 @@ export default function Sidebar() {
     { href: "/admin/dashboard/schedule", label: "Schedule" },
     { href: "/admin/dashboard/blog", label: "Blog" },
     { href: "/admin/dashboard/gallery", label: "Gallery" },
-    { href: "/admin/dashboard/setting", label: "Setting" }
+    { href: "/admin/dashboard/setting", label: "Setting" },
+    { href: "/admin/dashboard/newAdmin", label: "Add New Admin" }
   ];
 
   return (

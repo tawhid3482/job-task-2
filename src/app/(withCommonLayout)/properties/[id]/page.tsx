@@ -111,7 +111,7 @@ export default function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <LandownerBanner
-        img={project?.galleryImages[1] || "https://i.postimg.cc/2jxr3Zx0/Luxury-Flat-for-Sale-in-Bashundhara-Concord-Seven-Heights-1.jpg"}
+        img={project?.galleryImages[1] }
         title="Properties"
         text={project.Title}
       />

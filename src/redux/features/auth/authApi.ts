@@ -35,6 +35,7 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.user],
     }),
+    
     forgotPassword: builder.mutation({
       query: (data) => ({
         url: `/auth/forgot-password`,
