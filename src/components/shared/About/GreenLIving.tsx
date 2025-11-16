@@ -39,30 +39,21 @@ const GreenLivingSection: React.FC = () => {
           variants={fadeUp}
         >
           {/* Main Title */}
-          <motion.div className="mb-10" variants={fadeUp}>
+          <motion.div className="" variants={fadeUp}>
             <h2 className="text-5xl font-extralight text-gray-800 uppercase relative inline-block">
               GREEN LIVING
-              {/* Title-এর নিচে নীল আন্ডারলাইন */}
-              <span className="absolute left-0 bottom-[-5px] h-0.5 w-1/3 bg-blue-700"></span>
+              <span className="absolute mt-2 left-0 bottom-[-5px] h-0.5 w-1/3 bg-blue-700"></span>
             </h2>
           </motion.div>
 
           {/* Main Content Paragraphs */}
           <motion.div className="text-gray-600 space-y-6 text-base" variants={fadeUp}>
             <p>
-              We think that in every approach towards our continuous advancement towards the future, there should be a positive impact at every turn. Our buildings are hence built future-ready. This is ensured by building our apartments keeping sustainability in mind with proper ventilation, landscaped rooftops, kid-friendly green areas for kids and their families to hang out. Hence our apartments will be the home for generations to come. In the race for positive change, we want to be the leading force.
+              We believe that there should be a positive effect at every stage of our ongoing progress towards the future. As a result, our structures are prepared for the future. This is made possible by designing our flats with sustainability in mind, including adequate ventilation, beautifully planted rooftops, and kid-friendly green spaces where families can congregate. As a result, future generations will live in our apartments. We aim to be in the forefront of the movement for constructive change.
             </p>
           </motion.div>
 
-          {/* Quote Section */}
-          <motion.div className="mt-12 lg:mt-24 border-l-4 border-blue-700 pl-4" variants={fadeUp}>
-            <p className="text-xl italic text-gray-800 font-medium">
-              "We should attempt to bring nature, houses, and human beings together in a higher unity."
-            </p>
-            <p className="text-base text-gray-600 mt-2 font-light">
-              - Ludwig Mies van der Rohe
-            </p>
-          </motion.div>
+       
         </motion.div>
 
         {/* ==================== Right Image Section ==================== */}
@@ -74,7 +65,7 @@ const GreenLivingSection: React.FC = () => {
           variants={imageFadeIn}
         >
           <img
-            src="https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Green-Living.jpg" 
+            src="https://i.postimg.cc/kgXBtMZY/Concord-Quasem-Waterfront-Luxurious-Apartment-for-Sale-in-Dhanmondi-12.jpg" 
             alt="Green Living and Rooftop Garden"
             className="w-full h-full object-cover shadow-2xl"
           />

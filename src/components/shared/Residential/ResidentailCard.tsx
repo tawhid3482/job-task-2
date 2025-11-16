@@ -33,7 +33,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
     <Link href={`/properties/${project.id}`} className="block h-full">
       <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer w-full h-full flex flex-col bg-white">
         {/* Image Section - Fixed Height */}
-        <div className="relative overflow-hidden w-full h-64 sm:h-72 md:h-80 lg:h-[580px]">
+        <div className="relative overflow-hidden w-full h-full sm:h-72 lg:h-[580px]">
           <img
             src={project.galleryImages[0]} // Use first gallery image
             alt={project.Title}

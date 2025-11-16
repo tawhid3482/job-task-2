@@ -9,7 +9,7 @@ interface TeamMember {
   position: string;
   message: string;
   image: string;
-  layout: "left" | "right"; // Image left or right
+  layout: "left" | "right"; 
 }
 
 const About2: React.FC = () => {
@@ -19,26 +19,28 @@ const About2: React.FC = () => {
       id: 1,
       name: "Engr. Ruhul Amin",
       position: "Chairman",
-      message: `Chairman's Message: At Assist Holdings Limited, we believe that real estate is more than land and buildings — it's about building dreams, securing futures, and creating lasting value. From our very beginning, our goal has been to offer reliable, transparent, and innovative property solutions that empower people and strengthen communities. Our success is built on integrity, professionalism, and a deep commitment to our clients. As we move forward, we remain focused on expanding our services, improving customer experience, and contributing to the sustainable growth of our nation's real estate sector. Together, we are not just developing properties — we are developing trust.`,
-      image: "http://assistholdingsltd.com/images/1763280264964_chairman.jpg",
-      layout: "right"
+      message: `At Assist Holdings Limited, we believe that real estate is more than land and buildings — it's about building dreams, securing futures, and creating lasting value. From our very beginning, our goal has been to offer reliable, transparent, and innovative property solutions that empower people and strengthen communities. Our success is built on integrity, professionalism, and a deep commitment to our clients. As we move forward, we remain focused on expanding our services, improving customer experience, and contributing to the sustainable growth of our nation's real estate sector. Together, we are not just developing properties — we are developing trust.`,
+      image: "https://i.postimg.cc/k5wrR900/chairman.jpg",
+      layout: "right",
     },
     {
       id: 2,
-      name: "Mohammed Tohidur Rahman",
+      name: "Mohammad Tohidur Rahman",
       position: "Managing Director",
       message: `At Assist Holdings Limited, our mission is to make land ownership simple, secure, and profitable. We have built our reputation on trust, quality, and commitment — values that continue to guide us as we expand our footprint in the real estate market. Our focus remains on transparency, client satisfaction, and sustainable development. We are continuously improving our services, technology, and processes to meet the evolving needs of our valued clients and investors. We look forward to welcoming you to our growing family of satisfied landowners and investors.`,
-      image: "https://i.postimg.cc/wxL4GhFM/481247081-2995625383945511-6279249194017499974-n.jpg",
-      layout: "left"
+      image:
+        "https://i.postimg.cc/rF68kyMm/mm.jpg",
+      layout: "left",
     },
     {
       id: 3,
       name: "Ziaur Rahman",
       position: "Director & CEO",
       message: `Welcome to Assist Holdings Limited. Our company was founded on a vision to redefine real estate by combining modern development strategies with genuine care for our clients. Every project we undertake reflects our promise — to deliver quality, transparency, and long-term value. As CEO, I take pride in leading a team that is passionate about creating opportunities for investment and home ownership. We are dedicated to providing exceptional service and ensuring every client finds not just property, but peace of mind. Together, let's build a future where every investment grows with confidence.`,
-      image: "https://i.postimg.cc/HLb7gsKD/Whats-App-Image-2025-11-08-at-11-10-17-7478152d.jpg",
-      layout: "right"
-    }
+      image:
+        "https://i.postimg.cc/HLb7gsKD/Whats-App-Image-2025-11-08-at-11-10-17-7478152d.jpg",
+      layout: "right",
+    },
   ];
 
   // 📜 Framer Motion Variants
@@ -63,11 +65,17 @@ const About2: React.FC = () => {
   // 📜 Render Team Member Section
   const renderTeamMember = (member: TeamMember, index: number) => {
     const isImageRight = member.layout === "right";
-    
+
     return (
-      <div key={member.id} className="bg-black text-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden">
-        <div className={`max-w-7xl mx-auto flex flex-col lg:flex-row${isImageRight ? '-reverse' : ''} md:gap-10 items-stretch`}>
-          
+      <div
+        key={member.id}
+        className="bg-black text-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden"
+      >
+        <div
+          className={`max-w-7xl mx-auto flex flex-col lg:flex-row${
+            isImageRight ? "-reverse" : ""
+          } md:gap-10 items-stretch`}
+        >
           {/* Text Content Section */}
           <motion.div
             className="lg:w-1/2 pr-0 lg:pr-16 flex flex-col gap-5"
@@ -78,9 +86,14 @@ const About2: React.FC = () => {
           >
             {/* Main Content Paragraphs */}
             <motion.div className="text-base leading-relaxed" variants={fadeUp}>
-              <p className="whitespace-pre-line">{member.message}</p>
+              <p className="whitespace-pre-line text-justify ">
+                {member.message}
+              </p>
+
               <br />
-              <p className="font-semibold">{member.position}, Assist Holdings Limited</p>
+              <p className="font-semibold">
+                {member.position}, Assist Holdings Limited
+              </p>
             </motion.div>
 
             {/* Name and Position Section */}

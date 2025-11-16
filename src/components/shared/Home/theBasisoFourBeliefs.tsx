@@ -22,25 +22,25 @@ const beliefs: Belief[] = [
     id: "trust",
     title: "TRUST",
     description:
-      "Trustworthiness is one of our most prized values. Ensuring a culture that naturalizes the sense of reliability among the people involved enhances productivity, respect and helps strengthen the bond between the clients and us.",
+      "One of our most valued attributes is reliability. Maintaining a culture that fosters a sense of dependability among all parties involved improves respect, productivity, and the relationship between us and our clients.",
   },
   {
     id: "closeness",
     title: "CLOSENESS",
     description:
-      "Maintaining long-term, rewarding relationships with our clients is one of the principal things we transgress. Their happiness is our advancement towards success, and we make it happen by paying attention to the tiniest details.",
+      " One of the main things we fail to do is to maintain rewarding, long-term connections with our clients. Our progress towards success is based on their enjoyment, which we achieve by focussing on even the smallest aspects.",
   },
   {
     id: "uniqueness",
     title: "UNIQUENESS",
     description:
-      "We celebrate individuality and strategic differentiation. Our unique perspectives and creative problem-solving methods are what allow us to deliver distinctive value.",
+      "At Assist Holdings Limited, we take a different approach. Every one of our construction projects exhibits individuality on its own. Modern architecture, cutting-edge technology, and a significant level of sustainability all come together to create captivating outcomes.",
   },
   {
     id: "integrity",
     title: "INTEGRITY",
     description:
-      "We uphold uncompromising honesty and strong moral principles in all our dealings. Our commitment to integrity ensures transparency and accountability in every decision we make.",
+      "One of the core values that defines us is integrity. By amassing successes and accomplishments across the new path of our journey, we show integrity in our work and win our clients' trust.",
   },
 ];
 

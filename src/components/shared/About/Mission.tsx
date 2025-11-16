@@ -8,7 +8,7 @@ const aboutUsData = [
     title: "MISSION",
     imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Mission.jpg",
     description:
-      "At Assist Holdings Limited, our expedition  is to make property ownership accessible, transparent, and rewarding for everyone. We strive to empower individuals and investors through innovative land share opportunities, reliable real estate solutions, and a commitment to sustainable growth that builds communities and secures futures.",
+      "At Assist Holdings Limited, our mission is to provide innovative and sustainable real estate solutions that empower individuals and families to achieve their dream of property ownership. We are committed to delivering high-quality developments, transparent services, and lasting value for our clients, partners, and communities. And also empower individuals and families to achieve their dreams of land ownership by providing transparent, secure, and value-driven real estate and land share solutions. We are dedicated to building lasting trust through innovation, integrity, and excellence in every project we undertake.",
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const aboutUsData = [
     title: "VISION",
     imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Vision.jpg",
     description:
-      "Our vision is to become a trusted leader in the real estate and land share industry — transforming the way people invest in land by creating shared opportunities that drive prosperity, confidence, and long-term value across Bangladesh and beyond.",
+      "Our vision is to become a leading and trusted name in the real estate and land share industry, creating sustainable communities and unlocking opportunities that enhance the quality of life for our clients and future generations.",
   },
 ];
 
@@ -30,7 +30,7 @@ const AboutUsSection = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   return (
-    <div className="flex flex-col sm:flex-row  bg-black overflow-hidden">
+    <div className="flex flex-col sm:flex-row bg-black overflow-hidden">
       {aboutUsData.map((item) => (
         <div
           key={item.id}
@@ -61,19 +61,19 @@ const AboutUsSection = () => {
           {/* Text Content */}
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-8 z-10">
             <h2
-              className={`text-xl font-bold tracking-wide transition-all duration-700 ${
-                hoveredCard === item.id ? "text-xl" : "text-xl"
-              }`}
+              className={`font-bold tracking-wide transition-all duration-700 ${
+                hoveredCard === item.id ? "text-xl mb-4" : "text-xl"
+              } w-full`}
             >
               {item.title}
             </h2>
 
             {/* Description (Only on hover) */}
             <p
-              className={`max-w-md mt-4 text-sm sm:text-base transition-all duration-700 ease-in-out ${
+              className={`max-w-md text-sm sm:text-base transition-all duration-700 ease-in-out ${
                 hoveredCard === item.id
                   ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-10"
+                  : "opacity-0 translate-y-10 absolute"
               }`}
             >
               {item.description}

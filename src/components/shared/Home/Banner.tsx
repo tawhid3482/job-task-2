@@ -71,11 +71,11 @@ const BannerText: React.FC<{ data: BannerSlide; direction: "next" | "prev" }> = 
     <div
       className={`max-w-2xl transition-transform duration-1000 ease-out ${animationClasses}`}
     >
-      <p className="text-sm md:text-lg uppercase tracking-widest font-medium mb-1 text-[#E9EBDD]">
+      <p className="text-sm md:text-lg uppercase tracking-widest font-medium mb-1 text-[#F6BD2F]">
         {data.smallText}
       </p>
       <h3
-        className="leading-none tracking-wider uppercase text-[#E9EBDD] text-4xl md:text-[125px]"
+        className="leading-none tracking-wider uppercase text-[#F6BD2F] text-4xl md:text-[125px]"
         style={{ lineHeight: 1.2, fontWeight: 300 }}
       >
         {data.largeText}

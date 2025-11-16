@@ -1,5 +1,5 @@
 import React from 'react';
-const BACKGROUND_IMAGE_URL ="https://jcxbd.com/wp-content/uploads/2024/04/About-Us-Banner-2.jpg"
+const BACKGROUND_IMAGE_URL ="https://i.postimg.cc/mkgg18p2/Concord-Fresh-Meadows-Affordable-Luxury-Living-in-Bashundhara-7.jpg"
 const AboutBanner = () => {
     return (
             <div 
