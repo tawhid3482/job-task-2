@@ -21,17 +21,6 @@ const galleryApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.gallery],
     }),
-    // updateGallery: builder.mutation({
-    //   query: ({ galleryId, data }) => {
-    //     return {
-    //       url: `/gallery/update/${galleryId}`,
-    //       method: "PATCH",
-    //       data,
-    //     };
-    //   },
-    //   invalidatesTags: [tagTypes.gallery],
-    // }),
-
 
     deleteGallery: builder.mutation({
       query: (id: string) => ({
