@@ -12,21 +12,12 @@ import { isLoggedIn } from "@/services/auth.services";
 interface Gallery {
   id: string;
   videoUrl: string;
-  image: string[]; // Backend model অনুযায়ী "image" field (array)
+  image: string[]; 
 }
 
 const GalleryPage = () => {
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      router.push("/login");
-    }
-  }, [router]);
-
-  if (!isLoggedIn()) {
-    return null;
-  }
 
   const [createGallery, { isLoading: creating }] = useCreateGalleryMutation();
   const [deleteGallery, { isLoading: deleting }] = useDeleteGalleryMutation();

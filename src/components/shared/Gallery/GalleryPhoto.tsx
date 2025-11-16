@@ -209,7 +209,7 @@ const GalleryPage = () => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                      <div className="w-full h-full bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center">
                         <span className="text-6xl">🎬</span>
                       </div>
                     )}
@@ -223,7 +223,7 @@ const GalleryPage = () => {
                   </div>
 
                   {/* Video Title */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                  <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-4">
                     <p className="text-lg font-medium">Video Gallery</p>
                     <p className="text-sm text-gray-400">Click to play</p>
                   </div>

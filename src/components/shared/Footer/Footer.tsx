@@ -17,17 +17,17 @@ const Footer: React.FC = () => {
   const footerLinks = [
     [
       { name: "GALLERY", href: "/gallery" },
-      { name: "VIDEO", href: "/video" },
+      { name: "VIDEO", href: "/gallery" },
       { name: "Privacy Policy", href: "/privacy-policy" },
     ],
     [
-      { name: "CAREER", href: "/career" },
+      { name: "ABOUT US", href: "/about" },
       { name: "CSR", href: "/csr" },
       { name: "CONTACT", href: "/contact" },
     ],
     [
-      { name: "CONSTRUCTION STATUS", href: "/status" },
-      { name: "NEWS & EVENTS", href: "/news" },
+      { name: "OUR PROJECT", href: "/properties" },
+      { name: "NEWS & EVENTS", href: "/blog" },
     ],
   ];
 
