@@ -154,7 +154,7 @@
 //                 className={`w-[calc(100%/${visibleCount}-1.5rem)] shrink-0 overflow-hidden group cursor-pointer`}
 //               >
 //                 <div className="relative w-full h-full overflow-hidden">
-                
+
 //                   <img
 //                     src={
 //                       perfection.galleryImages?.[0] ||
@@ -186,9 +186,6 @@
 //                           </p>
 //                         )
 //                       )}
-
-                
-                 
 
 //                     {/* Explore Button */}
 //                     <motion.div
@@ -303,8 +300,6 @@
 
 // export default OurPerfections;
 
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
@@ -376,7 +371,9 @@ const OurPerfections: React.FC = () => {
   useEffect(() => {
     const fetchPerfections = async () => {
       try {
-        const res = await fetch(`https://assistholdingsltd.com/api/api/v1/perfections`);
+        const res = await fetch(
+          `https://assistholdingsltd.com/api/api/v1/perfections`
+        );
         const json = await res.json();
         setPerfections(Array.isArray(json.data) ? json.data : []);
       } catch (err) {
@@ -392,10 +389,10 @@ const OurPerfections: React.FC = () => {
     const updateVisibleCount = () => {
       const width = window.innerWidth;
 
-      if (width >= 1536) setVisibleCount(4);        // 2XL screen
-      else if (width >= 1050) setVisibleCount(3);   // Laptop
-      else if (width >= 640) setVisibleCount(2);    // Tablet
-      else setVisibleCount(1);                      // Phone
+      if (width >= 1536) setVisibleCount(4); // 2XL screen
+      else if (width >= 1050) setVisibleCount(3); // Laptop
+      else if (width >= 640) setVisibleCount(2); // Tablet
+      else setVisibleCount(1); // Phone
     };
 
     updateVisibleCount();
@@ -414,7 +411,8 @@ const OurPerfections: React.FC = () => {
   const maxIndex = Math.max(0, perfections.length - visibleCount);
   const totalSegments = perfections.length - visibleCount + 1;
 
-  const nextSlide = () => setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  const nextSlide = () =>
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
 
   return (
@@ -455,15 +453,17 @@ const OurPerfections: React.FC = () => {
                 style={{ width: `${100 / visibleCount}%` }}
               >
                 <div className="relative w-full h-full overflow-hidden">
-                  <img
-                    src={
-                      perfection.galleryImages?.[0] ||
-                      perfection.icon ||
-                      "/default-image.jpg"
-                    }
-                    alt={perfection.Title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  <div className="relative w-full  bg-black overflow-hidden group">
+                    <img
+                      src={
+                        perfection.galleryImages?.[0] ||
+                        perfection.icon ||
+                        "/default-image.jpg"
+                      }
+                      alt={perfection.Title}
+                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
 
                   {/* Hover overlay */}
                   <motion.div
@@ -473,12 +473,17 @@ const OurPerfections: React.FC = () => {
                     transition={{ duration: 0.5 }}
                   >
                     {perfection.extraFields &&
-                      Object.entries(perfection.extraFields).map(([icon, value], index) => (
-                        <p key={index} className="text-sm text-gray-200 mb-2 flex items-center gap-2">
-                          <span className="w-1 h-1 border border-white"></span>
-                          <span>{value}</span>
-                        </p>
-                      ))}
+                      Object.entries(perfection.extraFields).map(
+                        ([icon, value], index) => (
+                          <p
+                            key={index}
+                            className="text-sm text-gray-200 mb-2 flex items-center gap-2"
+                          >
+                            <span className="w-1 h-1 border border-white"></span>
+                            <span>{value}</span>
+                          </p>
+                        )
+                      )}
 
                     <motion.div
                       variants={buttonVariants}
@@ -544,7 +549,9 @@ const OurPerfections: React.FC = () => {
             onClick={prevSlide}
             disabled={currentIndex === 0}
             className={`p-2 mr-4 ${
-              currentIndex === 0 ? "text-gray-500" : "text-white hover:text-red-600"
+              currentIndex === 0
+                ? "text-gray-500"
+                : "text-white hover:text-red-600"
             }`}
           >
             <FaArrowLeftLong className="text-4xl" />
@@ -554,7 +561,9 @@ const OurPerfections: React.FC = () => {
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
             className={`p-2 mr-6 ${
-              currentIndex === maxIndex ? "text-gray-500" : "text-white hover:text-red-600"
+              currentIndex === maxIndex
+                ? "text-gray-500"
+                : "text-white hover:text-red-600"
             }`}
           >
             <FaArrowRightLong className="text-4xl" />
@@ -578,4 +587,3 @@ const OurPerfections: React.FC = () => {
 };
 
 export default OurPerfections;
-
