@@ -462,7 +462,7 @@ const OurPerfections: React.FC = () => {
                       "/default-image.jpg"
                     }
                     alt={perfection.Title}
-                    className="w-full h-full md:h-[620px] object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
 
                   {/* Hover overlay */}
