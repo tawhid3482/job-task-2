@@ -73,7 +73,7 @@ const ContactInfo: React.FC = () => {
           </motion.h2>
           
           <motion.p variants={itemVariants} className="text-sm text-gray-300 mb-2">
-            Central Office
+            Corporate Office 
           </motion.p>
           
           <motion.a 

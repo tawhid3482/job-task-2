@@ -114,7 +114,7 @@ const About2: React.FC = () => {
             <img
               src={member.image}
               alt={member.name}
-              className="w-full h-[500px] object-cover shadow-2xl rounded-lg"
+              className="w-full h-full object-cover shadow-2xl rounded-lg"
             />
           </motion.div>
         </div>

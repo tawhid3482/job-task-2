@@ -8,7 +8,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { usePathname } from "next/navigation";
-import Logo from "../../../../public/logo.png";
+import Logo from "../../../../public/logo-icon.png";
 import { useCreateScheduleMutation } from "@/redux/features/schedule/scheduleApi";
 
 const menuItems = [
