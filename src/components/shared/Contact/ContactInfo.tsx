@@ -54,7 +54,7 @@ const ContactInfo: React.FC = () => {
             href="assistholdingslimited@gmail.com" 
             className="text-white hover:text-blue-500 transition-colors duration-300 mb-1"
           >
-            assistholdingslimited@gmail.com
+            info@assistholdingsltd.com
           </motion.a>
           
           <motion.a 

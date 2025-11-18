@@ -9,7 +9,7 @@ interface TeamMember {
   position: string;
   message: string;
   image: string;
-  layout: "left" | "right"; 
+  layout: "left" | "right";
 }
 
 const About2: React.FC = () => {
@@ -28,8 +28,7 @@ const About2: React.FC = () => {
       name: "Mohammad Tohidur Rahman",
       position: "Managing Director",
       message: `At Assist Holdings Limited, our mission is to make land ownership simple, secure, and profitable. We have built our reputation on trust, quality, and commitment — values that continue to guide us as we expand our footprint in the real estate market. Our focus remains on transparency, client satisfaction, and sustainable development. We are continuously improving our services, technology, and processes to meet the evolving needs of our valued clients and investors. We look forward to welcoming you to our growing family of satisfied landowners and investors.`,
-      image:
-        "https://i.postimg.cc/rF68kyMm/mm.jpg",
+      image: "https://i.postimg.cc/rF68kyMm/mm.jpg",
       layout: "left",
     },
     {
@@ -40,6 +39,14 @@ const About2: React.FC = () => {
       image:
         "https://i.postimg.cc/HLb7gsKD/Whats-App-Image-2025-11-08-at-11-10-17-7478152d.jpg",
       layout: "right",
+    },
+    {
+      id: 4,
+      name: "Md.Imam Hossain",
+      position: "Director-Business Development",
+      message: `As the Director of Business Development, I am pleased to extend our commitment to delivering reliable, transparent, and high-quality real estate solutions. Our mission is to ensure that every client receives exceptional service, personalized support, and strategic guidance throughout their property journey.At Assist Holdings Limited, we continuously work to expand opportunities, strengthen partnerships, and introduce innovative approaches that add true value to your investments. Your trust motivates us to maintain the highest standards of professionalism and integrity.Should you require any assistance, property consultation, or investment guidance, please feel free to reach out. We are always here to support your goals.Thank you for choosing Assist Holdings Limited.`,
+      image: "http://assistholdingsltd.com/images/1763466457292_rsz_today.jpg",
+      layout: "left",
     },
   ];
 
