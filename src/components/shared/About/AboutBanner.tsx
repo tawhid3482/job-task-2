@@ -22,7 +22,7 @@ const AboutBanner = () => {
             <div className="relative text-center p-4 space-y-2">
                 {/* Small text "PROPERTIES" */}
                 <p className="text-sm tracking-widest uppercase mb-2 opacity-100">
-                    About
+                    About us
                 </p>
                 
                 {/* Large main title "CONCRETE WONDERS" */}
@@ -30,8 +30,9 @@ const AboutBanner = () => {
                     text-2xl md:text-7xl  
                     font-light 
                     tracking-wider
+                    uppercase
                 ">
-                   VALUE BREEDS VOLUME
+                  Better To Be Trusted Than Famous
                 </h1>
             </div>
 

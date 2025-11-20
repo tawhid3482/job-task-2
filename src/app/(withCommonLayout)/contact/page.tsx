@@ -10,10 +10,10 @@ const Contact = () => {
     <div>
       <LandownerBanner
         img={
-          "https://jcxbd.com/wp-content/uploads/2024/04/Page-Banners-Contact.jpg"
+          "http://assistholdingsltd.com/images/1763635196097_contact_us_banner.jpg"
         }
         title="contact"
-        text="HAPPY TO HELP"
+        text="Feel Free to Contact Us for Any Queries"
       ></LandownerBanner>
       <ContactInfo></ContactInfo>
       <Enquiry />

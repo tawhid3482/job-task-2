@@ -5,11 +5,9 @@ const LandownerBanner = ({img,title,text}:any) => {
     return (
         <div>
             <div 
-            // 1. Set the background image and cover the container.
             style={{ 
                 backgroundImage: `url(${img})`,
             }}
-            // 2. Add classes for height, background size/position, and flex for centering.
             className="
                 h-96 md:h-[552px]
                 bg-cover bg-center 

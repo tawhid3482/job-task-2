@@ -1,12 +1,11 @@
-"use client"
+"use client";
 import { useGetAllPropertiesQuery } from "@/redux/features/properties/propertiesApi";
 import React from "react";
 const BACKGROUND_IMAGE_URL =
-  "https://jcxbd.com/wp-content/uploads/2024/11/Properties-Banner.webp";
+  "http://assistholdingsltd.com/images/1763634652229_types-of-construction-insurance-cover_va5mhk.webp";
 
 const PropertiesBanner = () => {
   const { data } = useGetAllPropertiesQuery(null);
-
 
   return (
     <div>
@@ -28,7 +27,7 @@ const PropertiesBanner = () => {
         <div className="relative text-center p-4">
           {/* Small text "PROPERTIES" */}
           <p className="text-sm tracking-widest uppercase mb-2 opacity-80">
-            PROPERTIES
+            PROJECT
           </p>
 
           {/* Large main title "CONCRETE WONDERS" */}
@@ -37,9 +36,10 @@ const PropertiesBanner = () => {
                     text-2xl md:text-6xl  
                     font-extralight 
                     tracking-wider
+                    uppercase
                 "
           >
-            CONCRETE WONDERS
+            Every Detail Reflects Our promise of no Compromise in Quality
           </h1>
         </div>
       </div>

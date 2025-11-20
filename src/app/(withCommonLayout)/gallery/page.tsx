@@ -8,11 +8,11 @@ const Gallery = () => {
     <div>
       <LandownerBanner
         img={
-          "https://static.vecteezy.com/system/resources/thumbnails/022/527/605/small/house-of-dream-idea-real-estate-illustration-ai-generative-free-photo.jpg"
+          "http://assistholdingsltd.com/images/1763635971904_civil-engineering.jpg"
         }
         title="Gallery
 "
-        text="REVISITING MEMORIES"
+        text="Going Back To The Memories"
       ></LandownerBanner>
       <GalleryPhoto />
       <Testimonials />

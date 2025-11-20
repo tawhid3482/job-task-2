@@ -42,7 +42,7 @@ const About2: React.FC = () => {
     },
     {
       id: 4,
-      name: "Md.Imam Hossain",
+      name: "Md. Imam Hossain",
       position: "Director-Business Development",
       message: `As the Director of Business Development, I am pleased to extend our commitment to delivering reliable, transparent, and high-quality real estate solutions. Our mission is to ensure that every client receives exceptional service, personalized support, and strategic guidance throughout their property journey.At Assist Holdings Limited, we continuously work to expand opportunities, strengthen partnerships, and introduce innovative approaches that add true value to your investments. Your trust motivates us to maintain the highest standards of professionalism and integrity.Should you require any assistance, property consultation, or investment guidance, please feel free to reach out. We are always here to support your goals.Thank you for choosing Assist Holdings Limited.`,
       image: "http://assistholdingsltd.com/images/1763466457292_rsz_today.jpg",

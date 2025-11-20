@@ -9,7 +9,7 @@ const Blogs = () => {
     <div>
       <LandownerBanner
         img={
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFCMAi7IM8iI8AJEspf7un_x1Cjmm6c937-A&s"
+          "http://assistholdingsltd.com/images/1763634652229_types-of-construction-insurance-cover_va5mhk.webp"
         }
         title="blogs"
         // text="find your nest"
