@@ -28,7 +28,7 @@ const LandownerBanner = ({img,title,text}:any) => {
                 
                 {/* Large main title "CONCRETE WONDERS" */}
                 <h1 className="
-                    text-2xl md:text-7xl  
+                    text-2xl md:text-6xl  
                     font-light 
                     tracking-wider uppercase
                 ">
