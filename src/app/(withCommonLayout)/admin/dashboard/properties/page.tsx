@@ -155,6 +155,7 @@ const IconPicker = ({
 };
 
 interface FeatureAmenity {
+  id: number;
   icon: string;
   text: string;
 }
@@ -173,7 +174,7 @@ interface Perfection {
   description3: string;
   FeaturesAmenities?: FeatureAmenity[];
   videoUrl: string;
-  galleryImages: string[]; // Main Image: index 0, Cover Image: index 1, Others: index 2+
+  galleryImages: string[];
   Category: string;
   Type: string;
   Location: string;
@@ -232,6 +233,7 @@ const PerfectionsPage = () => {
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [existingGalleryImages, setExistingGalleryImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
   // Function to render any icon by name
@@ -248,20 +250,29 @@ const PerfectionsPage = () => {
     return null;
   };
 
-  // ✅ Add new feature amenity
+  // ✅ Add new feature amenity - user manually number দেবে
   const addFeatureAmenity = () => {
-    setFeaturesAmenities([...featuresAmenities, { icon: "", text: "" }]);
+    // User manually number input দেবে, তাই আমরা শুধু empty field add করব
+    setFeaturesAmenities([
+      ...featuresAmenities, 
+      { id: 0, icon: "", text: "" } // ID user দেবে
+    ]);
   };
 
   // ✅ Update feature amenity
   const updateFeatureAmenity = (
     index: number,
-    field: "icon" | "text",
-    value: string
+    field: "id" | "icon" | "text",
+    value: string | number
   ) => {
     const updated = [...featuresAmenities];
-    updated[index][field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setFeaturesAmenities(updated);
+  };
+
+  // ✅ Remove feature amenity
+  const removeFeatureAmenity = (index: number) => {
+    setFeaturesAmenities(featuresAmenities.filter((_, i) => i !== index));
   };
 
   // ✅ Add new extra field
@@ -335,26 +346,38 @@ const PerfectionsPage = () => {
     setUploading(true);
 
     try {
-      let galleryUrls: string[] = [];
+      // Create a new array for gallery URLs to avoid mutation
+      let galleryUrls: string[] = [...existingGalleryImages];
 
-      // Upload main image first (index 0)
+      // Upload new main image if provided
       if (mainImageFile) {
         const mainImageUrl = await uploadImageToCPanel(mainImageFile);
-        galleryUrls.push(mainImageUrl); // ✅ Main image at index 0
+        // Create a new array instead of mutating
+        galleryUrls = [mainImageUrl, ...galleryUrls.slice(1)];
       }
 
-      // Upload cover image second (index 1)
+      // Upload new cover image if provided
       if (coverImageFile) {
         const coverImageUrl = await uploadImageToCPanel(coverImageFile);
-        galleryUrls.push(coverImageUrl); // ✅ Cover image at index 1
+        // Create a new array instead of mutating
+        if (galleryUrls.length > 0) {
+          galleryUrls = [galleryUrls[0], coverImageUrl, ...galleryUrls.slice(2)];
+        } else {
+          galleryUrls = [coverImageUrl];
+        }
       }
 
-      // Upload additional gallery images (index 2+)
+      // Upload additional gallery images
       if (galleryFiles.length > 0) {
         const additionalGalleryUrls = await Promise.all(
           galleryFiles.map((file) => uploadImageToCPanel(file))
         );
-        galleryUrls = [...galleryUrls, ...additionalGalleryUrls]; // ✅ Additional images from index 2
+        
+        // Create new array with main, cover and new additional images
+        galleryUrls = [
+          ...galleryUrls.slice(0, 2),
+          ...additionalGalleryUrls
+        ];
       }
 
       // Convert extraFields to the required format
@@ -365,14 +388,17 @@ const PerfectionsPage = () => {
         }
       });
 
+      // User যেভাবে number দিয়েছে সেভাবেই save হবে, sorting করা হবে না
+      const featuresToSave = featuresAmenities.filter((fa) => fa.icon && fa.text && fa.id > 0);
+
       const perfectionData = {
         Title: formData.Title,
         description: formData.description,
         description2: formData.description2,
         description3: formData.description3,
-        FeaturesAmenities: featuresAmenities.filter((fa) => fa.icon && fa.text),
+        FeaturesAmenities: featuresToSave,
         videoUrl: formData.videoUrl,
-        galleryImages: galleryUrls, // ✅ Main: index 0, Cover: index 1, Others: index 2+
+        galleryImages: galleryUrls,
         Category: formData.Category,
         Type: formData.Type,
         Location: formData.Location,
@@ -427,6 +453,7 @@ const PerfectionsPage = () => {
     setMainImageFile(null);
     setCoverImageFile(null);
     setGalleryFiles([]);
+    setExistingGalleryImages([]);
     setEditingPerfection(null);
   };
 
@@ -447,7 +474,21 @@ const PerfectionsPage = () => {
       Type: perfection.Type || "",
       Location: perfection.Location || "",
     });
-    setFeaturesAmenities(perfection.FeaturesAmenities || []);
+    
+    // Set features exactly as they were saved
+    if (perfection.FeaturesAmenities) {
+      const featuresWithIds = (perfection.FeaturesAmenities as any[]).map((fa: any) => ({
+        id: fa.id || 0,
+        icon: fa.icon || "",
+        text: fa.text || "",
+      }));
+      setFeaturesAmenities(featuresWithIds);
+    } else {
+      setFeaturesAmenities([]);
+    }
+
+    // Set existing gallery images
+    setExistingGalleryImages(perfection.galleryImages || []);
 
     // Convert extraFields object back to array for editing
     if (perfection.extraFields) {
@@ -608,6 +649,11 @@ const PerfectionsPage = () => {
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
                     This will be the first image in gallery (index 0)
+                    {editingPerfection && existingGalleryImages[0] && (
+                      <span className="text-green-600 ml-2">
+                        ✓ Current image will be kept if no new image selected
+                      </span>
+                    )}
                   </p>
                   <input
                     type="file"
@@ -616,15 +662,32 @@ const PerfectionsPage = () => {
                     required={!editingPerfection}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
+                  
+                  {/* Show current main image in edit mode */}
+                  {editingPerfection && existingGalleryImages[0] && (
+                    <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-1">Current Main Image:</p>
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={existingGalleryImages[0]}
+                          alt="Current Main"
+                          className="w-16 h-16 object-cover rounded-md border"
+                        />
+                        <span className="text-xs text-gray-500">Index: 0</span>
+                      </div>
+                    </div>
+                  )}
+
                   {mainImageFile && (
                     <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-1">New Main Image:</p>
                       <img
                         src={URL.createObjectURL(mainImageFile)}
                         alt="Main Image Preview"
                         className="w-16 h-16 object-cover rounded-md border"
                       />
                       <p className="text-xs text-green-600 mt-1">
-                        ✓ This will be saved as gallery image at index 0
+                        ✓ This will replace the main image at index 0
                       </p>
                     </div>
                   )}
@@ -637,6 +700,11 @@ const PerfectionsPage = () => {
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
                     This will be the second image in gallery (index 1)
+                    {editingPerfection && existingGalleryImages[1] && (
+                      <span className="text-green-600 ml-2">
+                        ✓ Current image will be kept if no new image selected
+                      </span>
+                    )}
                   </p>
                   <input
                     type="file"
@@ -645,15 +713,32 @@ const PerfectionsPage = () => {
                     required={!editingPerfection}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
+                  
+                  {/* Show current cover image in edit mode */}
+                  {editingPerfection && existingGalleryImages[1] && (
+                    <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-1">Current Cover Image:</p>
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={existingGalleryImages[1]}
+                          alt="Current Cover"
+                          className="w-16 h-16 object-cover rounded-md border"
+                        />
+                        <span className="text-xs text-gray-500">Index: 1</span>
+                      </div>
+                    </div>
+                  )}
+
                   {coverImageFile && (
                     <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-1">New Cover Image:</p>
                       <img
                         src={URL.createObjectURL(coverImageFile)}
                         alt="Cover Image Preview"
                         className="w-16 h-16 object-cover rounded-md border"
                       />
                       <p className="text-xs text-green-600 mt-1">
-                        ✓ This will be saved as gallery image at index 1
+                        ✓ This will replace the cover image at index 1
                       </p>
                     </div>
                   )}
@@ -682,6 +767,11 @@ const PerfectionsPage = () => {
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
                     These will be added after main and cover images (from index 2)
+                    {editingPerfection && existingGalleryImages.length > 2 && (
+                      <span className="text-green-600 ml-2">
+                        ✓ Current {existingGalleryImages.length - 2} images will be replaced
+                      </span>
+                    )}
                   </p>
                   <input
                     type="file"
@@ -690,14 +780,17 @@ const PerfectionsPage = () => {
                     onChange={handleGalleryChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
-                  {galleryFiles.length > 0 && (
+                  
+                  {/* Show current additional gallery images in edit mode */}
+                  {editingPerfection && existingGalleryImages.length > 2 && (
                     <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-1">Current Additional Images:</p>
                       <div className="flex flex-wrap gap-2">
-                        {galleryFiles.map((file, index) => (
+                        {existingGalleryImages.slice(2).map((img, index) => (
                           <div key={index} className="relative">
                             <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Gallery ${index + 1}`}
+                              src={img}
+                              alt={`Gallery ${index + 2}`}
                               className="w-20 h-20 object-cover rounded-md border"
                             />
                             <span className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
@@ -706,14 +799,34 @@ const PerfectionsPage = () => {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {galleryFiles.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-1">New Additional Images:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {galleryFiles.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Gallery ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-md border"
+                            />
+                            <span className="absolute top-1 right-1 bg-blue-600 text-white text-xs px-1 rounded">
+                              #{index + 2}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                       <p className="text-xs text-blue-600 mt-1">
-                        These will be saved as gallery images from index 2 onwards
+                        These will replace additional gallery images from index 2 onwards
                       </p>
                     </div>
                   )}
                 </div>
 
-                {/* Features & Amenities */}
+                {/* Features & Amenities - User manually number input দেবে */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-md font-medium text-gray-900">
@@ -730,12 +843,28 @@ const PerfectionsPage = () => {
 
                   <div className="space-y-4">
                     {featuresAmenities.map((feature, index) => (
-                      <div
-                        key={index}
-                        className="border rounded-lg p-4 bg-gray-50"
-                      >
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                          {/* Serial Number Input - User manually number দেবে */}
                           <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Number *
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              required
+                              value={feature.id || ""}
+                              onChange={(e) =>
+                                updateFeatureAmenity(index, "id", parseInt(e.target.value) || 0)
+                              }
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                              placeholder="1, 2, 3..."
+                            />
+                          </div>
+
+                          {/* Icon Picker */}
+                          <div className="md:col-span-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Select Icon *
                             </label>
@@ -747,7 +876,8 @@ const PerfectionsPage = () => {
                             />
                           </div>
 
-                          <div className="md:col-span-3">
+                          {/* Feature Text */}
+                          <div className="md:col-span-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Feature Text *
                             </label>
@@ -757,24 +887,14 @@ const PerfectionsPage = () => {
                                 required
                                 value={feature.text}
                                 onChange={(e) =>
-                                  updateFeatureAmenity(
-                                    index,
-                                    "text",
-                                    e.target.value
-                                  )
+                                  updateFeatureAmenity(index, "text", e.target.value)
                                 }
                                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                                 placeholder="Swimming Pool, Free WiFi, etc."
                               />
                               <button
                                 type="button"
-                                onClick={() =>
-                                  setFeaturesAmenities(
-                                    featuresAmenities.filter(
-                                      (_, i) => i !== index
-                                    )
-                                  )
-                                }
+                                onClick={() => removeFeatureAmenity(index)}
                                 className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                               >
                                 ×
@@ -782,6 +902,21 @@ const PerfectionsPage = () => {
                             </div>
                           </div>
                         </div>
+
+                        {/* Preview */}
+                        {feature.id && feature.icon && feature.text && (
+                          <div className="mt-3 p-3 bg-white rounded border border-green-200">
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                                  #{feature.id}
+                                </span>
+                                {renderIcon(feature.icon, 20)}
+                                <span className="text-sm font-medium">{feature.text}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -967,6 +1102,9 @@ const PerfectionsPage = () => {
                           Location
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Features
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                           Gallery Images
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
@@ -981,7 +1119,7 @@ const PerfectionsPage = () => {
                       {perfections.map((p: Perfection) => (
                         <tr key={p.id} className="hover:bg-gray-50">
                           <td className="px-4 py-2">
-                            {p.galleryImages?.[0] ? ( // ✅ Main Image at index 0
+                            {p.galleryImages?.[0] ? (
                               <img
                                 src={p.galleryImages[0]}
                                 alt="Main"
@@ -996,7 +1134,7 @@ const PerfectionsPage = () => {
                             )}
                           </td>
                           <td className="px-4 py-2">
-                            {p.galleryImages?.[1] ? ( // ✅ Cover Image at index 1
+                            {p.galleryImages?.[1] ? (
                               <img
                                 src={p.galleryImages[1]}
                                 alt="Cover"
@@ -1019,6 +1157,29 @@ const PerfectionsPage = () => {
                           <td className="px-4 py-2 text-sm">{p.Type}</td>
                           <td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">
                             {p.Location}
+                          </td>
+                          <td className="px-4 py-2">
+                            <div className="max-w-xs">
+                              {p.FeaturesAmenities && p.FeaturesAmenities.length > 0 ? (
+                                <div className="flex flex-wrap gap-1">
+                                  {p.FeaturesAmenities.slice(0, 3).map((feature: any, index: number) => (
+                                    <span 
+                                      key={index}
+                                      className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                                    >
+                                      {feature.text}
+                                    </span>
+                                  ))}
+                                  {p.FeaturesAmenities.length > 3 && (
+                                    <span className="text-xs text-gray-500">
+                                      +{p.FeaturesAmenities.length - 3} more
+                                    </span>
+                                  )}
+                                </div>
+                              ) : (
+                                <span className="text-gray-400 text-sm">No features</span>
+                              )}
+                            </div>
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex items-center gap-1">

@@ -6,11 +6,13 @@ import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
 
 interface Amenity {
+  id: number;
   icon: string;
   text: string;
 }
 
 interface AmenityCardProps {
+  serialNumber: number;
   icon: string;
   text: string;
 }
@@ -36,11 +38,16 @@ const getIconComponent = (iconName: string): React.ElementType => {
   return FaIcons.FaQuestion;
 };
 
-const AmenityCard: React.FC<AmenityCardProps> = ({ icon, text }) => {
+const AmenityCard: React.FC<AmenityCardProps> = ({ serialNumber, icon, text }) => {
   const IconComponent = getIconComponent(icon);
   
   return (
-    <div className="flex flex-col items-center text-center p-4">
+    <div className="flex flex-col items-center text-center p-4 relative">
+      {/* Serial Number - Design একই রেখে */}
+      {/* <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#214187] text-white rounded-full flex items-center justify-center text-xs font-bold z-10">
+        {serialNumber}
+      </div> */}
+      
       <IconComponent className="w-10 h-10 md:w-16 md:h-16 text-[#214187] mb-3" />
       <p className="text-gray-900 font-medium leading-snug">
         {text.split(' ').map((word, index) => (
@@ -56,6 +63,11 @@ interface FeaturesAmenitiesProps {
 }
 
 const FeaturesAmenities: React.FC<FeaturesAmenitiesProps> = ({ features }) => {
+  console.log(features)
+  
+  // Sort features by ID to ensure serial order
+  const sortedFeatures = [...features].sort((a, b) => a.id - b.id);
+
   return (
     <div className="bg-[#F2F2F2] py-16 md:py-28 font-sans">
       <div className="max-w-7xl mx-auto px-4">
@@ -81,9 +93,10 @@ const FeaturesAmenities: React.FC<FeaturesAmenitiesProps> = ({ features }) => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-y-12 md:gap-y-20">
-          {features.map((amenity, index) => (
+          {sortedFeatures.map((amenity) => (
             <AmenityCard
-              key={index}
+              key={amenity.id}
+              serialNumber={amenity.id}
               icon={amenity.icon}
               text={amenity.text}
             />
