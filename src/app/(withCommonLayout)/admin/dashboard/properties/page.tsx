@@ -831,109 +831,7 @@ const PerfectionsPage = () => {
                   )}
                 </div>
 
-                {/* Features & Amenities */}
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-md font-medium text-gray-900">
-                      Features & Amenities
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={addFeatureAmenity}
-                      className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                    >
-                      + Add Feature
-                    </button>
-                  </div>
-
-                  <div className="space-y-4">
-                    {featuresAmenities.map((feature, index) => (
-                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                          {/* Serial Number Input */}
-                          <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Number *
-                            </label>
-                            <input
-                              type="number"
-                              min="1"
-                              required
-                              value={feature.id || ""}
-                              onChange={(e) =>
-                                updateFeatureAmenity(index, "id", parseInt(e.target.value) || 0)
-                              }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                              placeholder="1, 2, 3..."
-                            />
-                          </div>
-
-                          {/* Icon Picker */}
-                          <div className="md:col-span-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Select Icon *
-                            </label>
-                            <IconPicker
-                              selectedIcon={feature.icon}
-                              onIconSelect={(icon) =>
-                                updateFeatureAmenity(index, "icon", icon)
-                              }
-                            />
-                          </div>
-
-                          {/* Feature Text */}
-                          <div className="md:col-span-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Feature Text *
-                            </label>
-                            <div className="flex gap-2">
-                              <input
-                                type="text"
-                                required
-                                value={feature.text}
-                                onChange={(e) =>
-                                  updateFeatureAmenity(index, "text", e.target.value)
-                                }
-                                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                                placeholder="Swimming Pool, Free WiFi, etc."
-                              />
-                              <button
-                                type="button"
-                                onClick={() => removeFeatureAmenity(index)}
-                                className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                              >
-                                ×
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Preview */}
-                        {feature.id && feature.icon && feature.text && (
-                          <div className="mt-3 p-3 bg-white rounded border border-green-200">
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-2">
-                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
-                                  #{feature.id}
-                                </span>
-                                {renderIcon(feature.icon, 20)}
-                                <span className="text-sm font-medium">{feature.text}</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {featuresAmenities.length === 0 && (
-                    <p className="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
-                      No features added yet. Click "Add Feature" to start.
-                    </p>
-                  )}
-                </div>
-
-                {/* Sat A Glance - Features & Amenities এর মতোই serial number system */}
+                    {/* Sat A Glance - Features & Amenities এর মতোই serial number system */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-md font-medium text-gray-900">
@@ -1071,6 +969,110 @@ const PerfectionsPage = () => {
                     </p>
                   )}
                 </div>
+
+                {/* Features & Amenities */}
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-md font-medium text-gray-900">
+                      Features & Amenities
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={addFeatureAmenity}
+                      className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                    >
+                      + Add Feature
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {featuresAmenities.map((feature, index) => (
+                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                          {/* Serial Number Input */}
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Number *
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              required
+                              value={feature.id || ""}
+                              onChange={(e) =>
+                                updateFeatureAmenity(index, "id", parseInt(e.target.value) || 0)
+                              }
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                              placeholder="1, 2, 3..."
+                            />
+                          </div>
+
+                          {/* Icon Picker */}
+                          <div className="md:col-span-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Select Icon *
+                            </label>
+                            <IconPicker
+                              selectedIcon={feature.icon}
+                              onIconSelect={(icon) =>
+                                updateFeatureAmenity(index, "icon", icon)
+                              }
+                            />
+                          </div>
+
+                          {/* Feature Text */}
+                          <div className="md:col-span-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Feature Text *
+                            </label>
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                required
+                                value={feature.text}
+                                onChange={(e) =>
+                                  updateFeatureAmenity(index, "text", e.target.value)
+                                }
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                placeholder="Swimming Pool, Free WiFi, etc."
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeFeatureAmenity(index)}
+                                className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Preview */}
+                        {feature.id && feature.icon && feature.text && (
+                          <div className="mt-3 p-3 bg-white rounded border border-green-200">
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                                  #{feature.id}
+                                </span>
+                                {renderIcon(feature.icon, 20)}
+                                <span className="text-sm font-medium">{feature.text}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {featuresAmenities.length === 0 && (
+                    <p className="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
+                      No features added yet. Click "Add Feature" to start.
+                    </p>
+                  )}
+                </div>
+
+            
 
                 <div className="flex justify-end gap-3 pt-4">
                   <button

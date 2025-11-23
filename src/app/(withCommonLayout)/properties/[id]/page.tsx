@@ -214,17 +214,17 @@ export default function ProjectDetailPage() {
                       </div> */}
 
                       {/* Icon */}
-                      <div className="flex items-center justify-center w-10 h-10 bg-[#FBC341] text-white rounded-lg shrink-0  md:mr-20">
+                      <div className="flex items-center justify-center w-10 h-10 bg-[#FBC341] text-white rounded-lg shrink-0 mr-2">
                         {renderIcon(field.iconName, 20)}
                       </div>
 
                       {/* Field Name and Value */}
                       <div className="flex-1 ">
-                        <div className="">
+                        
                           <span className="font-semibold text-[#003C8C] text-sm sm:text-base  md:mr-20">
                             {field.fieldName}
                           </span>
-                        </div>
+                      
                       </div>
                       <div className="flex-1">
                         <span className="text-gray-700 text-sm sm:text-base flex-1 w-full">

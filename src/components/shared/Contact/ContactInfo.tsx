@@ -42,9 +42,9 @@ const ContactInfo: React.FC = () => {
           </motion.p>
           
           <motion.address variants={itemVariants} className="not-italic text-sm text-gray-300 mb-6 leading-relaxed">
-           Plot:11 (Level-9), Main Road, Block:D,
+           Plot: 11 (Level-9), Main Road, Block: D,
             <br />
-            Aftabnagar,Dhaka-1212, 
+            Aftabnagar, Dhaka-1212, 
             <br />
             Bangladesh
           </motion.address>
