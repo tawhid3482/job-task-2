@@ -22,13 +22,13 @@ interface Project {
   id: string;
   Title: string;
   Type: string;
-  coverImage:string;
+  coverImage: string;
   extraFields: Record<string, string>;
   description: string;
   description2: string;
   description3: string;
   status: string;
-  FeaturesAmenities:any
+  FeaturesAmenities: any;
   videoUrl: string;
   galleryImages: string[];
 }
@@ -45,6 +45,33 @@ const renderIcon = (iconName: string, size: number = 20) => {
     }
   }
   return null;
+};
+
+// Function to parse extraFields and sort by serial number
+const parseAndSortExtraFields = (extraFields: Record<string, string>) => {
+  if (!extraFields) return [];
+
+  const parsedFields = Object.entries(extraFields).map(([key, value]) => {
+    // Split key to get serial number and icon name
+    const [serialPart, ...iconParts] = key.split("_");
+    const serialNumber = parseInt(serialPart) || 0;
+    const iconName = iconParts.join("_");
+
+    // Split value to get field name and field value
+    const [fieldName, ...fieldValueParts] = value.split(": ");
+    const fieldValue = fieldValueParts.join(": ");
+
+    return {
+      serialNumber,
+      iconName,
+      fieldName: fieldName?.trim() || "",
+      fieldValue: fieldValue?.trim() || "",
+      originalKey: key,
+    };
+  });
+
+  // Sort by serial number
+  return parsedFields.sort((a, b) => a.serialNumber - b.serialNumber);
 };
 
 export default function ProjectDetailPage() {
@@ -87,6 +114,8 @@ export default function ProjectDetailPage() {
     if (id) fetchProject();
   }, [id]);
 
+  console.log(project);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -108,10 +137,13 @@ export default function ProjectDetailPage() {
     );
   }
 
+  // Parse and sort extra fields
+  const sortedExtraFields = parseAndSortExtraFields(project.extraFields);
+
   return (
     <div className="min-h-screen bg-white">
       <LandownerBanner
-        img={project?.galleryImages[1] }
+        img={project?.galleryImages[1]}
         title="Properties"
         text={project.Title}
       />
@@ -161,60 +193,48 @@ export default function ProjectDetailPage() {
           <div className="w-full lg:w-1/3">
             <div className="w-full space-y-4 sm:space-y-6">
               {/* Dynamic Extra Fields Display */}
-              {project.extraFields &&
-                Object.entries(project.extraFields).map(
-                  ([iconName, fieldValue], index) => {
-                    // Split the value to get field name and value
-                    const [fieldName, ...valueParts] = fieldValue.split(": ");
-                    const fieldValueText = valueParts.join(": ");
+              {sortedExtraFields.length > 0 ? (
+                sortedExtraFields.map((field, index) => (
+                  <motion.div
+                    key={field.originalKey}
+                    className="flex items-start sm:items-center py-2 sm:py-3 border-b border-gray-200"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeOut",
+                      delay: index * 0.1,
+                    }}
+                  >
+                    <div className="flex flex-col items-center justify-center md:flex-row md:items-center w-full gap-3">
+                      {/* Serial Number Badge */}
+                      {/* <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold shrink-0">
+                        {field.serialNumber}
+                      </div> */}
 
-                    return (
-                      <motion.div
-                        key={iconName}
-                        className="flex items-start sm:items-center py-2 sm:py-3 border-b border-gray-200"
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: 0.5,
-                          ease: "easeOut",
-                          delay: index * 0.1,
-                        }}
-                      >
-                        <div className="flex flex-col sm:flex-row sm:items-center w-full ">
-                          {/* Icon and Field Name */}
-                          <div className="flex items-center gap-2 font-semibold text-[#003C8C] text-sm sm:text-base w-full sm:w-44 lg:w-20 shrink-0 mb-1 sm:mb-0">
-                            <span className="text-[#FBC341]">
-                              {renderIcon(iconName, 30)}
-                            </span>
-                          </div>
+                      {/* Icon */}
+                      <div className="flex items-center justify-center w-10 h-10 bg-[#FBC341] text-white rounded-lg shrink-0  md:mr-20">
+                        {renderIcon(field.iconName, 20)}
+                      </div>
 
-                          {/* Field Name */}
-                          <div className="flex items-center w-full">
-                            <span className="font-normal text-[#003C8C] text-sm sm:text-base wrap-break-word">
-                              {fieldName}
-                            </span>
-                         
-                          </div>
-
-                          {/* Field Value */}
-                          <div className="flex items-center w-full">
-                            <span className="font-normal text-gray-700 text-sm sm:text-base wrap-break-word">
-                                 <span className="text-gray-900 hidden sm:inline mr-2">
-                              :
-                            </span>
-                              {fieldValueText}
-                            </span>
-                          </div>
+                      {/* Field Name and Value */}
+                      <div className="flex-1 ">
+                        <div className="">
+                          <span className="font-semibold text-[#003C8C] text-sm sm:text-base  md:mr-20">
+                            {field.fieldName}
+                          </span>
                         </div>
-                      </motion.div>
-                    );
-                  }
-                )}
-
-              {/* If no extra fields */}
-              {(!project.extraFields ||
-                Object.keys(project.extraFields).length === 0) && (
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-gray-700 text-sm sm:text-base flex-1 w-full">
+                          {field.fieldValue}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
                 <motion.div
                   className="text-center py-8 text-gray-500"
                   initial={{ opacity: 0 }}
@@ -231,9 +251,9 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* @ts-ignore */}
-      <FeaturesAmenities  features={project.FeaturesAmenities} />
-      <Video url= {project.videoUrl} />
-      <GalleryPage  images ={project.galleryImages} />
+      <FeaturesAmenities features={project.FeaturesAmenities} />
+      <Video url={project.videoUrl} />
+      <GalleryPage images={project.galleryImages} />
       <Enquiry />
       <Testimonials />
       {/* <OurAwardsandRecognition /> */}

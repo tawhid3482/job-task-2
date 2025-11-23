@@ -161,6 +161,7 @@ interface FeatureAmenity {
 }
 
 interface ExtraField {
+  id: number; // ✅ Serial number manually add করার জন্য id field যোগ করা হয়েছে
   icon: string;
   fieldName: string;
   fieldValue: string;
@@ -252,10 +253,9 @@ const PerfectionsPage = () => {
 
   // ✅ Add new feature amenity - user manually number দেবে
   const addFeatureAmenity = () => {
-    // User manually number input দেবে, তাই আমরা শুধু empty field add করব
     setFeaturesAmenities([
       ...featuresAmenities, 
-      { id: 0, icon: "", text: "" } // ID user দেবে
+      { id: 0, icon: "", text: "" }
     ]);
   };
 
@@ -275,22 +275,22 @@ const PerfectionsPage = () => {
     setFeaturesAmenities(featuresAmenities.filter((_, i) => i !== index));
   };
 
-  // ✅ Add new extra field
+  // ✅ Add new extra field - user manually number দেবে
   const addExtraField = () => {
     setExtraFields([
       ...extraFields,
-      { icon: "", fieldName: "", fieldValue: "" },
+      { id: 0, icon: "", fieldName: "", fieldValue: "" }, // ✅ id field যোগ করা হয়েছে
     ]);
   };
 
   // ✅ Update extra field
   const updateExtraField = (
     index: number,
-    field: "icon" | "fieldName" | "fieldValue",
-    value: string
+    field: "id" | "icon" | "fieldName" | "fieldValue",
+    value: string | number
   ) => {
     const updated = [...extraFields];
-    updated[index][field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setExtraFields(updated);
   };
 
@@ -352,14 +352,12 @@ const PerfectionsPage = () => {
       // Upload new main image if provided
       if (mainImageFile) {
         const mainImageUrl = await uploadImageToCPanel(mainImageFile);
-        // Create a new array instead of mutating
         galleryUrls = [mainImageUrl, ...galleryUrls.slice(1)];
       }
 
       // Upload new cover image if provided
       if (coverImageFile) {
         const coverImageUrl = await uploadImageToCPanel(coverImageFile);
-        // Create a new array instead of mutating
         if (galleryUrls.length > 0) {
           galleryUrls = [galleryUrls[0], coverImageUrl, ...galleryUrls.slice(2)];
         } else {
@@ -373,7 +371,6 @@ const PerfectionsPage = () => {
           galleryFiles.map((file) => uploadImageToCPanel(file))
         );
         
-        // Create new array with main, cover and new additional images
         galleryUrls = [
           ...galleryUrls.slice(0, 2),
           ...additionalGalleryUrls
@@ -383,8 +380,9 @@ const PerfectionsPage = () => {
       // Convert extraFields to the required format
       const extraFieldsObj: Record<string, string> = {};
       extraFields.forEach((field) => {
-        if (field.icon && field.fieldName && field.fieldValue) {
-          extraFieldsObj[field.icon] = `${field.fieldName}: ${field.fieldValue}`;
+        if (field.icon && field.fieldName && field.fieldValue && field.id > 0) {
+          // ✅ id সহ save করবে যাতে order maintain করা যায়
+          extraFieldsObj[`${field.id}_${field.icon}`] = `${field.fieldName}: ${field.fieldValue}`;
         }
       });
 
@@ -494,10 +492,17 @@ const PerfectionsPage = () => {
     if (perfection.extraFields) {
       const fieldsArray: ExtraField[] = Object.entries(
         perfection.extraFields
-      ).map(([icon, value]) => {
+      ).map(([key, value]) => {
+        // ✅ key থেকে id এবং icon আলাদা করুন
+        const [idPart, ...iconParts] = key.split('_');
+        const icon = iconParts.join('_');
+        const id = parseInt(idPart) || 0;
+        
         const [fieldName, ...fieldValueParts] = value.split(": ");
         const fieldValue = fieldValueParts.join(": ");
+        
         return {
+          id,
           icon,
           fieldName: fieldName || "",
           fieldValue: fieldValue || "",
@@ -826,7 +831,7 @@ const PerfectionsPage = () => {
                   )}
                 </div>
 
-                {/* Features & Amenities - User manually number input দেবে */}
+                {/* Features & Amenities */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-md font-medium text-gray-900">
@@ -845,7 +850,7 @@ const PerfectionsPage = () => {
                     {featuresAmenities.map((feature, index) => (
                       <div key={index} className="border rounded-lg p-4 bg-gray-50">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                          {/* Serial Number Input - User manually number দেবে */}
+                          {/* Serial Number Input */}
                           <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Number *
@@ -928,11 +933,11 @@ const PerfectionsPage = () => {
                   )}
                 </div>
 
-                {/* Extra Fields */}
+                {/* Sat A Glance - Features & Amenities এর মতোই serial number system */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-md font-medium text-gray-900">
-                      Extra Fields
+                      Sat A Glance
                     </h3>
                     <button
                       type="button"
@@ -949,9 +954,27 @@ const PerfectionsPage = () => {
                         key={index}
                         className="border rounded-lg p-4 bg-gray-50"
                       >
-                        <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
-                          {/* Icon Picker */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                          {/* Serial Number Input - Features & Amenities এর মতোই */}
                           <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Number *
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              required
+                              value={field.id || ""}
+                              onChange={(e) =>
+                                updateExtraField(index, "id", parseInt(e.target.value) || 0)
+                              }
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                              placeholder="1, 2, 3..."
+                            />
+                          </div>
+
+                          {/* Icon Picker */}
+                          <div className="md:col-span-3">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Icon *
                             </label>
@@ -964,7 +987,7 @@ const PerfectionsPage = () => {
                           </div>
 
                           {/* Field Name */}
-                          <div className="md:col-span-2">
+                          <div className="md:col-span-3">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Field Name *
                             </label>
@@ -985,7 +1008,7 @@ const PerfectionsPage = () => {
                           </div>
 
                           {/* Field Value */}
-                          <div className="md:col-span-2">
+                          <div className="md:col-span-3">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Field Value *
                             </label>
@@ -1018,17 +1041,23 @@ const PerfectionsPage = () => {
                         </div>
 
                         {/* Preview how it will be saved */}
-                        {field.icon && field.fieldName && field.fieldValue && (
-                          <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
-                            <p className="text-xs text-blue-700">
-                              <strong>Will be saved as:</strong>
-                              <br />
-                              Key: <code>{field.icon}</code>
-                              <br />
-                              Value:{" "}
-                              <code>
-                                {field.fieldName}: {field.fieldValue}
-                              </code>
+                        {field.id && field.icon && field.fieldName && field.fieldValue && (
+                          <div className="mt-3 p-3 bg-white rounded border border-green-200">
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                                  #{field.id}
+                                </span>
+                                {renderIcon(field.icon, 20)}
+                                <span className="text-sm font-medium">
+                                  {field.fieldName}: {field.fieldValue}
+                                </span>
+                              </div>
+                            </div>
+                            <p className="text-xs text-blue-700 mt-2">
+                              <strong>Will be saved as:</strong><br />
+                              Key: <code>{field.id}_{field.icon}</code><br />
+                              Value: <code>{field.fieldName}: {field.fieldValue}</code>
                             </p>
                           </div>
                         )}
@@ -1038,8 +1067,7 @@ const PerfectionsPage = () => {
 
                   {extraFields.length === 0 && (
                     <p className="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
-                      No extra fields added yet. Click "Add Field" to create
-                      custom fields.
+                      No fields added yet. Click "Add Field" to create custom fields.
                     </p>
                   )}
                 </div>

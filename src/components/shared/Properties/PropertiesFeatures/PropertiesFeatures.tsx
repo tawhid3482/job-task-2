@@ -63,7 +63,7 @@ interface FeaturesAmenitiesProps {
 }
 
 const FeaturesAmenities: React.FC<FeaturesAmenitiesProps> = ({ features }) => {
-  console.log(features)
+  // console.log(features)
   
   // Sort features by ID to ensure serial order
   const sortedFeatures = [...features].sort((a, b) => a.id - b.id);
