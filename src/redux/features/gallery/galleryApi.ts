@@ -13,13 +13,23 @@ const galleryApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.gallery],
     }),
-
     getAllGallery: builder.query({
       query: () => ({
         url: "/gallery",
         method: "GET",
       }),
       providesTags: [tagTypes.gallery],
+    }),
+
+    updateGallery: builder.mutation({
+      query: ({ id, data }) => {
+        return {
+          url: `/gallery/update/${id}`,
+          method: "PATCH",
+          data,
+        };
+      },
+      invalidatesTags: [tagTypes.slider],
     }),
 
     deleteGallery: builder.mutation({
@@ -33,7 +43,8 @@ const galleryApi = baseApi.injectEndpoints({
 });
 
 export const {
-useCreateGalleryMutation,
-useGetAllGalleryQuery,
-useDeleteGalleryMutation
+  useCreateGalleryMutation,
+  useGetAllGalleryQuery,
+  useDeleteGalleryMutation,
+  useUpdateGalleryMutation
 } = galleryApi;

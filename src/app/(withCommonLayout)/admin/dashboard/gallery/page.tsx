@@ -6,6 +6,7 @@ import {
   useCreateGalleryMutation,
   useDeleteGalleryMutation,
   useGetAllGalleryQuery,
+  useUpdateGalleryMutation,
 } from "@/redux/features/gallery/galleryApi";
 import { isLoggedIn } from "@/services/auth.services";
 
@@ -18,8 +19,8 @@ interface Gallery {
 const GalleryPage = () => {
   const router = useRouter();
 
-
   const [createGallery, { isLoading: creating }] = useCreateGalleryMutation();
+  const [updateGallery, { isLoading: updating }] = useUpdateGalleryMutation();
   const [deleteGallery, { isLoading: deleting }] = useDeleteGalleryMutation();
 
   const {
@@ -38,19 +39,50 @@ const GalleryPage = () => {
     videoUrl: "",
   });
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [currentImages, setCurrentImages] = useState<string[]>([]); // ✅ Current images for editing
+  const [imagesToRemove, setImagesToRemove] = useState<string[]>([]); // ✅ Track images to remove
   const [uploading, setUploading] = useState(false);
+
+  // ✅ Set current images when editing
+  useEffect(() => {
+    if (editingGallery) {
+      setFormData({
+        videoUrl: editingGallery.videoUrl || "",
+      });
+      setCurrentImages(editingGallery.image || []);
+      setImageFiles([]);
+      setImagesToRemove([]);
+    }
+  }, [editingGallery]);
 
   // ✅ Multiple Image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      setImageFiles(files);
+      setImageFiles(prev => [...prev, ...files]);
     }
   };
 
-  // ✅ Remove single image from selection
-  const removeImage = (index: number) => {
+  // ✅ Remove single image from new selection
+  const removeNewImage = (index: number) => {
     setImageFiles(imageFiles.filter((_, i) => i !== index));
+  };
+
+  // ✅ Remove single current image (mark for removal)
+  const removeCurrentImage = (index: number, imageUrl: string) => {
+    setCurrentImages(currentImages.filter((_, i) => i !== index));
+    setImagesToRemove(prev => [...prev, imageUrl]);
+  };
+
+  // ✅ Cancel removal of current image
+  const cancelRemoveCurrentImage = (imageUrl: string) => {
+    // Find the index in imagesToRemove array
+    const index = imagesToRemove.indexOf(imageUrl);
+    if (index > -1) {
+      const newImagesToRemove = [...imagesToRemove];
+      newImagesToRemove.splice(index, 1);
+      setImagesToRemove(newImagesToRemove);
+    }
   };
 
   // ✅ Upload image to CPANEL
@@ -80,33 +112,43 @@ const GalleryPage = () => {
     setUploading(true);
 
     try {
-      let imageUrls: string[] = [];
+      let newImageUrls: string[] = [];
 
-      // Upload images if selected
+      // Upload new images if selected
       if (imageFiles.length > 0) {
-        imageUrls = await Promise.all(
+        newImageUrls = await Promise.all(
           imageFiles.map((file) => uploadImageToCPanel(file))
         );
       }
 
+      // Combine current images (excluding removed ones) with new images
+      const finalImages = [
+        ...currentImages.filter(img => !imagesToRemove.includes(img)),
+        ...newImageUrls
+      ];
+
       // Check if at least one field is filled
-      if (!formData.videoUrl && imageUrls.length === 0) {
+      if (!formData.videoUrl && finalImages.length === 0) {
         toast.error("Please select at least one image or enter a video URL");
         setUploading(false);
         return;
       }
 
       // ✅ Backend model অনুযায়ী data structure
-      const galleryData = {
+      const galleryPayload = {
         videoUrl: formData.videoUrl,
-        image: imageUrls, // ✅ "image" field (array) - Backend এর সাথে match
+        image: finalImages, // ✅ Final combined images array
       };
 
-
       if (editingGallery) {
+        // ✅ Update gallery with proper data structure
+        await updateGallery({ 
+          id: editingGallery.id, 
+          data: galleryPayload 
+        }).unwrap();
         toast.success("Gallery updated successfully!");
       } else {
-        await createGallery(galleryData).unwrap();
+        await createGallery(galleryPayload).unwrap();
         toast.success("Gallery created successfully!");
       }
 
@@ -134,6 +176,8 @@ const GalleryPage = () => {
   const resetForm = () => {
     setFormData({ videoUrl: "" });
     setImageFiles([]);
+    setCurrentImages([]);
+    setImagesToRemove([]);
     setEditingGallery(null);
   };
 
@@ -142,14 +186,15 @@ const GalleryPage = () => {
     if (showForm) resetForm();
   };
 
-//   const handleEditGallery = (gallery: Gallery) => {
-//     setEditingGallery(gallery);
-//     setFormData({
-//       videoUrl: gallery.videoUrl,
-//     });
-//     setImageFiles([]);
-//     setShowForm(true);
-//   };
+  const handleEditGallery = (gallery: Gallery) => {
+    setEditingGallery(gallery);
+    setShowForm(true);
+  };
+
+  const cancelEdit = () => {
+    resetForm();
+    setShowForm(false);
+  };
 
   if (isLoading) {
     return (
@@ -171,7 +216,7 @@ const GalleryPage = () => {
             <button
               onClick={handleFormToggle}
               className="bg-[#7A3E1B] hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-              disabled={uploading || creating}
+              disabled={uploading || creating || updating}
             >
               <span>+</span>
               <span>{showForm ? "Cancel" : "Add Gallery"}</span>
@@ -221,11 +266,11 @@ const GalleryPage = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
 
-                  {/* Selected Images Preview */}
+                  {/* New Selected Images Preview */}
                   {imageFiles.length > 0 && (
                     <div className="mt-4">
                       <h4 className="text-sm font-medium text-gray-700 mb-2">
-                        Selected Images ({imageFiles.length})
+                        New Selected Images ({imageFiles.length})
                       </h4>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                         {imageFiles.map((file, index) => (
@@ -237,13 +282,13 @@ const GalleryPage = () => {
                             />
                             <button
                               type="button"
-                              onClick={() => removeImage(index)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                              onClick={() => removeNewImage(index)}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 cursor-pointer"
                             >
                               ×
                             </button>
                             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 text-center">
-                              Image {index + 1}
+                              New {index + 1}
                             </div>
                           </div>
                         ))}
@@ -252,33 +297,57 @@ const GalleryPage = () => {
                   )}
 
                   {/* Current Images when Editing */}
-                  {editingGallery &&
-                    !imageFiles.length &&
-                    editingGallery.image &&
-                    editingGallery.image.length > 0 && (
-                      <div className="mt-4">
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">
-                          Current Images ({editingGallery.image.length})
-                        </h4>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                          {editingGallery.image.map((img, index) => (
-                            <div key={index} className="relative">
+                  {editingGallery && currentImages.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">
+                        Current Images ({currentImages.length})
+                        {imagesToRemove.length > 0 && (
+                          <span className="text-red-500 ml-2">
+                            ({imagesToRemove.length} marked for removal)
+                          </span>
+                        )}
+                      </h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {currentImages.map((img, index) => {
+                          const isMarkedForRemoval = imagesToRemove.includes(img);
+                          return (
+                            <div key={index} className={`relative group ${isMarkedForRemoval ? 'opacity-50' : ''}`}>
                               <img
                                 src={img}
                                 alt={`Current ${index + 1}`}
                                 className="w-full h-24 object-cover rounded-md border"
                               />
-                              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 text-center">
-                                Current {index + 1}
+                              {isMarkedForRemoval ? (
+                                <button
+                                  type="button"
+                                  onClick={() => cancelRemoveCurrentImage(img)}
+                                  className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-green-600"
+                                >
+                                  ↶
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => removeCurrentImage(index, img)}
+                                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                                >
+                                  ×
+                                </button>
+                              )}
+                              <div className={`absolute bottom-0 left-0 right-0 text-white text-xs p-1 text-center ${
+                                isMarkedForRemoval ? 'bg-red-500' : 'bg-black bg-opacity-50'
+                              }`}>
+                                {isMarkedForRemoval ? 'Will Remove' : `Current ${index + 1}`}
                               </div>
                             </div>
-                          ))}
-                        </div>
-                        <p className="text-xs text-gray-500 mt-2">
-                          Select new images to update current ones
-                        </p>
+                          );
+                        })}
                       </div>
-                    )}
+                      <p className="text-xs text-gray-500 mt-2">
+                        Click × to remove images, click ↶ to cancel removal
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Validation Message */}
@@ -292,18 +361,18 @@ const GalleryPage = () => {
                 <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
-                    onClick={handleFormToggle}
-                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100"
-                    disabled={uploading || creating}
+                    onClick={cancelEdit}
+                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    disabled={uploading || creating || updating}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={uploading || creating}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
+                    disabled={uploading || creating || updating}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
                   >
-                    {(uploading || creating) && (
+                    {(uploading || creating || updating) && (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     )}
                     {editingGallery ? "Update Gallery" : "Add Gallery"}
@@ -380,16 +449,16 @@ const GalleryPage = () => {
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex space-x-2">
-                              {/* <button
+                              <button
                                 onClick={() => handleEditGallery(gallery)}
-                                className="text-blue-600 hover:text-blue-900 text-sm font-medium cursor-pointer"
-                                disabled={deleting}
+                                className="text-blue-600 hover:text-blue-900 text-sm font-medium cursor-pointer px-3 py-1  rounded hover:bg-blue-50"
+                                disabled={updating}
                               >
                                 Edit
-                              </button> */}
+                              </button>
                               <button
                                 onClick={() => handleDeleteGallery(gallery.id)}
-                                className="text-red-600 hover:text-red-900 text-sm font-medium cursor-pointer"
+                                className="text-red-600 hover:text-red-900 text-sm font-medium cursor-pointer px-3 py-1  rounded hover:bg-red-50"
                                 disabled={deleting}
                               >
                                 {deleting ? "Deleting..." : "Delete"}

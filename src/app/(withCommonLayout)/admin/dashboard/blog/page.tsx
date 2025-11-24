@@ -122,8 +122,6 @@ const BlogsAdminPage = () => {
   };
 
   const handleDeleteBlog = async (id: string) => {
- 
-
     try {
       await deleteBlog(id).unwrap();
       toast.success("Blog deleted successfully!");
