@@ -1,7 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { useCreateTestimonialMutation, useDeleteTestimonialMutation, useGetAllTestimonialQuery, useUpdateTestimonialMutation } from "@/redux/features/testimonial/testimonialApi";
+import { 
+  useCreateTestimonialMutation, 
+  useDeleteTestimonialMutation, 
+  useGetAllTestimonialQuery, 
+  useUpdateTestimonialMutation 
+} from "@/redux/features/testimonial/testimonialApi";
 
 interface Testimonial {
   id: string;
@@ -41,6 +46,16 @@ const TestimonialsPage = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
+  const handleEditTestimonial = (testimonial: Testimonial) => {
+    setEditingTestimonial(testimonial);
+    setFormData({
+      content: testimonial.content,
+      name: testimonial.name,
+      Image: testimonial.Image,
+    });
+    setImageFile(null);
+    setShowForm(true);
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -84,7 +99,7 @@ const TestimonialsPage = () => {
       // Upload new image if selected
       if (imageFile) {
         imageUrl = await uploadImageToCPanel(imageFile);
-      } else if (!editingTestimonial) {
+      } else if (!editingTestimonial && !formData.Image) {
         toast.error("Please select an image");
         setUploading(false);
         return;
@@ -119,13 +134,15 @@ const TestimonialsPage = () => {
   };
 
   const handleDeleteTestimonial = async (id: string) => {
-    try {
-      await deleteTestimonial(id).unwrap();
-      toast.success("Testimonial deleted successfully!");
-      refetch();
-    } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to delete testimonial");
-    }
+   
+      try {
+        await deleteTestimonial(id).unwrap();
+        toast.success("Testimonial deleted successfully!");
+        refetch();
+      } catch (error: any) {
+        toast.error(error?.data?.message || "Failed to delete testimonial");
+      }
+    
   };
 
   const resetForm = () => {
@@ -142,8 +159,6 @@ const TestimonialsPage = () => {
     setShowForm(!showForm);
     if (showForm) resetForm();
   };
-
-
 
   if (isLoading) {
     return (
@@ -236,7 +251,7 @@ const TestimonialsPage = () => {
                         className="w-24 h-24 object-cover rounded-md border"
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        {editingTestimonial
+                        {editingTestimonial && !imageFile
                           ? "Current Image - Select new image to update"
                           : "Preview"}
                       </p>
@@ -248,7 +263,7 @@ const TestimonialsPage = () => {
                   <button
                     type="button"
                     onClick={handleFormToggle}
-                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100"
+                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100 cursor-pointer"
                     disabled={uploading || creating || updating}
                   >
                     Cancel
@@ -330,13 +345,13 @@ const TestimonialsPage = () => {
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex space-x-2">
-                              {/* <button
+                              <button
                                 onClick={() => handleEditTestimonial(t)}
                                 className="text-blue-600 hover:text-blue-900 text-sm font-medium"
                                 disabled={deleting}
                               >
                                 Edit
-                              </button> */}
+                              </button>
                               <button
                                 onClick={() => handleDeleteTestimonial(t.id)}
                                 className="text-red-600 hover:text-red-900 text-sm font-medium"

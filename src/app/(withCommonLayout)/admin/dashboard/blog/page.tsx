@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import {
-    useCreateBlogsMutation,
+  useCreateBlogsMutation,
   useDeleteBlogsMutation,
   useGetAllBlogsQuery,
+  useUpdateBlogsMutation,
 } from "@/redux/features/blogs/blogsApi";
 
 interface Blog {
@@ -20,6 +20,7 @@ interface Blog {
 
 const BlogsAdminPage = () => {
   const [createBlog, { isLoading: creating }] = useCreateBlogsMutation();
+  const [updateBlog, { isLoading: updating }] = useUpdateBlogsMutation();
   const [deleteBlog, { isLoading: deleting }] = useDeleteBlogsMutation();
 
   const { data: blogsData, isLoading, refetch } = useGetAllBlogsQuery(undefined, {
@@ -29,18 +30,26 @@ const BlogsAdminPage = () => {
   const blogs: Blog[] = blogsData?.data || blogsData || [];
 
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ title: "", content: "", Image: "" });
+  const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
+  const [formData, setFormData] = useState({ 
+    title: "", 
+    content: "", 
+    Image: "" 
+  });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // const router = useRouter();
+  useEffect(() => {
+    if (editingBlog) {
+      setFormData({
+        title: editingBlog.title,
+        content: editingBlog.content,
+        Image: editingBlog.Image
+      });
+      setShowForm(true);
+    }
+  }, [editingBlog]);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) router.push("/login");
-  // }, [router]);
-
-  // ✅ Image preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -73,13 +82,11 @@ const BlogsAdminPage = () => {
     setUploading(true);
 
     try {
-      if (!imageFile) {
-        toast.error("Please select an image");
-        setUploading(false);
-        return;
-      }
+      let imageUrl = formData.Image;
 
-      const imageUrl = await uploadImageToCPanel(imageFile);
+      if (imageFile) {
+        imageUrl = await uploadImageToCPanel(imageFile);
+      }
 
       const blogData = {
         title: formData.title,
@@ -87,20 +94,36 @@ const BlogsAdminPage = () => {
         Image: imageUrl,
       };
 
-      await createBlog(blogData).unwrap();
-      toast.success("Blog created successfully!");
+      if (editingBlog) {
+        // ✅ CORRECTED: Pass data in the format expected by the mutation
+        await updateBlog({ 
+          id: editingBlog.id, 
+          data: blogData  // 'data' property explicitly added
+        }).unwrap();
+        toast.success("Blog updated successfully!");
+      } else {
+        await createBlog(blogData).unwrap();
+        toast.success("Blog created successfully!");
+      }
 
       resetForm();
       setShowForm(false);
       refetch();
     } catch (err: any) {
+      console.error("Error:", err);
       toast.error(err?.data?.message || "Something went wrong!");
     } finally {
       setUploading(false);
     }
   };
 
+  const handleEditBlog = (blog: Blog) => {
+    setEditingBlog(blog);
+  };
+
   const handleDeleteBlog = async (id: string) => {
+ 
+
     try {
       await deleteBlog(id).unwrap();
       toast.success("Blog deleted successfully!");
@@ -113,11 +136,17 @@ const BlogsAdminPage = () => {
   const resetForm = () => {
     setFormData({ title: "", content: "", Image: "" });
     setImageFile(null);
+    setEditingBlog(null);
   };
 
   const handleFormToggle = () => {
     setShowForm(!showForm);
     if (showForm) resetForm();
+  };
+
+  const cancelEdit = () => {
+    resetForm();
+    setShowForm(false);
   };
 
   if (isLoading) {
@@ -138,7 +167,7 @@ const BlogsAdminPage = () => {
             <button
               onClick={handleFormToggle}
               className="bg-[#7A3E1B] hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-              disabled={uploading || creating}
+              disabled={uploading || creating || updating}
             >
               <span>+</span>
               <span>{showForm ? "Cancel" : "Add Blog"}</span>
@@ -148,7 +177,9 @@ const BlogsAdminPage = () => {
           {/* Form */}
           {showForm && (
             <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
-              <h2 className="text-lg font-semibold mb-4">Add New Blog</h2>
+              <h2 className="text-lg font-semibold mb-4">
+                {editingBlog ? "Edit Blog" : "Add New Blog"}
+              </h2>
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
@@ -166,6 +197,7 @@ const BlogsAdminPage = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Content *</label>
                   <textarea
                     required
+                    rows={6}
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
@@ -174,40 +206,49 @@ const BlogsAdminPage = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Image *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Image {!editingBlog && "*"}
+                  </label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    required
+                    required={!editingBlog}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                   {formData.Image && (
                     <div className="mt-2">
                       <img src={formData.Image} alt="Preview" className="w-24 h-24 object-cover rounded-md border" />
-                      <p className="text-xs text-gray-500 mt-1">Preview</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {editingBlog && !imageFile ? "Current Image" : "Preview"}
+                      </p>
                     </div>
+                  )}
+                  {editingBlog && !imageFile && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Leave empty to keep current image
+                    </p>
                   )}
                 </div>
 
                 <div className="md:col-span-2 flex justify-end gap-3 pt-4">
                   <button
                     type="button"
-                    onClick={handleFormToggle}
+                    onClick={cancelEdit}
                     className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100"
-                    disabled={uploading || creating}
+                    disabled={uploading || creating || updating}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={uploading || creating}
+                    disabled={uploading || creating || updating}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
                   >
-                    {uploading || creating && (
+                    {(uploading || creating || updating) && (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     )}
-                    Add Blog
+                    {editingBlog ? "Update Blog" : "Add Blog"}
                   </button>
                 </div>
               </form>
@@ -228,7 +269,8 @@ const BlogsAdminPage = () => {
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Content</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th className="px-4py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -240,9 +282,25 @@ const BlogsAdminPage = () => {
                           <td className="px-4 py-2 font-medium">{b.title}</td>
                           <td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">{b.content}</td>
                           <td className="px-4 py-2">
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              b.status === 'published' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {b.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2 flex gap-2">
+                            <button
+                              onClick={() => handleEditBlog(b)}
+                              className="text-blue-600 hover:text-blue-900 text-sm font-medium px-3 py-1  rounded hover:bg-blue-50"
+                              disabled={updating}
+                            >
+                              Edit
+                            </button>
                             <button
                               onClick={() => handleDeleteBlog(b.id)}
-                              className="text-red-600 hover:text-red-900 text-sm font-medium"
+                              className="text-red-600 hover:text-red-900 text-sm font-medium px-3 py-1 rounded hover:bg-red-50"
                               disabled={deleting}
                             >
                               {deleting ? "Deleting..." : "Delete"}

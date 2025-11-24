@@ -22,9 +22,9 @@ const sliderApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.slider],
     }),
     updateSlider: builder.mutation({
-      query: ({ sliderId, data }) => {
+      query: ({ id, data }) => {
         return {
-          url: `/slider/update/${sliderId}`,
+          url: `/slider/update/${id}`,
           method: "PATCH",
           data,
         };

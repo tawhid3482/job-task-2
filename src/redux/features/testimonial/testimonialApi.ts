@@ -21,10 +21,11 @@ const testimonialApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.testimonial],
     }),
+
     updateTestimonial: builder.mutation({
-      query: ({ testimonialId, data }) => {
+      query: ({ id, data }) => {
         return {
-          url: `/testimonial/update/${testimonialId}`,
+          url: `/testimonial/update/${id}`,
           method: "PATCH",
           data,
         };
