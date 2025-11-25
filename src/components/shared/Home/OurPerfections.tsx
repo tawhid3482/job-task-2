@@ -259,7 +259,7 @@ const OurPerfections: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center mt-20">
+        <div className="flex items-center">
           <button
             onClick={prevSlide}
             disabled={currentIndex === 0}

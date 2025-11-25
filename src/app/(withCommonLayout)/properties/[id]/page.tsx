@@ -16,7 +16,6 @@ import Video from "@/components/shared/Properties/PropertiesFeatures/Vedio";
 import GalleryPage from "@/components/shared/Properties/PropertiesFeatures/PropertiesPhoto";
 import Enquiry from "@/components/shared/Landowner/Enquiry";
 import Testimonials from "@/components/shared/Home/Testimonials";
-import OurAwardsandRecognition from "@/components/shared/Home/OurAwardsandRecognition";
 
 interface Project {
   id: string;

@@ -7,39 +7,42 @@ interface VideoProps {
 }
 
 const Video: React.FC<VideoProps> = ({ url }) => {
-  const ROOFTOP_IMAGE =
-    "https://www.videoconverterfactory.com/tips/imgs-sns/send-a-video-by-email.png";
-
-  // Convert YouTube watch URL to embed URL
-  const convertToEmbed = (url: string) => {
+  // Convert YouTube URL to videoId
+  const extractVideoId = (url: string): string => {
     try {
       const urlObj = new URL(url);
-      let videoId = "";
 
       if (urlObj.searchParams.has("v")) {
-        videoId = urlObj.searchParams.get("v") || "";
-      } else if (urlObj.pathname.startsWith("/shorts/")) {
-        videoId = urlObj.pathname.split("/")[2];
+        return urlObj.searchParams.get("v") || "";
       }
 
-      return `https://www.youtube.com/embed/${videoId}`;
+      if (urlObj.pathname.startsWith("/shorts/")) {
+        return urlObj.pathname.split("/")[2];
+      }
+
+      return "";
     } catch (error) {
       console.error("Invalid YouTube URL", error);
       return "";
     }
   };
 
-  const embedUrl = convertToEmbed(url);
+  const videoId = extractVideoId(url);
 
-  if (!embedUrl) {
+  if (!videoId) {
     return <p className="text-red-500 text-center">Invalid YouTube URL</p>;
   }
+
+  const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+  // YouTube Default Thumbnail
+  const youtubeThumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return (
     <div className="bg-gray-100 py-16">
       <div className="w-full mx-auto">
         <VideoModalTrigger
-          thumbnailUrl={ROOFTOP_IMAGE}
+          thumbnailUrl={youtubeThumbnail}
           videoEmbedUrl={embedUrl}
         />
       </div>
