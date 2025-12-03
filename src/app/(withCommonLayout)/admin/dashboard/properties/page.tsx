@@ -728,7 +728,7 @@ const PerfectionsPage = () => {
                       </span>
                     )}
                   </p>
-                  <div className="flex gap-3 items-start">
+                  <div className="flex flex-col gap-3 items-start">
                     <div className="flex-1">
                       <input
                         type="file"
@@ -738,6 +738,7 @@ const PerfectionsPage = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                     </div>
+                  
                     {mainImageFile && (
                       <div className="flex items-center gap-2">
                         <ImagePreview
@@ -785,7 +786,7 @@ const PerfectionsPage = () => {
                       </span>
                     )}
                   </p>
-                  <div className="flex gap-3 items-start">
+                  <div className="flex gap-3 items-start flex-col">
                     <div className="flex-1">
                       <input
                         type="file"
