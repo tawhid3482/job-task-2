@@ -2,7 +2,7 @@
 import { useGetAllPropertiesQuery } from "@/redux/features/properties/propertiesApi";
 import React from "react";
 const BACKGROUND_IMAGE_URL =
-  "https://assistholdingsltd.com/images/1764481956093_types-of-construction-insurance-cover_va5mhk.webp";
+  "http://assistholdingsltd.com/images/1765780999299_civil.png";
 
 const PropertiesBanner = () => {
   const { data } = useGetAllPropertiesQuery(null);

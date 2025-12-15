@@ -8,7 +8,7 @@ const Gallery = () => {
     <div>
       <LandownerBanner
         img={
-          "https://assistholdingsltd.com/images/1764481614054_civil-engineering.jpg"
+          "http://assistholdingsltd.com/images/1765780753698_gallery.png"
         }
         title="Gallery
 "
