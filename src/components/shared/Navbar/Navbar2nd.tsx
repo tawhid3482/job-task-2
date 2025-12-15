@@ -8,7 +8,6 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { usePathname } from "next/navigation";
-import Logo from "../../../../public/logo-icon.png";
 import { useCreateScheduleMutation } from "@/redux/features/schedule/scheduleApi";
 
 const menuItems = [
@@ -20,13 +19,7 @@ const menuItems = [
   // "Career",
   "Blogs",
   "Contact",
-  // "Management-Team",
-  // "Concerns",
-  // "Landowner",
-  // "Buyer",
-  // "Blogs",
-  // "News&Events",
-  // "Contact",
+
 ];
 
 // Utility function
@@ -454,7 +447,7 @@ export default function Navbar() {
             {/* Left: Logo */}
             <Link href="/" className="flex items-center">
               <Image
-                src={Logo}
+                src='https://i.postimg.cc/wMKgd1D8/logo-icon.png'
                 alt="Assist Holdings Limited Logo"
                 width={96}
                 height={96}

@@ -3,7 +3,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import CurtainTransition from "@/components/PageTransition";
-import Navbar from "@/components/shared/Navbar/Navbar";
 import Navbar2nd from "@/components/shared/Navbar/Navbar2nd";
 import Footer from "@/components/shared/Footer/Footer";
 import { ToastContainer } from "react-toastify";
