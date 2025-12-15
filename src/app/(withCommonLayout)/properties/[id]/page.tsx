@@ -86,7 +86,7 @@ export default function ProjectDetailPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://assistholdingsltd.com/api/api/v1/perfections"
+          "http://103.7.4.211:5008/api/v1/perfections"
         );
         const result = await response.json();
 

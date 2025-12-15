@@ -15,7 +15,7 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const response = await fetch('https://assistholdingsltd.com/api/api/v1/auth/login', {
+      const response = await fetch('http://103.7.4.211:5008/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

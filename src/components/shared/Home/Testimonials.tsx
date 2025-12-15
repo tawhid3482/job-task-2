@@ -36,7 +36,7 @@ const Testimonials: React.FC = () => {
     const fetchTestimonials = async () => {
       try {
         const res = await fetch(
-          `https://assistholdingsltd.com/api/api/v1/testimonial`
+          `http://103.7.4.211:5008/api/v1/testimonial`
         );
         const json = await res.json();
         setTestimonials(Array.isArray(json.data) ? json.data : []);

@@ -93,7 +93,7 @@ const Banner: React.FC = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const res = await fetch("https://assistholdingsltd.com/api/api/v1/slider");
+        const res = await fetch("http://103.7.4.211:5008/api/v1/slider");
         const json = await res.json();
         if (json.success && json.data) {
           const mapped: BannerSlide[] = json.data.map((item: BackendSlide) => ({
