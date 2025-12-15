@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
@@ -161,7 +162,7 @@ interface FeatureAmenity {
 }
 
 interface ExtraField {
-  id: number; // ✅ Serial number manually add করার জন্য id field যোগ করা হয়েছে
+  id: number;
   icon: string;
   fieldName: string;
   fieldValue: string;
@@ -183,6 +184,44 @@ interface Perfection {
   status: string;
   createdAt: string;
 }
+
+// Image Preview Component with Remove Button
+interface ImagePreviewProps {
+  src: string;
+  index: number;
+  onRemove: () => void;
+  isNew?: boolean;
+}
+
+const ImagePreview = ({ src, index, onRemove, isNew = false }: ImagePreviewProps) => {
+  return (
+    <div className="relative group">
+      <img
+        src={src}
+        alt={`Gallery ${index}`}
+        className="w-20 h-20 object-cover rounded-md border shadow-sm"
+      />
+      <div className="absolute -top-2 -right-2">
+        <button
+          type="button"
+          onClick={onRemove}
+          className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+          title="Remove image"
+        >
+          ×
+        </button>
+      </div>
+      <div className="absolute bottom-1 left-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
+        {isNew ? `New #${index}` : `#${index}`}
+      </div>
+      {isNew && (
+        <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1 rounded">
+          New
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PerfectionsPage = () => {
   const router = useRouter();
@@ -251,7 +290,7 @@ const PerfectionsPage = () => {
     return null;
   };
 
-  // ✅ Add new feature amenity - user manually number দেবে
+  // Add new feature amenity
   const addFeatureAmenity = () => {
     setFeaturesAmenities([
       ...featuresAmenities, 
@@ -259,7 +298,7 @@ const PerfectionsPage = () => {
     ]);
   };
 
-  // ✅ Update feature amenity
+  // Update feature amenity
   const updateFeatureAmenity = (
     index: number,
     field: "id" | "icon" | "text",
@@ -270,20 +309,20 @@ const PerfectionsPage = () => {
     setFeaturesAmenities(updated);
   };
 
-  // ✅ Remove feature amenity
+  // Remove feature amenity
   const removeFeatureAmenity = (index: number) => {
     setFeaturesAmenities(featuresAmenities.filter((_, i) => i !== index));
   };
 
-  // ✅ Add new extra field - user manually number দেবে
+  // Add new extra field
   const addExtraField = () => {
     setExtraFields([
       ...extraFields,
-      { id: 0, icon: "", fieldName: "", fieldValue: "" }, // ✅ id field যোগ করা হয়েছে
+      { id: 0, icon: "", fieldName: "", fieldValue: "" },
     ]);
   };
 
-  // ✅ Update extra field
+  // Update extra field
   const updateExtraField = (
     index: number,
     field: "id" | "icon" | "fieldName" | "fieldValue",
@@ -294,12 +333,12 @@ const PerfectionsPage = () => {
     setExtraFields(updated);
   };
 
-  // ✅ Remove extra field
+  // Remove extra field
   const removeExtraField = (index: number) => {
     setExtraFields(extraFields.filter((_, i) => i !== index));
   };
 
-  // ✅ Handle file uploads
+  // Handle file uploads
   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setMainImageFile(e.target.files[0]);
@@ -314,11 +353,36 @@ const PerfectionsPage = () => {
 
   const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setGalleryFiles(Array.from(e.target.files));
+      const newFiles = Array.from(e.target.files);
+      setGalleryFiles([...galleryFiles, ...newFiles]);
     }
   };
 
-  // ✅ Upload images to CPANEL
+  // Remove main image
+  const removeMainImage = () => {
+    setMainImageFile(null);
+  };
+
+  // Remove cover image
+  const removeCoverImage = () => {
+    setCoverImageFile(null);
+  };
+
+  // Remove gallery file
+  const removeGalleryFile = (index: number) => {
+    const updatedFiles = [...galleryFiles];
+    updatedFiles.splice(index, 1);
+    setGalleryFiles(updatedFiles);
+  };
+
+  // Remove existing gallery image
+  const removeExistingGalleryImage = (index: number) => {
+    const updatedImages = [...existingGalleryImages];
+    updatedImages.splice(index, 1);
+    setExistingGalleryImages(updatedImages);
+  };
+
+  // Upload images to CPANEL
   const uploadImageToCPanel = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
@@ -346,34 +410,40 @@ const PerfectionsPage = () => {
     setUploading(true);
 
     try {
-      // Create a new array for gallery URLs to avoid mutation
+      // Start with existing images (if any are left after removals)
       let galleryUrls: string[] = [...existingGalleryImages];
 
       // Upload new main image if provided
       if (mainImageFile) {
         const mainImageUrl = await uploadImageToCPanel(mainImageFile);
-        galleryUrls = [mainImageUrl, ...galleryUrls.slice(1)];
+        // Replace index 0 with new main image
+        galleryUrls[0] = mainImageUrl;
+      } else if (existingGalleryImages[0]) {
+        // Keep existing main image if not removed
+        galleryUrls[0] = existingGalleryImages[0];
       }
 
       // Upload new cover image if provided
       if (coverImageFile) {
         const coverImageUrl = await uploadImageToCPanel(coverImageFile);
-        if (galleryUrls.length > 0) {
-          galleryUrls = [galleryUrls[0], coverImageUrl, ...galleryUrls.slice(2)];
-        } else {
-          galleryUrls = [coverImageUrl];
-        }
+        // Replace index 1 with new cover image
+        galleryUrls[1] = coverImageUrl;
+      } else if (existingGalleryImages[1]) {
+        // Keep existing cover image if not removed
+        galleryUrls[1] = existingGalleryImages[1];
       }
 
-      // Upload additional gallery images
+      // Upload additional new gallery images
       if (galleryFiles.length > 0) {
         const additionalGalleryUrls = await Promise.all(
           galleryFiles.map((file) => uploadImageToCPanel(file))
         );
         
+        // Add new gallery images after index 1
         galleryUrls = [
           ...galleryUrls.slice(0, 2),
-          ...additionalGalleryUrls
+          ...additionalGalleryUrls,
+          ...galleryUrls.slice(2) // Keep any remaining existing images
         ];
       }
 
@@ -381,12 +451,11 @@ const PerfectionsPage = () => {
       const extraFieldsObj: Record<string, string> = {};
       extraFields.forEach((field) => {
         if (field.icon && field.fieldName && field.fieldValue && field.id > 0) {
-          // ✅ id সহ save করবে যাতে order maintain করা যায়
           extraFieldsObj[`${field.id}_${field.icon}`] = `${field.fieldName}: ${field.fieldValue}`;
         }
       });
 
-      // User যেভাবে number দিয়েছে সেভাবেই save হবে, sorting করা হবে না
+      // User যেভাবে number দিয়েছে সেভাবেই save হবে
       const featuresToSave = featuresAmenities.filter((fa) => fa.icon && fa.text && fa.id > 0);
 
       const perfectionData = {
@@ -493,7 +562,6 @@ const PerfectionsPage = () => {
       const fieldsArray: ExtraField[] = Object.entries(
         perfection.extraFields
       ).map(([key, value]) => {
-        // ✅ key থেকে id এবং icon আলাদা করুন
         const [idPart, ...iconParts] = key.split('_');
         const icon = iconParts.join('_');
         const id = parseInt(idPart) || 0;
@@ -660,40 +728,47 @@ const PerfectionsPage = () => {
                       </span>
                     )}
                   </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleMainImageChange}
-                    required={!editingPerfection}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
+                  <div className="flex flex-col gap-3 items-start">
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleMainImageChange}
+                        required={!editingPerfection && !existingGalleryImages[0]}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  
+                    {mainImageFile && (
+                      <div className="flex items-center gap-2">
+                        <ImagePreview
+                          src={URL.createObjectURL(mainImageFile)}
+                          index={0}
+                          onRemove={removeMainImage}
+                          isNew={true}
+                        />
+                        <span className="text-xs text-green-600">
+                          ✓ New main image
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   
                   {/* Show current main image in edit mode */}
-                  {editingPerfection && existingGalleryImages[0] && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">Current Main Image:</p>
+                  {editingPerfection && existingGalleryImages[0] && !mainImageFile && (
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Current Main Image:</p>
                       <div className="flex items-center gap-3">
-                        <img
+                        <ImagePreview
                           src={existingGalleryImages[0]}
-                          alt="Current Main"
-                          className="w-16 h-16 object-cover rounded-md border"
+                          index={0}
+                          onRemove={() => removeExistingGalleryImage(0)}
                         />
-                        <span className="text-xs text-gray-500">Index: 0</span>
+                        <div className="text-xs text-gray-500">
+                          <p>Index: 0</p>
+                          <p className="text-red-500">Click X to remove</p>
+                        </div>
                       </div>
-                    </div>
-                  )}
-
-                  {mainImageFile && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">New Main Image:</p>
-                      <img
-                        src={URL.createObjectURL(mainImageFile)}
-                        alt="Main Image Preview"
-                        className="w-16 h-16 object-cover rounded-md border"
-                      />
-                      <p className="text-xs text-green-600 mt-1">
-                        ✓ This will replace the main image at index 0
-                      </p>
                     </div>
                   )}
                 </div>
@@ -711,40 +786,46 @@ const PerfectionsPage = () => {
                       </span>
                     )}
                   </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverImageChange}
-                    required={!editingPerfection}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
+                  <div className="flex gap-3 items-start flex-col">
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleCoverImageChange}
+                        required={!editingPerfection && !existingGalleryImages[1]}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    {coverImageFile && (
+                      <div className="flex items-center gap-2">
+                        <ImagePreview
+                          src={URL.createObjectURL(coverImageFile)}
+                          index={1}
+                          onRemove={removeCoverImage}
+                          isNew={true}
+                        />
+                        <span className="text-xs text-green-600">
+                          ✓ New cover image
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   
                   {/* Show current cover image in edit mode */}
-                  {editingPerfection && existingGalleryImages[1] && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">Current Cover Image:</p>
+                  {editingPerfection && existingGalleryImages[1] && !coverImageFile && (
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Current Cover Image:</p>
                       <div className="flex items-center gap-3">
-                        <img
+                        <ImagePreview
                           src={existingGalleryImages[1]}
-                          alt="Current Cover"
-                          className="w-16 h-16 object-cover rounded-md border"
+                          index={1}
+                          onRemove={() => removeExistingGalleryImage(1)}
                         />
-                        <span className="text-xs text-gray-500">Index: 1</span>
+                        <div className="text-xs text-gray-500">
+                          <p>Index: 1</p>
+                          <p className="text-red-500">Click X to remove</p>
+                        </div>
                       </div>
-                    </div>
-                  )}
-
-                  {coverImageFile && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">New Cover Image:</p>
-                      <img
-                        src={URL.createObjectURL(coverImageFile)}
-                        alt="Cover Image Preview"
-                        className="w-16 h-16 object-cover rounded-md border"
-                      />
-                      <p className="text-xs text-green-600 mt-1">
-                        ✓ This will replace the cover image at index 1
-                      </p>
                     </div>
                   )}
                 </div>
@@ -767,71 +848,94 @@ const PerfectionsPage = () => {
 
                 {/* Additional Gallery Images */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Additional Gallery Images
-                  </label>
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Additional Gallery Images
+                    </label>
+                    <div className="text-xs text-gray-500">
+                      {galleryFiles.length > 0 && (
+                        <span className="text-green-600">
+                          {galleryFiles.length} new image(s) selected
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
                   <p className="text-xs text-gray-500 mb-2">
                     These will be added after main and cover images (from index 2)
                     {editingPerfection && existingGalleryImages.length > 2 && (
                       <span className="text-green-600 ml-2">
-                        ✓ Current {existingGalleryImages.length - 2} images will be replaced
+                        ✓ {existingGalleryImages.length - 2} existing additional images
                       </span>
                     )}
                   </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleGalleryChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
+                  
+                  <div className="flex gap-3 items-start">
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleGalleryChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </div>
                   
                   {/* Show current additional gallery images in edit mode */}
                   {editingPerfection && existingGalleryImages.length > 2 && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">Current Additional Images:</p>
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Current Additional Images:</p>
                       <div className="flex flex-wrap gap-2">
                         {existingGalleryImages.slice(2).map((img, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={img}
-                              alt={`Gallery ${index + 2}`}
-                              className="w-20 h-20 object-cover rounded-md border"
-                            />
-                            <span className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
-                              #{index + 2}
-                            </span>
-                          </div>
+                          <ImagePreview
+                            key={index + 2}
+                            src={img}
+                            index={index + 2}
+                            onRemove={() => removeExistingGalleryImage(index + 2)}
+                          />
                         ))}
                       </div>
-                    </div>
-                  )}
-
-                  {galleryFiles.length > 0 && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">New Additional Images:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {galleryFiles.map((file, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Gallery ${index + 1}`}
-                              className="w-20 h-20 object-cover rounded-md border"
-                            />
-                            <span className="absolute top-1 right-1 bg-blue-600 text-white text-xs px-1 rounded">
-                              #{index + 2}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <p className="text-xs text-blue-600 mt-1">
-                        These will replace additional gallery images from index 2 onwards
+                      <p className="text-xs text-red-500 mt-1">
+                        Click X to remove existing images
                       </p>
                     </div>
                   )}
+
+                  {/* Show new gallery files */}
+                  {galleryFiles.length > 0 && (
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700 mb-2">New Additional Images:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {galleryFiles.map((file, index) => (
+                          <ImagePreview
+                            key={index}
+                            src={URL.createObjectURL(file)}
+                            index={index + 2}
+                            onRemove={() => removeGalleryFile(index)}
+                            isNew={true}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-xs text-blue-600 mt-1">
+                        These new images will be added to the gallery
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Gallery summary */}
+                  <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-700">Gallery Summary:</p>
+                    <div className="text-xs text-gray-600 mt-1">
+                      <p>• Main Image (index 0): {mainImageFile ? "New selected" : existingGalleryImages[0] ? "Existing" : "Not set"}</p>
+                      <p>• Cover Image (index 1): {coverImageFile ? "New selected" : existingGalleryImages[1] ? "Existing" : "Not set"}</p>
+                      <p>• Additional Images: {existingGalleryImages.length - 2} existing + {galleryFiles.length} new</p>
+                      <p>• Total after update: {existingGalleryImages.length + galleryFiles.length - (mainImageFile ? 0 : 0) - (coverImageFile ? 0 : 0)} images</p>
+                    </div>
+                  </div>
                 </div>
 
-                    {/* Sat A Glance - Features & Amenities এর মতোই serial number system */}
+                {/* Sat A Glance */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-md font-medium text-gray-900">
@@ -853,7 +957,7 @@ const PerfectionsPage = () => {
                         className="border rounded-lg p-4 bg-gray-50"
                       >
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                          {/* Serial Number Input - Features & Amenities এর মতোই */}
+                          {/* Serial Number Input */}
                           <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Number *
@@ -1072,13 +1176,12 @@ const PerfectionsPage = () => {
                   )}
                 </div>
 
-            
-
-                <div className="flex justify-end gap-3 pt-4">
+                {/* Submit Buttons */}
+                <div className="flex justify-end gap-3 pt-4 border-t">
                   <button
                     type="button"
                     onClick={handleFormToggle}
-                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
                     disabled={uploading || creating || updating}
                   >
                     Cancel
@@ -1086,7 +1189,7 @@ const PerfectionsPage = () => {
                   <button
                     type="submit"
                     disabled={uploading || creating || updating}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
+                    className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {(uploading || creating || updating) && (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
