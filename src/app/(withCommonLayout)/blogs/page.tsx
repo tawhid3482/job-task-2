@@ -9,7 +9,7 @@ const Blogs = () => {
     <div>
       <LandownerBanner
         img={
-          "http://assistholdingsltd.com/images/1765780999299_civil.png"
+          "https://assistholdingsltd.com/images/1766053900448_civil.png"
         }
         title="blogs"
         // text="find your nest"
