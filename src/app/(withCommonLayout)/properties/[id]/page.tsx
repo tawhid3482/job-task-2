@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -16,6 +18,7 @@ import Video from "@/components/shared/Properties/PropertiesFeatures/Vedio";
 import GalleryPage from "@/components/shared/Properties/PropertiesFeatures/PropertiesPhoto";
 import Enquiry from "@/components/shared/Landowner/Enquiry";
 import Testimonials from "@/components/shared/Home/Testimonials";
+import { decodeSlug, generateSlug } from "@/utils/slug";
 
 interface Project {
   id: string;
@@ -75,7 +78,7 @@ const parseAndSortExtraFields = (extraFields: Record<string, string>) => {
 
 export default function ProjectDetailPage() {
   const params = useParams();
-  const id = params?.id as string;
+  const slug = params?.id as string;
 
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -90,17 +93,55 @@ export default function ProjectDetailPage() {
         );
         const result = await response.json();
 
-        if (result.success) {
-          const foundProject = result.data.find(
-            (p: Project) => String(p.id) === String(id)
+        if (result.success && result.data) {
+          // Decode the slug back to original title
+          const originalTitle = decodeSlug(slug);
+          console.log("Decoded Title from URL:", originalTitle);
+          
+          // Try multiple matching strategies
+          let foundProject = null;
+          
+          // Strategy 1: Exact match with decoded title
+          foundProject = result.data.find(
+            (p: Project) => p.Title.toLowerCase() === originalTitle.toLowerCase()
           );
+          
+          if (!foundProject) {
+            // Strategy 2: Match with slug generated from Title
+            foundProject = result.data.find((p: Project) => {
+              const projectSlug = generateSlug(p.Title);
+              return projectSlug === slug.toLowerCase();
+            });
+          }
+          
+          if (!foundProject) {
+            // Strategy 3: Case-insensitive partial match
+            foundProject = result.data.find((p: Project) => {
+              const normalizedTitle = p.Title.toLowerCase().replace(/\s+/g, ' ');
+              const normalizedSlug = originalTitle.toLowerCase().replace(/\s+/g, ' ');
+              return normalizedTitle.includes(normalizedSlug) || 
+                     normalizedSlug.includes(normalizedTitle);
+            });
+          }
+          
+          if (!foundProject) {
+            // Strategy 4: Remove special characters and try again
+            foundProject = result.data.find((p: Project) => {
+              const cleanTitle = p.Title.replace(/[^\w\s]/gi, '').toLowerCase();
+              const cleanSlug = originalTitle.replace(/[^\w\s]/gi, '').toLowerCase();
+              return cleanTitle === cleanSlug;
+            });
+          }
+          
           if (foundProject) {
             setProject(foundProject);
           } else {
-            setError("Project not found");
+            console.log("Available projects:", result.data.map((p: Project) => p.Title));
+            console.log("Looking for:", originalTitle);
+            setError(`Project not found. Available: ${result.data.map((p: Project) => p.Title).join(', ')}`);
           }
         } else {
-          setError("Failed to fetch project");
+          setError("Failed to fetch project data");
         }
       } catch (err) {
         console.error("Error fetching project:", err);
@@ -110,10 +151,10 @@ export default function ProjectDetailPage() {
       }
     };
 
-    if (id) fetchProject();
-  }, [id]);
-
-  console.log(project);
+    if (slug) {
+      fetchProject();
+    }
+  }, [slug]);
 
   if (loading) {
     return (
@@ -129,8 +170,11 @@ export default function ProjectDetailPage() {
         <div className="text-xl text-red-600 mb-4">
           {error || "Project not found"}
         </div>
-        <Link href="/" className="text-blue-600 hover:underline">
-          Back to Home
+        <div className="text-gray-600 mb-2">
+          URL Slug: {slug}
+        </div>
+        <Link href="/properties" className="text-blue-600 hover:underline">
+          Back to Properties
         </Link>
       </div>
     );
@@ -142,7 +186,7 @@ export default function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <LandownerBanner
-        img={project?.galleryImages[1]}
+        img={project?.galleryImages?.[1] || project?.galleryImages?.[0]}
         title="Properties"
         text={project.Title}
       />
@@ -207,23 +251,16 @@ export default function ProjectDetailPage() {
                     }}
                   >
                     <div className="flex flex-col items-center justify-center md:flex-row md:items-center w-full gap-3">
-                      {/* Serial Number Badge */}
-                      {/* <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold shrink-0">
-                        {field.serialNumber}
-                      </div> */}
-
                       {/* Icon */}
                       <div className="flex items-center justify-center w-10 h-10 bg-[#FBC341] text-white rounded-lg shrink-0 mr-2">
                         {renderIcon(field.iconName, 20)}
                       </div>
 
                       {/* Field Name and Value */}
-                      <div className="flex-1 ">
-                        
-                          <span className="font-semibold text-[#003C8C] text-sm sm:text-base  md:mr-20">
-                            {field.fieldName}
-                          </span>
-                      
+                      <div className="flex-1">
+                        <span className="font-semibold text-[#003C8C] text-sm sm:text-base md:mr-20">
+                          {field.fieldName}
+                        </span>
                       </div>
                       <div className="flex-1">
                         <span className="text-gray-700 text-sm sm:text-base flex-1 w-full">
@@ -255,7 +292,6 @@ export default function ProjectDetailPage() {
       <GalleryPage images={project.galleryImages} />
       <Enquiry />
       <Testimonials />
-      {/* <OurAwardsandRecognition /> */}
     </div>
   );
 }

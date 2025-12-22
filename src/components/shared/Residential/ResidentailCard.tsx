@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { generateSlug } from "@/utils/slug";
 
 interface Project {
   id: string;
@@ -28,85 +29,81 @@ const buttonVariants = {
   },
 };
 
-const ProjectCard = ({ project }: { project: Project }) => (
-  <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/3 p-2 sm:p-3 shrink-0">
-    <Link href={`/properties/${project.id}`} className="block h-full">
-      <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer w-full h-full flex flex-col bg-white">
-        {/* Image Section - Fixed Height */}
-        <div className="relative overflow-hidden w-full h-full sm:h-72 lg:h-[580px]">
-          <img
-            src={project.galleryImages[0]} // Use first gallery image
-            alt={project.Title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <motion.div
-            className="absolute inset-0 bg-black/70 flex flex-col justify-start p-4 sm:p-6 md:p-8 text-white opacity-0 group-hover:opacity-100 z-10 space-y-2 sm:space-y-3 md:space-y-4 overflow-y-auto"
-            initial={{ y: 50, opacity: 0 }}
-            whileHover={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Display all extraFields dynamically */}
-            {Object.entries(project.extraFields).map(([key, value]) => (
-              <p key={key} className="text-xs sm:text-sm flex items-start gap-2">
-                <span className="w-1 h-1 border border-white  mt-1 shrink-0"></span>
-                <span>
-                   {value}
-                </span>
-              </p>
-            ))}
-
-            {/* Display FeaturesAmenities if available */}
-            {/* {project.FeaturesAmenities?.map((feature, index) => (
-              <p key={index} className="text-xs sm:text-sm flex items-start gap-2">
-                <span className="w-1 h-1 bg-white rounded-full mt-2 shrink-0"></span>
-                <span>
-                  <span className="font-medium">Feature:</span> {feature.text}
-                </span>
-              </p>
-            ))} */}
-
-            {/* Explore Button */}
+const ProjectCard = ({ project }: { project: Project }) => {
+  // Generate slug from Title
+  const slug = generateSlug(project.Title);
+  
+  return (
+    <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/3 p-2 sm:p-3 shrink-0">
+      {/* IMPORTANT: Use the generated slug instead of raw title */}
+      <Link href={`/properties/${slug}`} className="block h-full">
+        <div className="rounded-lg overflow-hidden group shadow-lg cursor-pointer w-full h-full flex flex-col bg-white">
+          {/* Image Section - Fixed Height */}
+          <div className="relative overflow-hidden w-full h-full sm:h-72 lg:h-[580px]">
+            <img
+              src={project.galleryImages[0]} // Use first gallery image
+              alt={project.Title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
             <motion.div
-              variants={buttonVariants}
-              initial="hidden"
-              animate="visible"
-              className="relative flex flex-col items-start mt-4 sm:mt-6 md:mt-8 my-2"
+              className="absolute inset-0 bg-black/70 flex flex-col justify-start p-4 sm:p-6 md:p-8 text-white opacity-0 group-hover:opacity-100 z-10 space-y-2 sm:space-y-3 md:space-y-4 overflow-y-auto"
+              initial={{ y: 50, opacity: 0 }}
+              whileHover={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              <motion.div
-                className="w-16 sm:w-20 h-px bg-white"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.8, delay: 1.6 }}
-                style={{ originX: 0.5 }}
-              />
-              <div className="uppercase tracking-widest text-xs sm:text-sm font-light hover:text-gray-300 transition-colors duration-300 my-1 sm:my-2">
-                EXPLORE
-              </div>
-              <motion.div
-                className="w-16 sm:w-20 h-px bg-white"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.8, delay: 1.6 }}
-                style={{ originX: 0.5 }}
-              />
-            </motion.div>
-          </motion.div>
-        </div>
+              {/* Display all extraFields dynamically */}
+              {Object.entries(project.extraFields).map(([key, value]) => (
+                <p key={key} className="text-xs sm:text-sm flex items-start gap-2">
+                  <span className="w-1 h-1 border border-white mt-1 shrink-0"></span>
+                  <span>{value}</span>
+                </p>
+              ))}
 
-        {/* Content Section - Fixed Height */}
-        <div className="bg-white p-3 sm:p-4 text-left text-black flex flex-col flex-1 min-h-[120px]">
-          <p className="text-xs sm:text-sm text-gray-600 mb-1 capitalize">{project.Type}</p>
-          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 line-clamp-2 flex-1">
-            {project.Title}
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-600 mt-auto">
-            {project.Location}
-          </p>
+              {/* Explore Button */}
+              <motion.div
+                variants={buttonVariants}
+                initial="hidden"
+                animate="visible"
+                className="relative flex flex-col items-start mt-4 sm:mt-6 md:mt-8 my-2"
+              >
+                <motion.div
+                  className="w-16 sm:w-20 h-px bg-white"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.8, delay: 1.6 }}
+                  style={{ originX: 0.5 }}
+                />
+                <div className="uppercase tracking-widest text-xs sm:text-sm font-light hover:text-gray-300 transition-colors duration-300 my-1 sm:my-2">
+                  EXPLORE
+                </div>
+                <motion.div
+                  className="w-16 sm:w-20 h-px bg-white"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.8, delay: 1.6 }}
+                  style={{ originX: 0.5 }}
+                />
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Content Section - Fixed Height */}
+          <div className="bg-white p-3 sm:p-4 text-left text-black flex flex-col flex-1 min-h-[120px]">
+            <p className="text-xs sm:text-sm text-gray-600 mb-1 capitalize">
+              {project.Type}
+            </p>
+            <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 line-clamp-2 flex-1">
+              {project.Title}
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600 mt-auto">
+              {project.Location}
+            </p>
+          </div>
         </div>
-      </div>
-    </Link>
-  </div>
-);
+      </Link>
+    </div>
+  );
+};
 
 const ProjectFilter = () => {
   const [projects, setProjects] = useState<Project[]>([]);

@@ -10,6 +10,7 @@ import * as IoIcons from "react-icons/io5";
 import * as MdIcons from "react-icons/md";
 import * as HiIcons from "react-icons/hi";
 import * as FiIcons from "react-icons/fi";
+import { generateSlug } from "@/utils/slug";
 
 const buttonVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -65,14 +66,14 @@ const getSortedExtraFields = (extraFields: Record<string, string> = {}) => {
   return Object.entries(extraFields)
     .sort(([keyA], [keyB]) => {
       // Extract numbers from keys like "1_FaMapPin", "2_FaVectorSquare"
-      const numA = parseInt(keyA.split('_')[0]) || 0;
-      const numB = parseInt(keyB.split('_')[0]) || 0;
+      const numA = parseInt(keyA.split("_")[0]) || 0;
+      const numB = parseInt(keyB.split("_")[0]) || 0;
       return numA - numB;
     })
     .map(([key, value]) => ({
       key,
       value,
-      iconName: key.split('_')[1] // Extract icon name from key
+      iconName: key.split("_")[1], // Extract icon name from key
     }));
 };
 
@@ -97,8 +98,6 @@ const OurPerfections: React.FC = () => {
     };
     fetchPerfections();
   }, []);
-
-  console.log(perfections);
 
   // FIXED BREAKPOINTS (phone=1, tablet=2, laptop=3, large=4)
   useEffect(() => {
@@ -162,11 +161,15 @@ const OurPerfections: React.FC = () => {
             transition={{ type: "tween", duration: 0.5 }}
           >
             {perfections.map((perfection) => {
-              const sortedExtraFields = getSortedExtraFields(perfection.extraFields);
-              
+              const slug = generateSlug(perfection.Title);
+
+              const sortedExtraFields = getSortedExtraFields(
+                perfection.extraFields
+              );
+
               return (
                 <Link
-                  href={`/properties/${perfection.id}`}
+                  href={`/properties/${slug}`}
                   key={perfection.id}
                   className="shrink-0 overflow-hidden group cursor-pointer"
                   style={{ width: `${100 / visibleCount}%` }}
@@ -231,7 +234,9 @@ const OurPerfections: React.FC = () => {
                   <div className="bg-black/80 p-4">
                     <p className="text-sm text-gray-300">{perfection.Type}</p>
                     <h3 className="text-xl font-bold">{perfection.Title}</h3>
-                    <p className="text-sm text-gray-300">{perfection.Category}</p>
+                    <p className="text-sm text-gray-300">
+                      {perfection.Category}
+                    </p>
 
                     <div className="mt-2 flex flex-wrap gap-1">
                       {/* Sorted extra fields for bottom section */}
