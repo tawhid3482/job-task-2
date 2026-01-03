@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useRef } from "react";
@@ -11,7 +10,6 @@ import {
   Variants,
   easeOut,
 } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 const Relentlessingoingbeyond: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -131,8 +129,7 @@ const Relentlessingoingbeyond: React.FC = () => {
               Whether you’re looking to invest, expand, or secure your future
               through land ownership, Assist Holdings Limited is here to help
               you build your foundation for success.
-              <br /> Assist Holdings Limited —
-              Better To Be Trusted Than Famous
+              <br /> Assist Holdings Limited — Better To Be Trusted Than Famous
             </motion.p>
           </div>
         </div>
@@ -141,7 +138,7 @@ const Relentlessingoingbeyond: React.FC = () => {
         <div className="lg:w-1/2 grid grid-cols-2 gap-5 relative">
           <motion.div style={{ y: imgMove2 }} className="col-span-1 mt-8">
             <img
-              src="https://i.postimg.cc/jdNHytPH/La-Speranza-6.jpg"
+              src="https://assistholdingsltd.com/images/1767415480535_La-Speranza-6.jpg"
               alt="Building 1"
               className="w-full h-full md:h-[480px] object-cover rounded-lg shadow-md"
             />
@@ -149,7 +146,7 @@ const Relentlessingoingbeyond: React.FC = () => {
 
           <motion.div style={{ y: imgMove3 }} className="col-span-1">
             <img
-              src="https://i.postimg.cc/xdFJW4Lq/Concord-Aurora-Heights-5-scaled-1.jpg"
+              src="https://assistholdingsltd.com/images/1767416072591_Concord-Aurora-Heights-5-scaled-1 (1).jpg"
               alt="Building 2"
               className="w-full h-full md:h-[600px] object-cover rounded-lg shadow-md"
             />

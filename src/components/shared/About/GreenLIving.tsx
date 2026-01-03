@@ -26,7 +26,6 @@ const GreenLivingSection: React.FC = () => {
   };
 
   return (
-    // আপনার স্ক্রিনশট অনুযায়ী সাদা ব্যাকগ্রাউন্ড
     <div className="bg-white py-24 px-4 sm:px-8 md:px-12 lg:px-24 font-sans overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch">
         
@@ -65,7 +64,7 @@ const GreenLivingSection: React.FC = () => {
           variants={imageFadeIn}
         >
           <img
-            src="https://i.postimg.cc/kgXBtMZY/Concord-Quasem-Waterfront-Luxurious-Apartment-for-Sale-in-Dhanmondi-12.jpg" 
+            src="https://assistholdingsltd.com/images/1767415827654_Concord-Quasem-Waterfront-Luxurious-Apartment-for-Sale-in-Dhanmondi-12 (1).jpg" 
             alt="Green Living and Rooftop Garden"
             className="w-full h-full object-cover shadow-2xl"
           />

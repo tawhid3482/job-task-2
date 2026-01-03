@@ -136,7 +136,7 @@ const OurAscendance: React.FC = () => {
           {/* Bottom Image */}
           <motion.div style={{ y: imgMove1 }} className="w-full mt-2">
             <img
-              src="https://i.postimg.cc/J41r5QBq/Concord-Malancha-22-scaled-1.jpg"
+              src="https://assistholdingsltd.com/images/1767415601049_Concord-Malancha-22-scaled-1.jpg"
               alt="Assist-holdings-limited Developments"
               className="w-full h-[400px] object-cover rounded-lg shadow-lg"
             />
@@ -147,7 +147,7 @@ const OurAscendance: React.FC = () => {
         <div className="lg:w-1/2 grid grid-cols-2 gap-5 relative">
           <motion.div style={{ y: imgMove2 }} className="col-span-1 mt-8">
             <img
-              src="https://i.postimg.cc/jdNHytPH/La-Speranza-6.jpg"
+              src="https://assistholdingsltd.com/images/1767415480535_La-Speranza-6.jpg"
               alt="Building 1"
               className="w-full h-[380px] object-cover rounded-lg shadow-md"
             />
@@ -155,7 +155,7 @@ const OurAscendance: React.FC = () => {
 
           <motion.div style={{ y: imgMove3 }} className="col-span-1">
             <img
-              src="https://i.postimg.cc/xdFJW4Lq/Concord-Aurora-Heights-5-scaled-1.jpg"
+              src="https://assistholdingsltd.com/images/1767415521377_Concord-Aurora-Heights-5-scaled-1.jpg"
               alt="Building 2"
               className="w-full h-[450px] object-cover rounded-lg shadow-md"
             />
@@ -163,7 +163,7 @@ const OurAscendance: React.FC = () => {
 
           <motion.div style={{ y: imgMove1 }} className="col-span-2">
             <img
-              src="https://i.postimg.cc/BQGL9DPh/Concord-Fresh-Meadows-Affordable-Luxury-Living-in-Bashundhara-7.jpg"
+              src="https://assistholdingsltd.com/images/1767415704651_Concord-Fresh-Meadows-Affordable-Luxury-Living-in-Bashundhara-7 (1).jpg"
               alt="Modern Architecture"
               className="w-full h-[420px] object-cover rounded-lg shadow-lg"
             />

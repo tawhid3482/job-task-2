@@ -6,21 +6,21 @@ const aboutUsData = [
   {
     id: 1,
     title: "MISSION",
-    imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Mission.jpg",
+    imageUrl: "https://assistholdingsltd.com/images/1767416265917_About-Us-Mission.jpeg",
     description:
       "At Assist Holdings Limited, our mission is to provide innovative and sustainable real estate solutions that empower individuals and families to achieve their dream of property ownership. We are committed to delivering high-quality developments, transparent services, and lasting value for our clients, partners, and communities. And also empower individuals and families to achieve their dreams of land ownership by providing transparent, secure, and value-driven real estate and land share solutions. We are dedicated to building lasting trust through innovation, integrity, and excellence in every project we undertake.",
   },
   {
     id: 2,
     title: "BRAND PROMISE",
-    imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Brand-Promise.jpg",
+    imageUrl: "https://assistholdingsltd.com/images/1767416332521_About-Us-Brand-Promise.jpeg",
     description:
       "Our brand promise is to establish trust with clients with a touch of our individuality and integrity.",
   },
   {
     id: 3,
     title: "VISION",
-    imageUrl: "https://jcxbd.com/wp-content/uploads/2021/11/About-Us-Vision.jpg",
+    imageUrl: "https://assistholdingsltd.com/images/1767416521391_About-Us-Vision.jpeg",
     description:
       "Our vision is to become a leading and trusted name in the real estate and land share industry, creating sustainable communities and unlocking opportunities that enhance the quality of life for our clients and future generations.",
   },
