@@ -89,7 +89,7 @@ export default function ProjectDetailPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://assistholdingsltd.com/api/api/v1/perfections"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/perfections`
         );
         const result = await response.json();
 
@@ -97,15 +97,16 @@ export default function ProjectDetailPage() {
           // Decode the slug back to original title
           const originalTitle = decodeSlug(slug);
           console.log("Decoded Title from URL:", originalTitle);
-          
+
           // Try multiple matching strategies
           let foundProject = null;
-          
+
           // Strategy 1: Exact match with decoded title
           foundProject = result.data.find(
-            (p: Project) => p.Title.toLowerCase() === originalTitle.toLowerCase()
+            (p: Project) =>
+              p.Title.toLowerCase() === originalTitle.toLowerCase()
           );
-          
+
           if (!foundProject) {
             // Strategy 2: Match with slug generated from Title
             foundProject = result.data.find((p: Project) => {
@@ -113,32 +114,48 @@ export default function ProjectDetailPage() {
               return projectSlug === slug.toLowerCase();
             });
           }
-          
+
           if (!foundProject) {
             // Strategy 3: Case-insensitive partial match
             foundProject = result.data.find((p: Project) => {
-              const normalizedTitle = p.Title.toLowerCase().replace(/\s+/g, ' ');
-              const normalizedSlug = originalTitle.toLowerCase().replace(/\s+/g, ' ');
-              return normalizedTitle.includes(normalizedSlug) || 
-                     normalizedSlug.includes(normalizedTitle);
+              const normalizedTitle = p.Title.toLowerCase().replace(
+                /\s+/g,
+                " "
+              );
+              const normalizedSlug = originalTitle
+                .toLowerCase()
+                .replace(/\s+/g, " ");
+              return (
+                normalizedTitle.includes(normalizedSlug) ||
+                normalizedSlug.includes(normalizedTitle)
+              );
             });
           }
-          
+
           if (!foundProject) {
             // Strategy 4: Remove special characters and try again
             foundProject = result.data.find((p: Project) => {
-              const cleanTitle = p.Title.replace(/[^\w\s]/gi, '').toLowerCase();
-              const cleanSlug = originalTitle.replace(/[^\w\s]/gi, '').toLowerCase();
+              const cleanTitle = p.Title.replace(/[^\w\s]/gi, "").toLowerCase();
+              const cleanSlug = originalTitle
+                .replace(/[^\w\s]/gi, "")
+                .toLowerCase();
               return cleanTitle === cleanSlug;
             });
           }
-          
+
           if (foundProject) {
             setProject(foundProject);
           } else {
-            console.log("Available projects:", result.data.map((p: Project) => p.Title));
+            console.log(
+              "Available projects:",
+              result.data.map((p: Project) => p.Title)
+            );
             console.log("Looking for:", originalTitle);
-            setError(`Project not found. Available: ${result.data.map((p: Project) => p.Title).join(', ')}`);
+            setError(
+              `Project not found. Available: ${result.data
+                .map((p: Project) => p.Title)
+                .join(", ")}`
+            );
           }
         } else {
           setError("Failed to fetch project data");
@@ -170,9 +187,7 @@ export default function ProjectDetailPage() {
         <div className="text-xl text-red-600 mb-4">
           {error || "Project not found"}
         </div>
-        <div className="text-gray-600 mb-2">
-          URL Slug: {slug}
-        </div>
+        <div className="text-gray-600 mb-2">URL Slug: {slug}</div>
         <Link href="/properties" className="text-blue-600 hover:underline">
           Back to Properties
         </Link>

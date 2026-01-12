@@ -122,7 +122,7 @@ const ProjectFilter = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://assistholdingsltd.com/api/api/v1/perfections"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/perfections`
         );
         const result = await response.json();
         if (result.success) {

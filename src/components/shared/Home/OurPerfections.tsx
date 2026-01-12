@@ -87,7 +87,7 @@ const OurPerfections: React.FC = () => {
     const fetchPerfections = async () => {
       try {
         const res = await fetch(
-          `https://assistholdingsltd.com/api/api/v1/perfections`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/perfections`
         );
         const json = await res.json();
         setPerfections(Array.isArray(json.data) ? json.data : []);
