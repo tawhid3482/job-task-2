@@ -64,7 +64,7 @@ const GreenLivingSection: React.FC = () => {
           variants={imageFadeIn}
         >
           <img
-            src="https://assistholdingsltd.com/images/1767415827654_Concord-Quasem-Waterfront-Luxurious-Apartment-for-Sale-in-Dhanmondi-12 (1).jpg" 
+            src="https://i.ibb.co/LDW4HD6r/Luxury-Apartment-for-Sale-in-Dhanmondi-Concord-Hazera-Mansion-10.jpg" 
             alt="Green Living and Rooftop Garden"
             className="w-full h-full object-cover shadow-2xl"
           />

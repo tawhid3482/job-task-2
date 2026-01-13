@@ -20,7 +20,7 @@ const About2: React.FC = () => {
       name: "Engr. Ruhul Amin",
       position: "Chairman",
       message: `At Assist Holdings Limited, we believe that real estate is more than land and buildings — it's about building dreams, securing futures, and creating lasting value. From our very beginning, our goal has been to offer reliable, transparent, and innovative property solutions that empower people and strengthen communities. Our success is built on integrity, professionalism, and a deep commitment to our clients. As we move forward, we remain focused on expanding our services, improving customer experience, and contributing to the sustainable growth of our nation's real estate sector. Together, we are not just developing properties — we are developing trust.`,
-      image: "https://assistholdingsltd.com/images/1767416627834_chairman.jpg",
+      image: "https://i.ibb.co/qLT1Jk6m/chairman.jpg",
       layout: "right",
     },
     {
@@ -28,7 +28,7 @@ const About2: React.FC = () => {
       name: "Mohammad Tohidur Rahman",
       position: "Managing Director",
       message: `At Assist Holdings Limited, our mission is to make land ownership simple, secure, and profitable. We have built our reputation on trust, quality, and commitment — values that continue to guide us as we expand our footprint in the real estate market. Our focus remains on transparency, client satisfaction, and sustainable development. We are continuously improving our services, technology, and processes to meet the evolving needs of our valued clients and investors. We look forward to welcoming you to our growing family of satisfied landowners and investors.`,
-      image: "https://assistholdingsltd.com/images/1767416773758_mm (1).jpg",
+      image: "https://i.ibb.co/LzbFL6BH/mm-1.jpg",
       layout: "left",
     },
     {
@@ -37,7 +37,7 @@ const About2: React.FC = () => {
       position: "Director & CEO",
       message: `Welcome to Assist Holdings Limited. Our company was founded on a vision to redefine real estate by combining modern development strategies with genuine care for our clients. Every project we undertake reflects our promise — to deliver quality, transparency, and long-term value. As CEO, I take pride in leading a team that is passionate about creating opportunities for investment and home ownership. We are dedicated to providing exceptional service and ensuring every client finds not just property, but peace of mind. Together, let's build a future where every investment grows with confidence.`,
       image:
-        "https://assistholdingsltd.com/images/1767416748947_Whats-App-Image-2025-11-08-at-11-10-17-7478152d.jpg",
+        "https://i.ibb.co/pBsvk0sB/Whats-App-Image-2025-11-08-at-11-10-17-7478152d.jpg",
       layout: "right",
     },
     {
@@ -45,7 +45,7 @@ const About2: React.FC = () => {
       name: "Md. Imam Hossain",
       position: "Director-Business Development",
       message: `As the Director of Business Development, I am pleased to extend our commitment to delivering reliable, transparent, and high-quality real estate solutions. Our mission is to ensure that every client receives exceptional service, personalized support, and strategic guidance throughout their property journey.At Assist Holdings Limited, we continuously work to expand opportunities, strengthen partnerships, and introduce innovative approaches that add true value to your investments. Your trust motivates us to maintain the highest standards of professionalism and integrity.Should you require any assistance, property consultation, or investment guidance, please feel free to reach out. We are always here to support your goals.Thank you for choosing Assist Holdings Limited.`,
-      image: "https://assistholdingsltd.com/images/1767416805366_imam (1).jpg",
+      image: "https://i.ibb.co/vxYZ1zWT/imam-1.jpg",
       layout: "left",
     },
   ];

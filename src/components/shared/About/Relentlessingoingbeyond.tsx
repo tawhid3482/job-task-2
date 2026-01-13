@@ -138,7 +138,7 @@ const Relentlessingoingbeyond: React.FC = () => {
         <div className="lg:w-1/2 grid grid-cols-2 gap-5 relative">
           <motion.div style={{ y: imgMove2 }} className="col-span-1 mt-8">
             <img
-              src="https://assistholdingsltd.com/images/1767415480535_La-Speranza-6.jpg"
+              src="https://i.ibb.co/Cs0x5yCp/La-Speranza-6.jpg"
               alt="Building 1"
               className="w-full h-full md:h-[480px] object-cover rounded-lg shadow-md"
             />
@@ -146,7 +146,7 @@ const Relentlessingoingbeyond: React.FC = () => {
 
           <motion.div style={{ y: imgMove3 }} className="col-span-1">
             <img
-              src="https://assistholdingsltd.com/images/1767416072591_Concord-Aurora-Heights-5-scaled-1 (1).jpg"
+              src="https://i.ibb.co/LDW4HD6r/Luxury-Apartment-for-Sale-in-Dhanmondi-Concord-Hazera-Mansion-10.jpg"
               alt="Building 2"
               className="w-full h-full md:h-[600px] object-cover rounded-lg shadow-md"
             />
