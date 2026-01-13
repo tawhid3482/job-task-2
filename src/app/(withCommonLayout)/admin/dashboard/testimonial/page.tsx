@@ -69,25 +69,51 @@ const TestimonialsPage = () => {
     }
   };
 
-  const uploadImageToCPanel = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append("image", file);
+  // const uploadImageToCPanel = async (file: File): Promise<string> => {
+  //   const formData = new FormData();
+  //   formData.append("image", file);
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`, {
+  //   try {
+  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`, {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+
+  //     if (!res.ok) throw new Error("Failed to upload image");
+
+  //     const data = await res.json();
+  //     return data.url;
+  //   } catch (error) {
+  //     toast.error("Image upload failed");
+  //     throw error;
+  //   }
+  // };
+
+  const uploadImage = async (file: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+      {
         method: "POST",
         body: formData,
-      });
+      }
+    );
 
-      if (!res.ok) throw new Error("Failed to upload image");
+    const data = await res.json();
 
-      const data = await res.json();
-      return data.url;
-    } catch (error) {
-      toast.error("Image upload failed");
-      throw error;
+    if (!data.success) {
+      throw new Error("Image upload failed");
     }
-  };
+
+    return data.data.url; // ✅ direct image URL
+  } catch (error) {
+    toast.error("Image upload failed");
+    throw error;
+  }
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +124,7 @@ const TestimonialsPage = () => {
 
       // Upload new image if selected
       if (imageFile) {
-        imageUrl = await uploadImageToCPanel(imageFile);
+        imageUrl = await uploadImage(imageFile);
       } else if (!editingTestimonial && !formData.Image) {
         toast.error("Please select an image");
         setUploading(false);

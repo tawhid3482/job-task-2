@@ -86,26 +86,55 @@ const GalleryPage = () => {
   };
 
   // ✅ Upload image to CPANEL
-  const uploadImageToCPanel = async (file: File): Promise<string> => {
-    const data = new FormData();
-    data.append("image", file);
+  // const uploadImageToCPanel = async (file: File): Promise<string> => {
+  //   const data = new FormData();
+  //   data.append("image", file);
 
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`,
+  //       {
+  //         method: "POST",
+  //         body: data,
+  //       }
+  //     );
+  //     if (!res.ok) throw new Error("Failed to upload image");
+  //     const result = await res.json();
+  //     return result.url;
+  //   } catch (err) {
+  //     toast.error("Image upload failed");
+  //     throw err;
+  //   }
+  // };
+
+  
+    const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("image", file);
+  
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`,
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
         {
           method: "POST",
-          body: data,
+          body: formData,
         }
       );
-      if (!res.ok) throw new Error("Failed to upload image");
-      const result = await res.json();
-      return result.url;
-    } catch (err) {
+  
+      const data = await res.json();
+  
+      if (!data.success) {
+        throw new Error("Image upload failed");
+      }
+  
+      return data.data.url; // ✅ direct image URL
+    } catch (error) {
       toast.error("Image upload failed");
-      throw err;
+      throw error;
     }
   };
+  
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,7 +146,7 @@ const GalleryPage = () => {
       // Upload new images if selected
       if (imageFiles.length > 0) {
         newImageUrls = await Promise.all(
-          imageFiles.map((file) => uploadImageToCPanel(file))
+          imageFiles.map((file) => uploadImage(file))
         );
       }
 

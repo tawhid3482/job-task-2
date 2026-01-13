@@ -383,27 +383,55 @@ const PerfectionsPage = () => {
   };
 
   // Upload images to CPANEL
-  const uploadImageToCPanel = async (file: File): Promise<string> => {
+  // const uploadImageToCPanel = async (file: File): Promise<string> => {
+  //   const formData = new FormData();
+  //   formData.append("image", file);
+
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`,
+  //       {
+  //         method: "POST",
+  //         body: formData,
+  //       }
+  //     );
+
+  //     if (!res.ok) throw new Error("Failed to upload image");
+  //     const data = await res.json();
+  //     return data.url;
+  //   } catch (error) {
+  //     toast.error("Image upload failed");
+  //     throw error;
+  //   }
+  // };
+
+  
+    const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
-
+  
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload-image`,
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
         {
           method: "POST",
           body: formData,
         }
       );
-
-      if (!res.ok) throw new Error("Failed to upload image");
+  
       const data = await res.json();
-      return data.url;
+  
+      if (!data.success) {
+        throw new Error("Image upload failed");
+      }
+  
+      return data.data.url; // ✅ direct image URL
     } catch (error) {
       toast.error("Image upload failed");
       throw error;
     }
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -415,7 +443,7 @@ const PerfectionsPage = () => {
 
       // Upload new main image if provided
       if (mainImageFile) {
-        const mainImageUrl = await uploadImageToCPanel(mainImageFile);
+        const mainImageUrl = await uploadImage(mainImageFile);
         // Replace index 0 with new main image
         galleryUrls[0] = mainImageUrl;
       } else if (existingGalleryImages[0]) {
@@ -425,7 +453,7 @@ const PerfectionsPage = () => {
 
       // Upload new cover image if provided
       if (coverImageFile) {
-        const coverImageUrl = await uploadImageToCPanel(coverImageFile);
+        const coverImageUrl = await uploadImage(coverImageFile);
         // Replace index 1 with new cover image
         galleryUrls[1] = coverImageUrl;
       } else if (existingGalleryImages[1]) {
@@ -436,7 +464,7 @@ const PerfectionsPage = () => {
       // Upload additional new gallery images
       if (galleryFiles.length > 0) {
         const additionalGalleryUrls = await Promise.all(
-          galleryFiles.map((file) => uploadImageToCPanel(file))
+          galleryFiles.map((file) => uploadImage(file))
         );
         
         // Add new gallery images after index 1
